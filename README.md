@@ -1,5 +1,6 @@
 # CU-CSCI3308-Fall2024-Ultimate-Hangman
-Team 8 CSCI 3308 012 
+Team 8 CSCI 3308 012
+
 Ultimate Versatile Hangman
 
 # --- #
@@ -11,6 +12,7 @@ For the social gamer, Who loves to game with friends. The Ultimate Hangman is an
 # --- #
 
 Contributors: Dorrin Ashrafi, Tian Zhang, Alex Recana, Cole Irish, Erasmia Poulassichidis
+
 Team Eccentric Developers
 
 # --- #
