@@ -1,0 +1,7 @@
+{{!-- send messages to the user e.g. invalid password, account already exists, etc --}}
+
+{{#if message}}
+  <div class="alert alert-{{#if error}}danger{{else}}success{{/if}}" role="alert">
+    {{ message }}
+  </div>
+{{/if}}
