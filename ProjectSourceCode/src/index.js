@@ -69,3 +69,36 @@ app.use(
     extended: true,
   })
 );
+
+// *****************************************************
+// <!-- Section 4 : API Routes -->
+// *****************************************************
+
+app.get('/register', (req, res) => {
+    res.render('resources/register'); // rendering the registration page when the link is clicked
+});
+
+app.post('/register', async (req, res) => {
+    try {
+      const { username, email, password, confirmPassword } = req.body;
+  
+      //checking if passwords match
+      if (password !== confirmPassword) {
+        return res.status(400).send('Passwords do not match'); // sends eorror message if they don't match
+      }
+  
+      // hash using bcrypt - like in lab 8
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // inserting into the table of users
+      const insertQuery = `INSERT INTO users (username, email, password) VALUES ($1, $2, $3)`;
+      await db.none(insertQuery, [username, email, hashedPassword]);
+  
+      // redirecting to the login page to log in if the registration is successful
+      res.redirect('/login');
+    } catch (error) {
+      console.error('Error registering user:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
