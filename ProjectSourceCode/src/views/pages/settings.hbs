@@ -2,14 +2,15 @@
 <body>
   <h1>Select Difficulty Level</h1>
   <div class="button-group" id="difficulty-buttons">
-    <button onclick="setDifficulty('Easy')">Easy</button>
-    <button onclick="setDifficulty('Medium')">Medium</button>
-    <button onclick="setDifficulty('Hard')">Hard</button>
+    <button type="button" class="btn btn-primary" onclick="setDifficulty('Easy')">Easy</button>
+    <button type="button" class="btn btn-primary" onclick="setDifficulty('Medium')">Medium</button>
+    <button type="button" class="btn btn-primary" onclick="setDifficulty('Hard')">Hard</button>
   </div>
 
-  <h2>Select Theme</h2>
+  <h1>Select Theme</h1>
   <div class="button-group" id="theme-buttons">
-    <button onclick="setTheme('Light')">Light Theme</button>
-    <button onclick="setTheme('Dark')">Dark Theme</button>
+    <button type="button" class="btn btn-secondary" onclick="setTheme('Light')">Light Theme</button>
+    <button type="button" class="btn btn-dark" onclick="setTheme('Dark')">Dark Theme</button>
   </div>
 </body>
+{{>footer}}
