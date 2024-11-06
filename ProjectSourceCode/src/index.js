@@ -75,7 +75,7 @@ app.use(
 // *****************************************************
 
 app.get('/register', (req, res) => {
-    res.render('resources/register'); // rendering the registration page when the link is clicked
+    res.render('psges/register'); // rendering the registration page when the link is clicked
 });
 
 app.post('/register', async (req, res) => {
