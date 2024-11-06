@@ -69,3 +69,34 @@ app.use(
     extended: true,
   })
 );
+
+app.get('/login', (req, res) => {
+    res.render('pages/login');
+});
+
+// app.post('/login', async (req, res) => {
+//     let user = `select * from users WHERE users.username = '${req.body.username}'`;
+//     db.any(user)
+//     .then(async (rows) => {
+//       if(rows.length == 0) {
+//         res.render('pages/register');
+//         return;
+//       }
+//       const match = await bcrypt.compare(req.body.password, rows[0].password);   
+//       if(!match) {
+//         // res.message('Incorrect username or password.');
+//         res.render('pages/login');
+//       } else {
+//         req.session.user = user;
+//         req.session.save();
+//         res.redirect('/discover');
+//       }
+//     })
+//     .catch((error) => {
+//       res.redirect('/register');
+//     })
+//   });
+
+
+app.listen(3000);
+console.log('Server is listening on port 3000');

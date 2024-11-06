@@ -6,7 +6,7 @@ services:
     expose:
       - '5432'
     volumes:
-      - group-project:/var/lib/postgresql/data
+      - CU-CSCI3308-Fall2024-Ultimate-Hangman:/var/lib/postgresql/data
       - ./src/init_data:/docker-entrypoint-initdb.d
   web:
     image: node:lts
@@ -23,4 +23,4 @@ services:
       - ./:/repository
     command: 'npm start'
 volumes:
-  group-project:
+  CU-CSCI3308-Fall2024-Ultimate-Hangman:
