@@ -78,6 +78,10 @@ app.get('/', (req, res) => {
   res.redirect('/login');
 });
 
+app.get('/welcome', (req, res) => {
+    res.json({status: 'success', message: 'Welcome!'});
+});
+
 app.get('/login', (req, res) => {
     res.render('pages/login');
 });
@@ -145,7 +149,7 @@ app.post('/register', async (req, res) => {
   }
     // To-DO: Insert username and hashed password into the 'users' table
   });
- 
+
   const auth = (req, res, next) => {
     if (!req.session.user) {
       return res.redirect('/login');
@@ -155,29 +159,5 @@ app.post('/register', async (req, res) => {
   
   app.use(auth);
 
-//   app.post('/register', async (req, res) => {
-//     try {
-//       const { username, email, password, confirmPassword } = req.body;
-  
-//       //checking if passwords match
-//       if (password !== confirmPassword) {
-//         return res.status(400).send('Passwords do not match'); // sends eorror message if they don't match
-//       }
-  
-//       // hash using bcrypt - like in lab 8
-//       const hashedPassword = await bcrypt.hash(password, 10);
-  
-//       // inserting into the table of users
-//       const insertQuery = `INSERT INTO users (username, email, password) VALUES ($1, $2, $3)`;
-//       await db.none(insertQuery, [username, email, hashedPassword]);
-  
-//       // redirecting to the login page to log in if the registration is successful
-//       res.redirect('/login');
-//     } catch (error) {
-//       console.error('Error registering user:', error);
-//       res.status(500).send('Internal Server Error');
-//     }
-//   });
-
-app.listen(3000);
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
