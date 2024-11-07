@@ -74,34 +74,6 @@ app.use(
 // <!-- Section 4 : API Routes -->
 // *****************************************************
 
-app.get('/register', (req, res) => {
-    res.render('pages/register'); // rendering the registration page when the link is clicked
-});
-
-app.post('/register', async (req, res) => {
-    try {
-      const { username, email, password, confirmPassword } = req.body;
-  
-      //checking if passwords match
-      if (password !== confirmPassword) {
-        return res.status(400).send('Passwords do not match'); // sends eorror message if they don't match
-      }
-  
-      // hash using bcrypt - like in lab 8
-      const hashedPassword = await bcrypt.hash(password, 10);
-  
-      // inserting into the table of users
-      const insertQuery = `INSERT INTO users (username, email, password) VALUES ($1, $2, $3)`;
-      await db.none(insertQuery, [username, email, hashedPassword]);
-  
-      // redirecting to the login page to log in if the registration is successful
-      res.redirect('/login');
-    } catch (error) {
-      console.error('Error registering user:', error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
-
 app.get('/', (req, res) => {
   res.redirect('/login');
 });
@@ -131,6 +103,48 @@ app.post('/login', async (req, res) => {
       res.redirect('/register');
     })
   });
+
+  app.get('/register', (req, res) => {
+    res.render('pages/register');
+  });
+
+  // Register
+app.post('/register', async (req, res) => {
+    //hash the password using bcrypt library
+    
+    var uname = req.body.username;
+    const regquery = `insert into users (username, password) values ($1, $2);`;
+    if ((uname !== '') && (req.body.password !== '')){
+    const hash = await bcrypt.hash(req.body.password, 10);
+    db.any(regquery,[uname, hash])
+    // if query execution succeeds
+    // query results can be obtained
+    // as shown below
+    .then(data => {
+      res.redirect('/login')
+    })
+    // if query execution fails
+    // send error message
+    .catch(err => {
+      console.log('Uh Oh spaghettio');
+      console.log(err);
+      
+      res.render('pages/register', {
+      
+        error: true,
+        message: "User already exists or invalid parameters!",
+      });
+    });
+  }
+  else{
+    res.redirect('/register', {
+      error: true,
+      message: "User already exists or invalid parameters!",
+    })
+
+  }
+    // To-DO: Insert username and hashed password into the 'users' table
+  });
  
   const auth = (req, res, next) => {
     if (!req.session.user) {
@@ -141,46 +155,28 @@ app.post('/login', async (req, res) => {
   
   app.use(auth);
 
-//   app.get('/register', (req, res) => {
-//     res.render('pages/register');
-//   });
-
-//   // Register
-// app.post('/register', async (req, res) => {
-//     //hash the password using bcrypt library
-    
-//     var uname = req.body.username;
-//     const regquery = `insert into users (username, password) values ($1, $2);`;
-//     if ((uname !== '') && (req.body.password !== '')){
-//     const hash = await bcrypt.hash(req.body.password, 10);
-//     db.any(regquery,[uname, hash])
-//     // if query execution succeeds
-//     // query results can be obtained
-//     // as shown below
-//     .then(data => {
-//       res.redirect('/login')
-//     })
-//     // if query execution fails
-//     // send error message
-//     .catch(err => {
-//       console.log('Uh Oh spaghettio');
-//       console.log(err);
-      
-//       res.render('pages/register', {
-      
-//         error: true,
-//         message: "User already exists or invalid parameters!",
-//       });
-//     });
-//   }
-//   else{
-//     res.redirect('/register', {
-//       error: true,
-//       message: "User already exists or invalid parameters!",
-//     })
-
-//   }
-//     // To-DO: Insert username and hashed password into the 'users' table
+//   app.post('/register', async (req, res) => {
+//     try {
+//       const { username, email, password, confirmPassword } = req.body;
+  
+//       //checking if passwords match
+//       if (password !== confirmPassword) {
+//         return res.status(400).send('Passwords do not match'); // sends eorror message if they don't match
+//       }
+  
+//       // hash using bcrypt - like in lab 8
+//       const hashedPassword = await bcrypt.hash(password, 10);
+  
+//       // inserting into the table of users
+//       const insertQuery = `INSERT INTO users (username, email, password) VALUES ($1, $2, $3)`;
+//       await db.none(insertQuery, [username, email, hashedPassword]);
+  
+//       // redirecting to the login page to log in if the registration is successful
+//       res.redirect('/login');
+//     } catch (error) {
+//       console.error('Error registering user:', error);
+//       res.status(500).send('Internal Server Error');
+//     }
 //   });
 
 app.listen(3000);
