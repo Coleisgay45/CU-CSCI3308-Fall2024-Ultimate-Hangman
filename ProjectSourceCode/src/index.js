@@ -109,16 +109,6 @@ app.post('/login', async (req, res) => {
     })
   });
 
-  
-  const auth = (req, res, next) => {
-    if (!req.session.user) {
-      return res.redirect('/login');
-    }
-    next();
-  };
-  
-  app.use(auth);
-
   app.get('/register', (req, res) => {
     res.render('pages/register');
   });
@@ -160,6 +150,16 @@ app.post('/register', async (req, res) => {
   }
     // To-DO: Insert username and hashed password into the 'users' table
   });
+
+  // access after this point requires login 
+  const auth = (req, res, next) => {
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+    next();
+  };
+  
+  app.use(auth);
 
 app.listen(3000);
 console.log('Server is listening on port 3000');
