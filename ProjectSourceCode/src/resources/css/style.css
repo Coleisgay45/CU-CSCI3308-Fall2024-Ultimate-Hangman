@@ -1,0 +1,14 @@
+.navbar .nav-link {
+        color: white !important;
+        padding: 10px;
+      }      
+      .navbar .nav-item {
+        margin: 0 20px; 
+      }
+      .navbar-nav {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        width: 100%;
+      }
+      
