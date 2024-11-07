@@ -101,5 +101,47 @@ app.post('/login', async (req, res) => {
   });
 
 
+  app.get('/register', (req, res) => {
+    res.render('pages/register');
+  });
+
+  // Register
+app.post('/register', async (req, res) => {
+    //hash the password using bcrypt library
+    
+    var uname = req.body.username;
+    const regquery = `insert into users (username, password) values ($1, $2);`;
+    if ((uname !== '') && (req.body.password !== '')){
+    const hash = await bcrypt.hash(req.body.password, 10);
+    db.any(regquery,[uname, hash])
+    // if query execution succeeds
+    // query results can be obtained
+    // as shown below
+    .then(data => {
+      res.redirect('/login')
+    })
+    // if query execution fails
+    // send error message
+    .catch(err => {
+      console.log('Uh Oh spaghettio');
+      console.log(err);
+      
+      res.render('pages/register', {
+      
+        error: true,
+        message: "User already exists or invalid parameters!",
+      });
+    });
+  }
+  else{
+    res.redirect('/register', {
+      error: true,
+      message: "User already exists or invalid parameters!",
+    })
+
+  }
+    // To-DO: Insert username and hashed password into the 'users' table
+  });
+
 app.listen(3000);
 console.log('Server is listening on port 3000');
