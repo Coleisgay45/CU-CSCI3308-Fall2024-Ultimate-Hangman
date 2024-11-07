@@ -71,7 +71,7 @@ app.use(
 );
 
 app.get('/', (req, res) => {
-  res.render('pages/register');
+  res.redirect('login');
 });
 
 app.get('/login', (req, res) => {
