@@ -75,7 +75,7 @@ app.use(
 // *****************************************************
 
 app.get('/register', (req, res) => {
-    res.render('psges/register'); // rendering the registration page when the link is clicked
+    res.render('pages/register'); // rendering the registration page when the link is clicked
 });
 
 app.post('/register', async (req, res) => {
@@ -103,7 +103,7 @@ app.post('/register', async (req, res) => {
   });
 
 app.get('/', (req, res) => {
-  res.render('pages/register');
+  res.redirect('/login');
 });
 
 app.get('/login', (req, res) => {
@@ -131,8 +131,7 @@ app.post('/login', async (req, res) => {
       res.redirect('/register');
     })
   });
-
-  
+ 
   const auth = (req, res, next) => {
     if (!req.session.user) {
       return res.redirect('/login');

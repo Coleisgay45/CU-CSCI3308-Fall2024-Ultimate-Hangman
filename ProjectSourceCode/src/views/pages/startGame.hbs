@@ -39,29 +39,29 @@
   </style>
 </head>
 <body>
-  <div class="container hangman-container">
-    <!-- text box, subject to change? -->
-    <h2>Guess a Letter!</h2>
-    <input type="text" id="guess-input" class="guess-input form-control" maxlength="1" placeholder="Guess a letter" />
+    <div class="container hangman-container">
+        <!-- text box, subject to change? -->
+        <h2>Guess a Letter!</h2>
+        <input type="text" id="guess-input" class="guess-input form-control" maxlength="1" placeholder="Guess a letter" />
 
-    <!-- image of the hangman stand -->
-    <div class="hangman-image">
-      <img src="/path/to/hangman-stand.png" alt="Hangman Stand" class="img-fluid" />
-    </div>
+        <!-- image of the hangman stand -->
+        <div class="hangman-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Hangman-0.png" alt="Hangman Stand" class="img-fluid" />
+        </div>
 
-    <!-- box for letters that are guessed incorrectly -->
-    <div class="incorrect-guesses">
-      <h4>Incorrect Guesses</h4>
-      <p id="incorrect-letters">None</p>
-    </div>
+        <!-- box for letters that are guessed incorrectly -->
+        <div class="incorrect-guesses">
+        <h4>Incorrect Guesses</h4>
+        <p id="incorrect-letters">None</p>
+        </div>
 
-    <!-- lines at the bottom to hold the place of correctly guessed letters -->
-    <div class="correct-letters" id="correct-letters">
-      {{#each wordLetters}}
-        <span>_</span>
-      {{/each}}
+        <!-- lines at the bottom to hold the place of correctly guessed letters -->
+        <div class="correct-letters" id="correct-letters">
+        {{#each wordLetters}}
+            <span>_</span>
+        {{/each}}
+        </div>
     </div>
-  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
