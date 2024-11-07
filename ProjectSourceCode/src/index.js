@@ -54,6 +54,9 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
+//app.set('resources',path.join(__dirname,'resources'));
+app.use(express.static(__dirname+'/resources'));
+// path join is taking you to rpository 
 
 // initialize session variables
 app.use(
@@ -73,6 +76,8 @@ app.use(
 app.get('/', (req, res) => {
   res.render('pages/register');
 });
+
+
 
 app.get('/login', (req, res) => {
     res.render('pages/login');
