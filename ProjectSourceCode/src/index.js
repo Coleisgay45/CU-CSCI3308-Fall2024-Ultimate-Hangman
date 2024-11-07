@@ -70,6 +70,10 @@ app.use(
   })
 );
 
+app.get('/', (req, res) => {
+    res.redirect('/login');
+});
+
 app.get('/login', (req, res) => {
     res.render('pages/login');
 });
@@ -95,6 +99,8 @@ app.post('/login', async (req, res) => {
       res.redirect('/register');
     })
   });
+
+  
 
 
 app.listen(3000);
