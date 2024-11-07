@@ -77,6 +77,10 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
     res.render('pages/login');
 });
+app.get('/', (req, res) => {
+  res.render('pages/home', { 
+  });
+});
 
 app.post('/login', async (req, res) => {
     let user = `select * from users WHERE users.username = '${req.body.username}'`;
