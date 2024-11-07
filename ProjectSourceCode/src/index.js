@@ -74,6 +74,10 @@ app.get('/', (req, res) => {
   res.redirect('login');
 });
 
+app.get('/welcome', (req, res) => {
+    res.json({status: 'success', message: 'Welcome!'});
+});
+
 app.get('/login', (req, res) => {
     res.render('pages/login');
 });
@@ -100,15 +104,6 @@ app.post('/login', async (req, res) => {
     })
   });
 
-  
-  const auth = (req, res, next) => {
-    if (!req.session.user) {
-      return res.redirect('/login');
-    }
-    next();
-  };
-  
-  app.use(auth);
 
   app.get('/register', (req, res) => {
     res.render('pages/register');
@@ -152,5 +147,14 @@ app.post('/register', async (req, res) => {
     // To-DO: Insert username and hashed password into the 'users' table
   });
 
-app.listen(3000);
+  const auth = (req, res, next) => {
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+    next();
+  };
+  
+  app.use(auth);
+
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
