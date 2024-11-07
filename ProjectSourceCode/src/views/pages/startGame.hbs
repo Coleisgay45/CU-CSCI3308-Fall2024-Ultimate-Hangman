@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Play Hangman</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <style>
+    /* custom so they go in the right places on the page */
+    .hangman-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .guess-input {
+      margin: 20px 0;
+    }
+    .incorrect-guesses {
+      position: absolute;
+      top: 20%;
+      right: 10%;
+      width: 150px;
+      text-align: left;
+    }
+    .correct-letters {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .correct-letters span {
+      font-size: 1.5em;
+      border-bottom: 2px solid #000;
+      width: 20px;
+      display: inline-block;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container hangman-container">
+    <!-- text box, subject to change? -->
+    <h2>Guess a Letter!</h2>
+    <input type="text" id="guess-input" class="guess-input form-control" maxlength="1" placeholder="Guess a letter" />
+
+    <!-- image of the hangman stand -->
+    <div class="hangman-image">
+      <img src="/path/to/hangman-stand.png" alt="Hangman Stand" class="img-fluid" />
+    </div>
+
+    <!-- box for letters that are guessed incorrectly -->
+    <div class="incorrect-guesses">
+      <h4>Incorrect Guesses</h4>
+      <p id="incorrect-letters">None</p>
+    </div>
+
+    <!-- lines at the bottom to hold the place of correctly guessed letters -->
+    <div class="correct-letters" id="correct-letters">
+      {{#each wordLetters}}
+        <span>_</span>
+      {{/each}}
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
