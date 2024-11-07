@@ -71,7 +71,7 @@ app.use(
 );
 
 app.get('/', (req, res) => {
-  res.render('pages/home');
+  res.render('pages/register');
 });
 
 app.get('/login', (req, res) => {
@@ -88,7 +88,7 @@ app.post('/login', async (req, res) => {
       }
       const match = await bcrypt.compare(req.body.password, rows[0].password);   
       if(!match) {
-        res.render('pages/login');
+        res.redirect('/login', {message: "Username or Password"})
       } else {
         req.session.user = user;
         req.session.save();
@@ -100,6 +100,15 @@ app.post('/login', async (req, res) => {
     })
   });
 
+  
+  const auth = (req, res, next) => {
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+    next();
+  };
+  
+  app.use(auth);
 
   app.get('/register', (req, res) => {
     res.render('pages/register');
