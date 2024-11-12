@@ -101,7 +101,7 @@ app.post('/login', async (req, res) => {
       } else {
         req.session.user = user;
         req.session.save();
-        res.redirect('/discover');
+        res.redirect('/home');
       }
     })
     .catch((error) => {
@@ -149,6 +149,10 @@ app.post('/register', async (req, res) => {
 
   }
     // To-DO: Insert username and hashed password into the 'users' table
+  });
+
+  app.get('/dictionary', (req, res) => {
+    res.render('pages/dictionary');
   });
 
   // access after this point requires login 
