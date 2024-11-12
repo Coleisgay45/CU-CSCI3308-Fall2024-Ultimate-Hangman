@@ -123,13 +123,13 @@ app.post('/login', async (req, res) => {
       } else {
         req.session.user = user;
         req.session.save();
-        res.redirect('/discover');
+        res.redirect('/discover', {message: "login successful!"});
       }
     })
     .catch((error) => {
       res.redirect('/register');
     })
-  });
+});
 
   app.get('/register', (req, res) => {
     res.render('pages/register');
