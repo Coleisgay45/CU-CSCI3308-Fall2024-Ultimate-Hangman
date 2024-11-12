@@ -77,7 +77,14 @@ app.get('/', (req, res) => {
   res.render('pages/register');
 });
 
+app.get('/welcome', function(req, res) { 
+  res.status(200).json({
+    status: 'success',
+    message: 'Welcome!'
+  })
 
+  // res.render('pages/welcome', {message: "Welcome!"})
+})
 
 app.get('/login', (req, res) => {
     res.render('pages/login');
@@ -161,5 +168,7 @@ app.post('/register', async (req, res) => {
   
   app.use(auth);
 
-app.listen(3000);
 console.log('Server is listening on port 3000');
+
+module.exports = app.listen(3000);
+

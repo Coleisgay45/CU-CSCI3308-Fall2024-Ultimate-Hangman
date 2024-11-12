@@ -1,6 +1,6 @@
 // ********************** Initialize server **********************************
 
-const server = require('../src/index'); //TODO: Make sure the path to your index.js is correctly added
+const app = require('../src/index'); //TODO: Make sure the path to your index.js is correctly added
 
 // ********************** Import Libraries ***********************************
 
@@ -12,20 +12,22 @@ const {assert, expect} = chai;
 
 // ********************** DEFAULT WELCOME TESTCASE ****************************
 
-describe('Server!', () => {
+describe('I am testing the server', () => {
   // Sample test case given to test / endpoint.
   it('Returns the default welcome message', done => {
     chai
-      .request(server)
+      .request(app)
       .get('/welcome')
       .end((err, res) => {
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(201);
         expect(res.body.status).to.equals('success');
         assert.strictEqual(res.body.message, 'Welcome!');
         done();
       });
   });
 });
+
+
 
 // *********************** TODO: WRITE 2 UNIT TESTCASES **************************
 
