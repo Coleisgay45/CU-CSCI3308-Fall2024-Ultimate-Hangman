@@ -101,7 +101,7 @@ app.post('/login', async (req, res) => {
       } else {
         req.session.user = user;
         req.session.save();
-        res.redirect('/discover');
+        res.redirect('/home');
       }
     })
     .catch((error) => {
@@ -160,6 +160,10 @@ app.post('/register', async (req, res) => {
   };
   
   app.use(auth);
+
+app.get('/home', (req, res) => {
+  res.render('pages/home');
+});
 
 app.listen(3000);
 console.log('Server is listening on port 3000');
