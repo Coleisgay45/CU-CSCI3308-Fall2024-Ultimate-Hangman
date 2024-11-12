@@ -77,23 +77,38 @@ app.get('/', (req, res) => {
   res.render('pages/register');
 });
 
+//test cases
 app.get('/welcome', function(req, res) { 
   res.status(200).json({
     status: 'success',
     message: 'Welcome!'
   })
-
-  // res.render('pages/welcome', {message: "Welcome!"})
 })
+/*
+app.get('/login', function(req, res) { 
+  res.status(401).json({
+    status: 'unauthorized login',
+    message: 'invalid credentials!'
+  })
+})
+
+app.get('/login', function(req, res) { 
+  res.status(200).json({
+    status: 'logged in',
+    message: 'login successful!'
+  })
+})
+  */
 
 app.get('/login', (req, res) => {
     res.render('pages/login');
 });
+/*
 app.get('/', (req, res) => {
   res.render('pages/home', { 
   });
 });
-
+*/
 app.post('/login', async (req, res) => {
     let user = `select * from users WHERE users.username = '${req.body.username}'`;
     db.any(user)
@@ -104,7 +119,7 @@ app.post('/login', async (req, res) => {
       }
       const match = await bcrypt.compare(req.body.password, rows[0].password);   
       if(!match) {
-        res.redirect('/login', {message: "Username or Password"})
+        res.redirect('/login', {message: "Username or Password incorrect"})
       } else {
         req.session.user = user;
         req.session.save();
@@ -156,7 +171,11 @@ app.post('/register', async (req, res) => {
 
   }
     // To-DO: Insert username and hashed password into the 'users' table
-  });
+});
+
+app.get('/settings', (req, res) => {
+  res.render('pages/settings');
+});
 
   // access after this point requires login 
   const auth = (req, res, next) => {
