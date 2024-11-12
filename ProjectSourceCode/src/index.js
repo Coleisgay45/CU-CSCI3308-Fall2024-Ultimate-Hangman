@@ -88,25 +88,39 @@ app.get('/', (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    let user = `select * from users WHERE users.username = '${req.body.username}'`;
-    db.any(user)
-    .then(async (rows) => {
-      if(rows.length == 0) {
-        res.render('pages/register');
-        return;
-      }
-      const match = await bcrypt.compare(req.body.password, rows[0].password);   
-      if(!match) {
-        res.redirect('/login', {message: "Username or Password"})
-      } else {
-        req.session.user = user;
-        req.session.save();
-        res.redirect('/home');
-      }
+  db.tx(async t => {
+    const user = await t.one(
+      `SELECT username, password
+         FROM
+          users
+         WHERE
+          username = $1`,
+      [req.body.username]
+    );
+    console.info(user)
+    if(user.username === ''){
+      res.redirect('/register')
+    }
+    const match = await bcrypt.compare(req.body.password, user.password);
+    if(match !== true){
+      res.redirect('/login', {message: "Wrong Password or Username"})
+    }
+    return user;
+  })
+    .then(user => {
+    
+    req.session.user = user;
+    req.session.save();
+    res.redirect('/home')
     })
-    .catch((error) => {
-      res.redirect('/register');
-    })
+    .catch(err => {
+      res.render('pages/login', {
+    
+        error: true,
+        message: "Wrong Password or Username",
+      });
+    });
+
   });
 
   app.get('/register', (req, res) => {
@@ -151,10 +165,6 @@ app.post('/register', async (req, res) => {
     // To-DO: Insert username and hashed password into the 'users' table
   });
 
-  app.get('/dictionary', (req, res) => {
-    res.render('pages/dictionary');
-  });
-
   // access after this point requires login 
   const auth = (req, res, next) => {
     if (!req.session.user) {
@@ -164,6 +174,12 @@ app.post('/register', async (req, res) => {
   };
   
   app.use(auth);
+
+  
+  app.get('/dictionary', (req, res) => {
+    res.render('pages/dictionary');
+  });
+
 
 app.listen(3000);
 console.log('Server is listening on port 3000');
