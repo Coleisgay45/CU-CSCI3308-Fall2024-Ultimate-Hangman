@@ -54,6 +54,9 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
+//app.set('resources',path.join(__dirname,'resources'));
+app.use(express.static(__dirname+'/resources'));
+// path join is taking you to rpository 
 
 // initialize session variables
 app.use(
@@ -74,16 +77,13 @@ app.use(
 // <!-- Section 4 : API Routes -->
 // *****************************************************
 
-app.get('/', (req, res) => {
-  res.redirect('/login');
-});
-
-app.get('/welcome', (req, res) => {
-    res.json({status: 'success', message: 'Welcome!'});
-});
 
 app.get('/login', (req, res) => {
     res.render('pages/login');
+});
+app.get('/', (req, res) => {
+  res.render('pages/home', { 
+  });
 });
 
 app.post('/login', async (req, res) => {
@@ -150,6 +150,7 @@ app.post('/register', async (req, res) => {
     // To-DO: Insert username and hashed password into the 'users' table
   });
 
+  // access after this point requires login 
   const auth = (req, res, next) => {
     if (!req.session.user) {
       return res.redirect('/login');
@@ -159,5 +160,5 @@ app.post('/register', async (req, res) => {
   
   app.use(auth);
 
-module.exports = app.listen(3000);
+app.listen(3000);
 console.log('Server is listening on port 3000');
