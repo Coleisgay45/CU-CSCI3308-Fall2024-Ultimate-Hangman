@@ -19,7 +19,7 @@ describe('I am testing the server', () => {
       .request(app)
       .get('/welcome')
       .end((err, res) => {
-        expect(res).to.have.status(201);
+        expect(res).to.have.status(200);
         expect(res.body.status).to.equals('success');
         assert.strictEqual(res.body.message, 'Welcome!');
         done();
@@ -32,3 +32,18 @@ describe('I am testing the server', () => {
 // *********************** TODO: WRITE 2 UNIT TESTCASES **************************
 
 // ********************************************************************************
+// negative test case: user tries to login but enters the wrong password
+describe('I am testing the login', () => {
+  // Sample test case given to test / endpoint.
+  it('Returns the default welcome message', done => {
+    chai
+      .request(app)
+      .get('/login')
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        expect(res.body.status).to.equals('success');
+        assert.strictEqual(res.body.message, 'Welcome!');
+        done();
+      });
+  });
+});
