@@ -85,8 +85,21 @@ app.get('/welcome', function(req, res) {
   })
 })
 
+app.get('/register', (req, res) => {
+  res.render('pages/register');
+});
+
 app.get('/login', (req, res) => {
     res.render('pages/login');
+});
+
+app.get('/settings', (req, res) => {
+  console.log('hi im here yayyyyyyyy');
+  res.render('pages/settings');
+});
+
+app.get('/discover', (req, res) => {
+  res.render('pages/discover');
 });
 
 app.post('/login', async (req, res) => {
@@ -99,7 +112,6 @@ app.post('/login', async (req, res) => {
       }
       const match = await bcrypt.compare(req.body.password, rows[0].password);  
       if(!match) { // existing user, incorrect password
-        console.log('hi');
         res.redirect(400, '/login')
       } else {
         req.session.user = user;
@@ -112,15 +124,12 @@ app.post('/login', async (req, res) => {
     })
 });
 
-  app.get('/register', (req, res) => {
-    res.render('pages/register');
-  });
-
   // Register
 app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     
     var uname = req.body.username;
+    console.log("USERNAME: ", uname);
     const regquery = `insert into users (username, password) values ($1, $2);`;
     if ((uname !== '') && (req.body.password !== '')){
     const hash = await bcrypt.hash(req.body.password, 10);
@@ -129,33 +138,34 @@ app.post('/register', async (req, res) => {
     // query results can be obtained
     // as shown below
     .then(data => {
-      res.redirect('/login')
+        res.status(200).render('pages/login');
+
+      //res.redirect(200, '/login')
     })
     // if query execution fails
     // send error message
     .catch(err => {
-      console.log('Uh Oh spaghettio');
-      console.log(err);
-      
-      res.render('pages/register', {
-      
-        error: true,
-        message: "User already exists or invalid parameters!",
+      // console.log("========================\n");
+      // console.log('Uh Oh spaghettio');
+      // console.log(err);
+      // console.log("========================\n");
+      /*
+      res.status(400).render('pages/register', {
+        message: 'User already exists or invalid parameters!',
+        error: true
       });
+      */
+      res.status(400).render('pages/register');
     });
   }
   else{
-    res.redirect('/register', {
+    res.status(400).render('pages/register', {
       error: true,
-      message: "User already exists or invalid parameters!",
-    })
-
+      status: 'failure',
+      message: 'User already exists or invalid parameters!'
+    });
   }
     // To-DO: Insert username and hashed password into the 'users' table
-});
-
-app.get('/settings', (req, res) => {
-  res.render('pages/settings');
 });
 
   // access after this point requires login 
@@ -164,9 +174,8 @@ app.get('/settings', (req, res) => {
       return res.redirect('/login');
     }
     next();
-  };
-  
-  app.use(auth);
+};
+app.use(auth);
 
 console.log('Server is listening on port 3000');
 

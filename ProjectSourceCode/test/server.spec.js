@@ -30,6 +30,53 @@ describe('I am testing the server', () => {
 // *********************** TODO: WRITE 2 UNIT TESTCASES FOR REGISTER POST**************************
 // POS: A SUCESSFUL REGISTRATION
 // NEG: UNSUCESSFUL, LIKE DUPLICATE USERNAME OR SOMETHING ELSE
+describe('I am testing registration with new user', () => {
+  it('Returns 200 status code, successful registration', (done) => {
+    chai
+      .request(app)
+      .post('/register')      
+      .send({ username: 'erpoulas123', password: 'Slay936!!' })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        //console.log("========================\n\n\n\n\n\n",res.body,"\n\n\n\n===============================");
+        //console.log("========================\n\n\n\n\n\n",res,"\n\n\n\n===============================");
+        res.should.be.html;
+        //assert.strictEqual(res.body.message, 'user registered');
+        done();
+      });
+  });
+});
+
+describe('I am testing registration with existing user in database', () => {
+  it('Returns 400 status code, failed registration', (done) => {
+    chai
+      .request(app)
+      .post('/register')      
+      .send({ username: 'hhawksley0', password: 'MiamiBeach832$' })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        //console.log("========================\n\n\n\n\n\n",res.body,"\n\n\n\n===============================");
+        //console.log("========================\n\n\n\n\n\n",res,"\n\n\n\n===============================");
+        res.should.be.html;
+        //assert.strictEqual(res.body.message, 'user registered');
+        done();
+      });
+  });
+});
+
+// describe('I am testing registration with existing user in database', () => {
+//   it('Returns 400 status code, failed registration', (done) => {
+//     chai
+//       .request(app)
+//       .post('/register')
+//       .send({ username: 'hhawksley0', password: 'MiamiBeach832$' })
+//       .end((err, res) => {
+//         expect(res).to.have.status(400);
+//         assert.strictEqual(res.body.message, 'User already exists or invalid parameters!');
+//         done();
+//       });
+//   });
+// });
 
 
 // *********************** TODO: WRITE 2 UNIT TESTCASES **************************
