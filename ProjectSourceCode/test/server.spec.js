@@ -27,6 +27,9 @@ describe('I am testing the server', () => {
   });
 });
 
+// *********************** TODO: WRITE 2 UNIT TESTCASES FOR REGISTER POST**************************
+// POS: A SUCESSFUL REGISTRATION
+// NEG: UNSUCESSFUL, LIKE DUPLICATE USERNAME OR SOMETHING ELSE
 
 
 // *********************** TODO: WRITE 2 UNIT TESTCASES **************************
@@ -35,7 +38,7 @@ describe('I am testing the server', () => {
 // negative test case: user tries to login but enters the wrong password
 
 describe('I am testing login with existing user, incorrect password', () => {
-  it('Returns the error message for invalid credentials', (done) => {
+  it('Returns 400 status code, incorrect password', (done) => {
     chai
       .request(app)
       .post('/login')
@@ -50,7 +53,7 @@ describe('I am testing login with existing user, incorrect password', () => {
 // positive test case: user enters correct username and password
 describe('I am testing login with valid credentials', () => {
   // Sample test case given to test / endpoint.
-  it('Returns successful login message', done => {
+  it('Returns 200 status code, successful login', done => {
     chai
       .request(app)
       .post('/login')
