@@ -151,6 +151,10 @@ app.post('/register', async (req, res) => {
     // To-DO: Insert username and hashed password into the 'users' table
   });
 
+  app.get('/logout', (req,res) => {
+    req.render('pages/logout')
+  });
+
   // access after this point requires login 
   const auth = (req, res, next) => {
     if (!req.session.user) {
