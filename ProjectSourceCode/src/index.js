@@ -81,10 +81,10 @@ app.use(
 app.get('/login', (req, res) => {
     res.render('pages/login');
 });
-app.get('/', (req, res) => {
-  res.render('pages/home', { 
-  });
-});
+// app.get('/', (req, res) => {
+//   res.render('pages/home', { 
+//   });
+// });
 
 app.post('/login', async (req, res) => {
     let user = `select * from users WHERE users.username = '${req.body.username}'`;
@@ -149,6 +149,16 @@ app.post('/register', async (req, res) => {
   }
     // To-DO: Insert username and hashed password into the 'users' table
   });
+
+//logout
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+    if (err) {
+        return res.redirect('/home'); 
+    }
+    res.render('pages/logout');
+    });
+});
 
   // access after this point requires login 
   const auth = (req, res, next) => {
