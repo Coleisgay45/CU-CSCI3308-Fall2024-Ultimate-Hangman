@@ -160,6 +160,10 @@ app.get('/logout', (req, res) => {
     });
 });
 
+app.get('/settings', (req, res) => {
+    req.render('pages/settings')
+});
+
   // access after this point requires login 
   const auth = (req, res, next) => {
     if (!req.session.user) {
@@ -167,6 +171,7 @@ app.get('/logout', (req, res) => {
     }
     next();
   };
+  
   
   app.use(auth);
 
