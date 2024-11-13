@@ -163,7 +163,6 @@ app.post('/register', async (req, res) => {
   app.use(auth);
 
 app.get('/home', (req, res) => {
-  console.log(req.session);
   res.render('pages/home', {
     username: req.session.user,
   });
