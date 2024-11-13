@@ -100,7 +100,7 @@ app.post('/login', async (req, res) => {
         res.redirect('/login', {message: "Username or Password"})
       } else {
         user.username = req.body.username;
-        req.session.user = user;
+        req.session.user = req.body.username;
         req.session.save();
         res.redirect('/home');
       }
@@ -163,8 +163,9 @@ app.post('/register', async (req, res) => {
   app.use(auth);
 
 app.get('/home', (req, res) => {
+  console.log(req.session);
   res.render('pages/home', {
-    username: req.session.user.username,
+    username: req.session.user,
   });
 });
 
