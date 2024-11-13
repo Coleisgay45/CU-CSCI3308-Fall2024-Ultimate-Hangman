@@ -38,10 +38,7 @@ describe('I am testing registration with new user', () => {
       .send({ username: 'erpoulas123', password: 'Slay936!!' })
       .end((err, res) => {
         expect(res).to.have.status(200);
-        //console.log("========================\n\n\n\n\n\n",res.body,"\n\n\n\n===============================");
-        //console.log("========================\n\n\n\n\n\n",res,"\n\n\n\n===============================");
         res.should.be.html;
-        //assert.strictEqual(res.body.message, 'user registered');
         done();
       });
   });
@@ -55,29 +52,11 @@ describe('I am testing registration with existing user in database', () => {
       .send({ username: 'hhawksley0', password: 'MiamiBeach832$' })
       .end((err, res) => {
         expect(res).to.have.status(400);
-        //console.log("========================\n\n\n\n\n\n",res.body,"\n\n\n\n===============================");
-        //console.log("========================\n\n\n\n\n\n",res,"\n\n\n\n===============================");
         res.should.be.html;
-        //assert.strictEqual(res.body.message, 'user registered');
         done();
       });
   });
 });
-
-// describe('I am testing registration with existing user in database', () => {
-//   it('Returns 400 status code, failed registration', (done) => {
-//     chai
-//       .request(app)
-//       .post('/register')
-//       .send({ username: 'hhawksley0', password: 'MiamiBeach832$' })
-//       .end((err, res) => {
-//         expect(res).to.have.status(400);
-//         assert.strictEqual(res.body.message, 'User already exists or invalid parameters!');
-//         done();
-//       });
-//   });
-// });
-
 
 // *********************** TODO: WRITE 2 UNIT TESTCASES **************************
 
@@ -92,6 +71,7 @@ describe('I am testing login with existing user, incorrect password', () => {
       .send({ username: 'hhawksley0', password: 'Stu1234567?' })
       .end((err, res) => {
         expect(res).to.have.status(400);
+        //res.should.be.html;
         done();
       });
   });
@@ -107,6 +87,7 @@ describe('I am testing login with valid credentials', () => {
       .send({ username: 'hhawksley0', password: 'Stu123456!' })
       .end((err, res) => {
         expect(res).to.have.status(200);
+        //res.should.be.html;
         done();
       });
   });

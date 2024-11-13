@@ -138,23 +138,12 @@ app.post('/register', async (req, res) => {
     // query results can be obtained
     // as shown below
     .then(data => {
+        console.log('woahhhhhhhhhh');
         res.status(200).render('pages/login');
-
-      //res.redirect(200, '/login')
     })
     // if query execution fails
     // send error message
     .catch(err => {
-      // console.log("========================\n");
-      // console.log('Uh Oh spaghettio');
-      // console.log(err);
-      // console.log("========================\n");
-      /*
-      res.status(400).render('pages/register', {
-        message: 'User already exists or invalid parameters!',
-        error: true
-      });
-      */
       res.status(400).render('pages/register');
     });
   }
