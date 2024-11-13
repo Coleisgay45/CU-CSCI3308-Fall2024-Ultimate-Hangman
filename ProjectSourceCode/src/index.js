@@ -53,6 +53,7 @@ db.connect()
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
+console.log(__dirname);
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
 //app.set('resources',path.join(__dirname,'resources'));
 app.use(express.static(__dirname+'/resources'));
@@ -99,28 +100,31 @@ app.get('/settings', (req, res) => {
 });
 
 app.get('/discover', (req, res) => {
-  res.render('pages/discover');
+  res.render('pages/discover'); 
 });
 
 app.post('/login', async (req, res) => {
     let user = `select * from users WHERE users.username = '${req.body.username}'`;
     db.any(user)
     .then(async (rows) => {
+      console.log(rows);
       if(rows.length == 0) {
         res.render('pages/register');
         return;
       }
       const match = await bcrypt.compare(req.body.password, rows[0].password);  
       if(!match) { // existing user, incorrect password
-        res.redirect(400, '/login')
+        //res.redirect('/login')
+        res.status(400).render('pages/login');
       } else {
         req.session.user = user;
         req.session.save();
-        res.redirect(200, '/discover');
+        res.status(200).render('pages/discover');
       }
     })
     .catch((error) => {
-      res.redirect(500, '/register');
+      res.status(500).render('pages/register');
+      //res.redirect(500, '/register');
     })
 });
 
