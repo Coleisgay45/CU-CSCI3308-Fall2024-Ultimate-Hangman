@@ -84,64 +84,24 @@ app.get('/welcome', function(req, res) {
     message: 'Welcome!'
   })
 })
-/*
-app.get('/login', function(req, res) { 
-  res.status(401).json({
-    status: 'unauthorized login',
-    message: 'invalid credentials!'
-  })
-})
-
-app.get('/login', function(req, res) { 
-  res.status(200).json({
-    status: 'logged in',
-    message: 'login successful!'
-  })
-})
-  */
 
 app.get('/login', (req, res) => {
     res.render('pages/login');
 });
-/*
-app.get('/', (req, res) => {
-  res.render('pages/home', { 
-  });
-});
-*/
+
 app.post('/login', async (req, res) => {
-    console.log('something');
     let user = `select * from users WHERE users.username = '${req.body.username}'`;
-    console.log('running query');
     db.any(user)
     .then(async (rows) => {
-      console.log('query ran');
-      console.log(rows);
-      console.log(rows[0]);
       if(rows.length == 0) {
         res.render('pages/register');
         return;
       }
-      const match = await bcrypt.compare(req.body.password, rows.password);  
-      console.log('passed match');
-      console.log(rows.password);
-      console.log(match); 
-      if(!match) { // incorrect password
-        // res.status(400).json({
-        //   status: 'failure',
-        //   message: 'Username or Password incorrect!'
-        // });
-        //res.redirect('/login')
+      const match = await bcrypt.compare(req.body.password, rows[0].password);  
+      if(!match) { // existing user, incorrect password
         console.log('hi');
         res.redirect(400, '/login')
       } else {
-        // res.status(200).json({
-        //   status: 'success',
-        //   message: 'login successful!'
-        // });
-        // req.session.user = user;
-        // req.session.save();
-        // res.redirect('/discover');
         req.session.user = user;
         req.session.save();
         res.redirect(200, '/discover');
