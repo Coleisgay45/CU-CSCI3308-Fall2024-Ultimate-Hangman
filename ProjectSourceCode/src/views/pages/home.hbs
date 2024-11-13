@@ -22,7 +22,7 @@
         justify-content: center;
         align-items: center;
         width: 100%;
-        height: 520px;
+        height: 420px;
         background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%), url("https://www.word-grabber.com/3/m/2014/01/hangman_facebook.jpg");
         background-size: cover;
         background-position: center;
@@ -42,6 +42,51 @@
       color: #d1d1d1;
       margin: 20px 0;
     }
+
+    .score {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 80px 200px;
+    }
+
+    .score .work {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: end;
+      padding: 0 40px;
+    }
+
+    .score .work img {
+      color: #333333;
+      border-radius: 50%;
+      border: 2px solid #333333;
+      width: 5%;
+      height: 5%;
+      
+    }
+
+    .score .work .work-heading {
+      font-size: 20px;
+      color: #333333;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .score .work .work-text {
+      font-size: 15px;
+      color: #585858;
+      margin: 10px 0;
+    }
+
+    .score .score-heading {
+      text-align: center;
+      font-size: 50px;
+      margin: 10px 0;
+      
+    }
+
     </style>
   </head>
   <body>
@@ -49,7 +94,15 @@
     <main>
       <div class="intro">
         <h1>Home</h1>
-        <p>Welcome to Ultimate Hangman!</p>
+        <p>{{username}}</p>
+        <p>Welcome, to Ultimate Hangman!</p>
+      </div>
+      <div class="score">
+        <p class="score-heading">High Scores:</p>
+        <div class="work">
+          <img src="https://th.bing.com/th/id/R.0fd81358b183723ba8e5df50d9a85da1?rik=tdRRmTqJ7WjFyg&pid=ImgRaw&r=0">
+          <p class="work-heading">Hangman:</p>
+    </div>
       </div>
     </main>
   </body>

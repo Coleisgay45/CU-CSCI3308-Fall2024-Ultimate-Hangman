@@ -99,6 +99,7 @@ app.post('/login', async (req, res) => {
       if(!match) {
         res.redirect('/login', {message: "Username or Password"})
       } else {
+        user.username = req.body.username;
         req.session.user = user;
         req.session.save();
         res.redirect('/home');
@@ -162,7 +163,9 @@ app.post('/register', async (req, res) => {
   app.use(auth);
 
 app.get('/home', (req, res) => {
-  res.render('pages/home');
+  res.render('pages/home', {
+    username: req.session.user.username,
+  });
 });
 
 app.listen(3000);
