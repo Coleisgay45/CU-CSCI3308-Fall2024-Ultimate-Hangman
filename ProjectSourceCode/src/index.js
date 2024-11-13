@@ -183,24 +183,33 @@ app.post('/register', async (req, res) => {
   
  app.post('/dictionaryword', (req, res) =>{
   var userword = req.body.word;
+  var url2 = "https://api.dictionaryapi.dev/api/v2/entries/en/"
+  + userword;
   console.log(userword);
   axios({
-    url: `https://api.api-ninjas.com/v1/dictionary`,
+    url: url2,
     method: 'GET',
     dataType: 'json',
     headers: {
       'Accept-Encoding': 'application/json',
-      'X-Api-Key': '0n76oBTce1BkxH8oeM5PaLNPrxa99q2KHeVn3chv'
+      
     },
-    params: {
-      "word" : userword, 
+    params: { 
     },
   })
   .then(results => {
-    console.log(results);
-    var wordinfo = results.data
-    res.render('pages/definition', wordinfo
+    const wordData = results.data;
+    const wordData2 = wordData[0].meanings
+    const wordData3 = wordData2[0].definitions
+    const wordData4 = wordData3[0].definition
+    console.log("word data is ", wordData);
+    console.log("word data 2 is ", wordData2)
+    console.log("word data 3 is ", wordData3)
+    console.log("word data 4 is ", wordData4)
+    // console.log("word data item ", wordData[0].meanings);
+    res.render('pages/definition', {wordData4}
     );
+    
    // the results will be displayed on the terminal if the docker containers are running // Send some parameters
   })
   .catch(error => {
