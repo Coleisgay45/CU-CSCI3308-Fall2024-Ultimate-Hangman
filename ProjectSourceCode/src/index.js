@@ -180,6 +180,39 @@ app.post('/register', async (req, res) => {
     res.render('pages/dictionary');
   });
 
+  
+ app.post('/dictionaryword', (req, res) =>{
+  var userword = req.body.word;
+  console.log(userword);
+  axios({
+    url: `https://api.api-ninjas.com/v1/dictionary`,
+    method: 'GET',
+    dataType: 'json',
+    headers: {
+      'Accept-Encoding': 'application/json',
+      'X-Api-Key': '0n76oBTce1BkxH8oeM5PaLNPrxa99q2KHeVn3chv'
+    },
+    params: {
+      "word" : userword, 
+    },
+  })
+  .then(results => {
+    console.log(results);
+    var wordinfo = results.data
+    res.render('pages/definition', wordinfo
+    );
+   // the results will be displayed on the terminal if the docker containers are running // Send some parameters
+  })
+  .catch(error => {
+    // Handle errors
+    // const empty = "error"
+    console.error(error.message);
+    res.render('pages/dictionary');
+    
+  });
+
+ });
+
 
 app.listen(3000);
 console.log('Server is listening on port 3000');
