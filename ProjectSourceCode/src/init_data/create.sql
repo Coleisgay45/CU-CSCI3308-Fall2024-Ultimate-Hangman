@@ -1,10 +1,10 @@
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     username VARCHAR(50) PRIMARY KEY,
-    password_ CHAR(60) NOT NULL
+    password CHAR(60) NOT NULL
 );
 
-INSERT INTO users (username, password_) 
+INSERT INTO users (username, password) 
 VALUES 
 ('hhawksley0','Stu123456!'),
 ('ojarnell1', 'Stu123456!'),

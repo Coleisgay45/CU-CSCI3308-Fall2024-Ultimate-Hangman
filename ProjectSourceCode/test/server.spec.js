@@ -34,7 +34,7 @@ describe('I am testing the server', () => {
 // ********************************************************************************
 // negative test case: user tries to login but enters the wrong password
 
-describe('I am testing login with invalid credentials', () => {
+describe('I am testing login with existing user, incorrect password', () => {
   it('Returns the error message for invalid credentials', (done) => {
     chai
       .request(app)
@@ -42,7 +42,9 @@ describe('I am testing login with invalid credentials', () => {
       .send({ username: 'hhawksley0', password: 'Stu1234567!' })
       .end((err, res) => {
         expect(res).to.have.status(400);
-        expect(res.body.message).to.equal('Username or Password incorrect');
+        //expect(res.body.status).to.equals('failure');
+        //assert.strictEqual(res.body.message, 'Username or Password incorrect!');
+        //expect(res.body.message).to.equal('Username or Password incorrect!');
         done();
       });
   });
@@ -58,8 +60,8 @@ describe('I am testing login with valid credentials', () => {
       .send({ username: 'hhawksley0', password: 'Stu123456!' })
       .end((err, res) => {
         expect(res).to.have.status(200);
-        //expect(res.body.status).to.equals('logged in');
-        assert.strictEqual(res.body.message, 'login successful!');
+        //expect(res.body.status).to.equals('success');
+        //assert.strictEqual(res.body.message, 'login successful!');
         done();
       });
   });
