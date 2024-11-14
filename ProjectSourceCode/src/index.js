@@ -127,18 +127,20 @@ app.post('/login', async (req, res) => {
       res.status(400).render('pages/login');
       return;
     }
-    req.session.user = user;
+    req.session.user = req.body.username;
     req.session.save();
-    res.status(200).render('pages/discover');
+    res.redirect('/home');
   })
     .catch(err => {
       res.status(500).render('pages/register')
     });
 
 });
+
 app.get('/register', (req, res) => {
     res.render('pages/register');
   });
+
 app.get('/playHangman', (req, res) => {
     res.render('pages/playHangman');
   });
@@ -228,24 +230,10 @@ app.post('/dictionaryword', (req, res) =>{
 
 });
  
-app.get('/leaderboards', (req, res) => {
-  const users = 'select * from users'
-  // Query to get all the users
-
-  db.any(users)
-    .then(users => {
-      console.log(users)
-      res.render('pages/leaderboard', {
-        users
-      });
-    })
-    .catch(err => {
-      res.render('pages/leaderboard', {
-        users: [],
-        error: true,
-        message: err.message,
-      });
-    });
+app.get('/home', (req, res) => {
+  res.render('pages/home', {
+    username: req.session.user,
+  });
 });
 
 module.exports = app.listen(3000);
