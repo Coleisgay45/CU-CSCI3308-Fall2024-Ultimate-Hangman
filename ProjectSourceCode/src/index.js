@@ -151,6 +151,7 @@ app.post('/register', async (req, res) => {
     // To-DO: Insert username and hashed password into the 'users' table
   });
 
+  //logout
   app.get('/logout', (req,res) => {
     req.render('pages/logout')
   });
