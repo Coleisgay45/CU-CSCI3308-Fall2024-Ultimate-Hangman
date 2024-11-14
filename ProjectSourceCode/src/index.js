@@ -95,12 +95,11 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/settings', (req, res) => {
-  console.log('hi im here yayyyyyyyy');
   res.render('pages/settings');
 });
 
-app.get('/discover', (req, res) => {
-  res.render('pages/discover'); 
+app.get('/home', (req, res) => {
+  res.render('pages/home'); 
 });
 
 app.post('/login', async (req, res) => {
@@ -129,28 +128,24 @@ app.post('/login', async (req, res) => {
     }
     req.session.user = user;
     req.session.save();
-    res.status(200).render('pages/discover');
+    res.status(200).render('pages/home');
   })
     .catch(err => {
       res.status(500).render('pages/register')
     });
-
 });
-app.get('/register', (req, res) => {
-    res.render('pages/register');
-  });
-app.get('/playHangman', (req, res) => {
+
+  app.get('/playHangman', (req, res) => {
     res.render('pages/playHangman');
   });
-
   // Register
-  app.post('/register', async (req, res) => {
+app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     
-    var uname = req.body.username;
-    console.log("USERNAME: ", uname);
-    const regquery = `insert into users (username, password) values ($1, $2);`;
-    if ((uname !== '') && (req.body.password !== '')){
+  var uname = req.body.username;
+  console.log("USERNAME: ", uname);
+  const regquery = `insert into users (username, password) values ($1, $2);`;
+  if ((uname !== '') && (req.body.password !== '')){
     const hash = await bcrypt.hash(req.body.password, 10);
     db.any(regquery,[uname, hash])
     // if query execution succeeds
@@ -173,11 +168,11 @@ app.get('/playHangman', (req, res) => {
 });
 
 // access after this point requires login 
-  const auth = (req, res, next) => {
-    if (!req.session.user) {
-      return res.redirect('/login');
-    }
-    next();
+const auth = (req, res, next) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  next();
 };
 app.use(auth);
 
@@ -217,7 +212,5 @@ app.post('/dictionaryword', (req, res) =>{
   });
 
 });
- 
-
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
