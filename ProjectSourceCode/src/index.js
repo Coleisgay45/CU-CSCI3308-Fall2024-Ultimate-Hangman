@@ -212,7 +212,8 @@ app.post('/dictionaryword', (req, res) =>{
     console.log("word data 3 is ", wordData3)
     console.log("word data 4 is ", wordData4)
     // console.log("word data item ", wordData[0].meanings);
-    res.render('pages/definition', {wordData4}
+    res.render('pages/dictionary', {message: wordData4}
+     //res.redirect('/login', {message: "Wrong Password or Username"})
     );
     
    // the results will be displayed on the terminal if the docker containers are running // Send some parameters
@@ -221,7 +222,7 @@ app.post('/dictionaryword', (req, res) =>{
     // Handle errors
     // const empty = "error"
     console.error(error.message);
-    res.render('pages/dictionary');
+    res.render('pages/dictionary', {message: "Error invalid word / word not found"});
     
   });
 
