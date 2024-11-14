@@ -134,9 +134,13 @@ app.post('/login', async (req, res) => {
     .catch(err => {
       res.status(500).render('pages/register')
     });
+
 });
-  app.get('/register', (req, res) => {
+app.get('/register', (req, res) => {
     res.render('pages/register');
+  });
+app.get('/playHangman', (req, res) => {
+    res.render('pages/playHangman');
   });
 
   // Register
@@ -213,6 +217,7 @@ app.post('/dictionaryword', (req, res) =>{
   });
 
 });
+ 
 
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
