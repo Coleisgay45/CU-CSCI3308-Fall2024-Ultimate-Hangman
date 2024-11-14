@@ -131,51 +131,22 @@ app.post('/login', async (req, res) => {
     req.session.save();
     res.status(200).render('pages/discover');
   })
-    //.then(user => {
-   // })
     .catch(err => {
       res.status(500).render('pages/register')
     });
 });
-  
-/*
-  app.post('/login', async (req, res) => {
-    let user = `select * from users WHERE users.username = '${req.body.username}'`;
-    db.any(user)
-    .then(async (rows) => {
-      console.log(rows);
-      if(rows.length == 0) {
-        res.render('pages/register');
-        return;
-      }
-      const match = await bcrypt.compare(req.body.password, rows[0].password);  
-      if(!match) { // existing user, incorrect password
-        //res.redirect('/login')
-        res.status(400).render('pages/login');
-      } else {
-        req.session.user = user;
-        req.session.save();
-        res.status(200).render('pages/discover');
-      }
-    })
-    .catch((error) => {
-      res.status(500).render('pages/register');
-      //res.redirect(500, '/register');
-    })
-});
-*/
   app.get('/register', (req, res) => {
     res.render('pages/register');
   });
 
   // Register
-app.post('/register', async (req, res) => {
+  app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     
     var uname = req.body.username;
-    //console.log("USERNAME: ", uname);
+    console.log("USERNAME: ", uname);
     const regquery = `insert into users (username, password) values ($1, $2);`;
-    //if ((uname !== '') && (req.body.password !== '')){
+    if ((uname !== '') && (req.body.password !== '')){
     const hash = await bcrypt.hash(req.body.password, 10);
     db.any(regquery,[uname, hash])
     // if query execution succeeds
@@ -187,21 +158,17 @@ app.post('/register', async (req, res) => {
     // if query execution fails
     // send error message
     .catch(err => {
-      //res.status(400).render('pages/register');
-      res.status(400).send(err)
+      res.status(400).render('pages/register');
     });
-  // }
-  // else{
-  //   res.status(400).render('pages/register', {
-  //     error: true,
-  //     status: 'failure',
-  //     message: 'User already exists or invalid parameters!'
-  //   });
-  // }
+  }
+  else{
+    console.log('uh oh spaghettio');
+    res.status(400).render('pages/register');
+  }
     // To-DO: Insert username and hashed password into the 'users' table
 });
 
-  // access after this point requires login 
+// access after this point requires login 
   const auth = (req, res, next) => {
     if (!req.session.user) {
       return res.redirect('/login');
@@ -210,16 +177,12 @@ app.post('/register', async (req, res) => {
 };
 app.use(auth);
 
-//console.log('Server is listening on port 3000');
-
-
-  
-  app.get('/dictionary', (req, res) => {
+app.get('/dictionary', (req, res) => {
     res.render('pages/dictionary');
-  });
+});
 
   
- app.post('/dictionaryword', (req, res) =>{
+app.post('/dictionaryword', (req, res) =>{
   var userword = req.body.word;
   console.log(userword);
   axios({
@@ -249,8 +212,7 @@ app.use(auth);
     
   });
 
- });
+});
 
-
- module.exports = app.listen(3000);
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
