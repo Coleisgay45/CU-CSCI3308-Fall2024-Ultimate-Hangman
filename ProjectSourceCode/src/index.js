@@ -53,6 +53,7 @@ db.connect()
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
+console.log(__dirname);
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
 //app.set('resources',path.join(__dirname,'resources'));
 app.use(express.static(__dirname+'/resources'));
@@ -77,14 +78,29 @@ app.get('/', (req, res) => {
   res.render('pages/register');
 });
 
+//test cases
+app.get('/welcome', function(req, res) { 
+  res.status(200).json({
+    status: 'success',
+    message: 'Welcome!'
+  })
+})
 
+app.get('/register', (req, res) => {
+  res.render('pages/register');
+});
 
 app.get('/login', (req, res) => {
     res.render('pages/login');
 });
-app.get('/', (req, res) => {
-  res.render('pages/home', { 
-  });
+
+app.get('/settings', (req, res) => {
+  console.log('hi im here yayyyyyyyy');
+  res.render('pages/settings');
+});
+
+app.get('/discover', (req, res) => {
+  res.render('pages/discover'); 
 });
 
 app.post('/login', async (req, res) => {
@@ -97,32 +113,57 @@ app.post('/login', async (req, res) => {
           username = $1`,
       [req.body.username]
     );
-    console.info(user)
+    //console.info(user)
     if(user.username === ''){
-      res.redirect('/register')
+      // res.redirect('/register')
+      res.render('pages/register'); //my code
+      return;
     }
+    console.log('matching')
     const match = await bcrypt.compare(req.body.password, user.password);
+    console.log(match)
     if(match !== true){
-      res.redirect('/login', {message: "Wrong Password or Username"})
+      //res.redirect('/login', {message: "Wrong Password or Username"})
+      res.status(400).render('pages/login');
+      return;
     }
-    return user;
-  })
-    .then(user => {
-    
     req.session.user = user;
     req.session.save();
-    res.redirect('/home')
-    })
+    res.status(200).render('pages/discover');
+  })
+    //.then(user => {
+   // })
     .catch(err => {
-      res.render('pages/login', {
-    
-        error: true,
-        message: "Wrong Password or Username",
-      });
+      res.status(500).render('pages/register')
     });
-
-  });
-
+});
+  
+/*
+  app.post('/login', async (req, res) => {
+    let user = `select * from users WHERE users.username = '${req.body.username}'`;
+    db.any(user)
+    .then(async (rows) => {
+      console.log(rows);
+      if(rows.length == 0) {
+        res.render('pages/register');
+        return;
+      }
+      const match = await bcrypt.compare(req.body.password, rows[0].password);  
+      if(!match) { // existing user, incorrect password
+        //res.redirect('/login')
+        res.status(400).render('pages/login');
+      } else {
+        req.session.user = user;
+        req.session.save();
+        res.status(200).render('pages/discover');
+      }
+    })
+    .catch((error) => {
+      res.status(500).render('pages/register');
+      //res.redirect(500, '/register');
+    })
+});
+*/
   app.get('/register', (req, res) => {
     res.render('pages/register');
   });
@@ -132,38 +173,33 @@ app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     
     var uname = req.body.username;
+    //console.log("USERNAME: ", uname);
     const regquery = `insert into users (username, password) values ($1, $2);`;
-    if ((uname !== '') && (req.body.password !== '')){
+    //if ((uname !== '') && (req.body.password !== '')){
     const hash = await bcrypt.hash(req.body.password, 10);
     db.any(regquery,[uname, hash])
     // if query execution succeeds
     // query results can be obtained
     // as shown below
     .then(data => {
-      res.redirect('/login')
+        res.status(200).render('pages/login');
     })
     // if query execution fails
     // send error message
     .catch(err => {
-      console.log('Uh Oh spaghettio');
-      console.log(err);
-      
-      res.render('pages/register', {
-      
-        error: true,
-        message: "User already exists or invalid parameters!",
-      });
+      //res.status(400).render('pages/register');
+      res.status(400).send(err)
     });
-  }
-  else{
-    res.redirect('/register', {
-      error: true,
-      message: "User already exists or invalid parameters!",
-    })
-
-  }
+  // }
+  // else{
+  //   res.status(400).render('pages/register', {
+  //     error: true,
+  //     status: 'failure',
+  //     message: 'User already exists or invalid parameters!'
+  //   });
+  // }
     // To-DO: Insert username and hashed password into the 'users' table
-  });
+});
 
   // access after this point requires login 
   const auth = (req, res, next) => {
@@ -171,9 +207,11 @@ app.post('/register', async (req, res) => {
       return res.redirect('/login');
     }
     next();
-  };
-  
-  app.use(auth);
+};
+app.use(auth);
+
+//console.log('Server is listening on port 3000');
+
 
   
   app.get('/dictionary', (req, res) => {
@@ -214,5 +252,5 @@ app.post('/register', async (req, res) => {
  });
 
 
-app.listen(3000);
+ module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
