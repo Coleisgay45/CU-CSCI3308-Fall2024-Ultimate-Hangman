@@ -12,3 +12,14 @@
         width: 100%;
       }
       
+/* light theme */
+body.light-theme {
+  background-color: white !important;
+  color: black !important;
+}
+
+/* dark theme */
+body.dark-theme {
+  background-color: #2c3745 !important;
+  color: white !important;
+}

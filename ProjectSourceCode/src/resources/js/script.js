@@ -1,11 +1,24 @@
+// function setTheme(theme) {
+//     const body = document.getElementByID("body");
+//     if (theme === 'Light') {
+//       body.setAttribute('data-bs-theme', 'light');
+//     } else if (theme === 'Dark') {
+//       body.setAttribute('data-bs-theme', 'dark');
+//     }
+// }
+console.log("script.js is loaded");
 function setTheme(theme) {
+    console.log(`Setting theme to: ${theme}`);
     const body = document.body;
-    if (theme === 'Light') {
-      body.setAttribute('data-bs-theme', 'light');
-    } else if (theme === 'Dark') {
-      body.setAttribute('data-bs-theme', 'dark');
+  
+    if (theme === 'light') {
+      body.classList.remove('dark-theme');
+      body.classList.add('light-theme');
+    } else if (theme === 'dark') {
+      body.classList.remove('light-theme');
+      body.classList.add('dark-theme');
     }
-}
+  }
 
 function setDifficulty(level){
     if (level == 'Easy'){
@@ -22,6 +35,7 @@ function setDifficulty(level){
 }
 
 function toggleMute() {
+    //this is how you can toggle back and forth between mute and unmute
     isMuted = !isMuted;
     // audioElements is just a temp variable for now 
     const audioElements = document.querySelectorAll("audio");

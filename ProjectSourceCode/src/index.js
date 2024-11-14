@@ -161,7 +161,7 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/settings', (req, res) => {
-    req.render('pages/settings')
+    res.render('pages/settings')
 });
 
   // access after this point requires login 
