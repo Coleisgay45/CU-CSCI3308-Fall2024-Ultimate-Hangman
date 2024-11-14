@@ -123,8 +123,11 @@ app.post('/login', async (req, res) => {
 
   });
 
-  app.get('/register', (req, res) => {
+app.get('/register', (req, res) => {
     res.render('pages/register');
+  });
+app.get('/playHangman', (req, res) => {
+    res.render('pages/playHangman');
   });
 
   // Register
@@ -212,6 +215,7 @@ app.post('/register', async (req, res) => {
   });
 
  });
+ 
 
 
 app.listen(3000);
