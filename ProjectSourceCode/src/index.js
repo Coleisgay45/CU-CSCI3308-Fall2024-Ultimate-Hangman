@@ -103,7 +103,6 @@ app.post('/login', async (req, res) => {
         req.session.user = req.body.username;
         req.session.save();
         res.redirect('/home');
-        res.redirect('/home');
       }
     })
     .catch((error) => {
