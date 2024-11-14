@@ -23,3 +23,45 @@ body.dark-theme {
   background-color: #2c3745 !important;
   color: white !important;
 }
+.Hangman-Pic img{
+  padding-top: 20px;
+  user-select: none;
+  height: auto; 
+  width : 80%;
+  max-width: 400px;
+  padding : 20px;
+
+}
+
+.word-display{
+  gap: 10px;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.Game-box .Keyboard{
+  display: flex;
+  gap : 5px;
+  flex-wrap: wrap; 
+  /*Without wrap (flex-wrap: nowrap;): Flex items stay on a single line, potentially overflowing the container if there's too much content.
+With wrap (flex-wrap: wrap;): Flex items will go to a new row if they can’t fit in the current one, keeping them within the container's width/height.
+*/
+  justify-content: center;
+}
+.Keyboard button{
+  /*This divides the width of the parent by 7 for a grid layout and then subtracts 5 pixels to leave space for margins or padding.*/
+  color: white;
+  background-color: navy;
+  font-size:large;
+  cursor:pointer;
+  border: none;
+  padding: 7px;
+  width: calc(100% /9 - 20px);
+  font-weight: 700;
+}
+.Keyboard button:hover{
+  background: #8286c9;
+}
