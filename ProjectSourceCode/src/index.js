@@ -227,6 +227,25 @@ app.post('/dictionaryword', (req, res) =>{
 
 });
  
+app.get('/leaderboards', (req, res) => {
+  const users = 'select * from users'
+  // Query to get all the users
+
+  db.any(users)
+    .then(users => {
+      console.log(users)
+      res.render('pages/leaderboard', {
+        users
+      });
+    })
+    .catch(err => {
+      res.render('pages/leaderboard', {
+        users: [],
+        error: true,
+        message: err.message,
+      });
+    });
+});
 
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
