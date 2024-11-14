@@ -94,15 +94,6 @@ app.get('/login', (req, res) => {
     res.render('pages/login');
 });
 
-app.get('/settings', (req, res) => {
-  console.log('hi im here yayyyyyyyy');
-  res.render('pages/settings');
-});
-
-app.get('/discover', (req, res) => {
-  res.render('pages/discover'); 
-});
-
 app.post('/login', async (req, res) => {
   db.tx(async t => {
     const user = await t.one(
@@ -115,7 +106,6 @@ app.post('/login', async (req, res) => {
     );
     //console.info(user)
     if(user.username === ''){
-      // res.redirect('/register')
       res.render('pages/register'); //my code
       return;
     }
@@ -123,13 +113,12 @@ app.post('/login', async (req, res) => {
     const match = await bcrypt.compare(req.body.password, user.password);
     console.log(match)
     if(match !== true){
-      //res.redirect('/login', {message: "Wrong Password or Username"})
       res.status(400).render('pages/login');
       return;
     }
     req.session.user = user;
     req.session.save();
-    res.status(200).render('pages/discover');
+    res.status(200).render('pages/discover', );
   })
     .catch(err => {
       res.status(500).render('pages/register')
@@ -138,10 +127,15 @@ app.post('/login', async (req, res) => {
 });
 app.get('/register', (req, res) => {
     res.render('pages/register');
-  });
-app.get('/playHangman', (req, res) => {
-    res.render('pages/playHangman');
-  });
+});
+
+app.get('/discover', (req, res) => {
+  res.render('pages/discover'); 
+});
+
+app.get('/settings', (req, res) => {
+  res.render('pages/settings');
+});
 
   // Register
   app.post('/register', async (req, res) => {
@@ -181,11 +175,14 @@ app.get('/playHangman', (req, res) => {
 };
 app.use(auth);
 
+app.get('/playHangman', (req, res) => {
+  res.render('pages/playHangman');
+});
+
 app.get('/dictionary', (req, res) => {
     res.render('pages/dictionary');
 });
 
-  
 app.post('/dictionaryword', (req, res) =>{
   var userword = req.body.word;
   console.log(userword);
@@ -213,11 +210,9 @@ app.post('/dictionaryword', (req, res) =>{
     // const empty = "error"
     console.error(error.message);
     res.render('pages/dictionary');
-    
   });
 
 });
- 
 
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
