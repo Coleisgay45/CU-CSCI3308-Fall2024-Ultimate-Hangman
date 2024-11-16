@@ -119,23 +119,11 @@ app.post('/login', async (req, res) => {
     req.session.user = req.body.username;
     req.session.save();
     res.status(200).render('pages/home', );
-})
+    })
     .catch(err => {
       res.status(500).render('pages/register')
     });
 
-});
-
-app.get('/register', (req, res) => {
-    res.render('pages/register');
-});
-
-app.get('/discover', (req, res) => {
-  res.render('pages/discover'); 
-});
-
-app.get('/settings', (req, res) => {
-  res.render('pages/settings');
 });
   // Register
 app.post('/register', async (req, res) => {
@@ -167,13 +155,23 @@ app.post('/register', async (req, res) => {
 });
 
 // access after this point requires login 
-  const auth = (req, res, next) => {
+const auth = (req, res, next) => {
     if (!req.session.user) {
       return res.redirect('/login');
     }
     next();
 };
 app.use(auth);
+
+app.get('/home', (req, res) => {
+  res.render('pages/home', {
+    username: req.session.user,
+  });
+});
+
+app.get('/settings', (req, res) => {
+  res.render('pages/settings');
+});
 
 app.get('/playHangman', (req, res) => {
   res.render('pages/playHangman');
@@ -212,12 +210,6 @@ app.post('/dictionaryword', (req, res) =>{
     res.render('pages/dictionary');
   });
 
-});
-
-app.get('/home', (req, res) => {
-  res.render('pages/home', {
-    username: req.session.user,
-  });
 });
 
 module.exports = app.listen(3000);
