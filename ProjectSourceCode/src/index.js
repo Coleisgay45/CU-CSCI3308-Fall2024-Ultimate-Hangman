@@ -116,15 +116,16 @@ app.post('/login', async (req, res) => {
       res.status(400).render('pages/login');
       return;
     }
-    req.session.user = user;
+    req.session.user = req.body.username;
     req.session.save();
-    res.status(200).render('pages/discover', );
-  })
+    res.status(200).render('pages/home', );
+})
     .catch(err => {
       res.status(500).render('pages/register')
     });
 
 });
+
 app.get('/register', (req, res) => {
     res.render('pages/register');
 });
@@ -136,9 +137,8 @@ app.get('/discover', (req, res) => {
 app.get('/settings', (req, res) => {
   res.render('pages/settings');
 });
-
   // Register
-  app.post('/register', async (req, res) => {
+app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     
     var uname = req.body.username;
@@ -212,6 +212,12 @@ app.post('/dictionaryword', (req, res) =>{
     res.render('pages/dictionary');
   });
 
+});
+
+app.get('/home', (req, res) => {
+  res.render('pages/home', {
+    username: req.session.user,
+  });
 });
 
 module.exports = app.listen(3000);

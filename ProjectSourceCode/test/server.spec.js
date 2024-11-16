@@ -77,7 +77,7 @@ describe('I am testing login with existing user, incorrect password', () => {
   });
 });
 
-// positive test case: user enters correct username and password
+// // positive test case: user enters correct username and password
 describe('I am testing login with valid credentials', () => {
   // Sample test case given to test / endpoint.
   it('Returns 200 status code, successful login', done => {
