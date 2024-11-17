@@ -4,8 +4,12 @@
     <div class="Hangman-Pic">
         <img src="img/hangman-0.svg">
     </div>
-    <div class="Game-box">
+    <div id="lettersDisplay" ></div>
+    <div id="guessMessage"></div>
+    <div class="Game-box" style="font-size: 20px; margin-top: 10px; color: blue;">
         <div class = "Keyboard">
+          <!-- make it to where keyboard typing correlates to clicking the button-->
+          <!-- make it to where after guessing a letter, the button darkens and loses functionality-->
             <button type="button" onclick="checkGuess('A')">A</button>
             <button type="button" onclick="checkGuess('B')">B</button>
             <button type="button" onclick="checkGuess('C')">C</button>
@@ -13,7 +17,7 @@
             <button type="button" onclick="checkGuess('E')">E</button>
             <button type="button" onclick="checkGuess('F')">F</button>
             <button type="button" onclick="checkGuess('G')">G</button>
-            <button type="button" onclick="checkGuess('H`')">H</button>
+            <button type="button" onclick="checkGuess('H')">H</button>
             <button type="button" onclick="checkGuess('I')">I</button>
             <button type="button" onclick="checkGuess('J')">J</button>
             <button type="button" onclick="checkGuess('K')">K</button>

@@ -1,5 +1,5 @@
-let currentWord = '';
-let correctGuesses = []; 
+let currentWord = 'WORD'; // temp for testing, will change to initialize to '' later
+let correctGuesses = new Array(currentWord.length).fill(false);
 let errorCount = 0;
 
 // should we add a reset function each new game to reset global variables?
@@ -33,22 +33,27 @@ function generateRandomWord()
   let currentWord_ = '';
   // random word generated, then we set it to currentWord_
   // word generated depends on level: maybe easy = 3-4, medium = 5-6, hard = 7+? idk what we want to decide
+  // set all to uppercase to correlate with buttons
   currentWord = currentWord_;
 }
 
-function displayLetters()
-{
-  let display = word.split('').map((letter, index) => {
-    return correctGuesses ? letter : '_';
+function displayLetters() {
+  let display = currentWord.split('').map((letter, index) => {
+    // Check if the letter has been correctly guessed
+    return correctGuesses[index] ? letter : '_';
   });
-  document.getElementById('lettersDisplay').textContent = display.join(' '); // TODO: need to make html element lettersDisplay on playHangman page
+  document.getElementById('lettersDisplay').textContent = display.join(' ');
 }
+
 
 function checkGuess(guess)
 {
+  console.log('checkGuess called');
   let correctGuess = false;
-  if (currentWord.includes(letter))
+
+  if (currentWord.includes(guess))
   {
+    console.log(guess);
     correctGuess = true;
     for (let i = 0; i < currentWord.length; i++) {
       if (currentWord[i] === guess) {
@@ -59,24 +64,21 @@ function checkGuess(guess)
 
   else
   {
-    correctGuess = false;
     errorCount++;
-    
-    // error count ++
   }
 
   displayLetters();
 
-  if (correctGuess == false)
+  if (correctGuess)
   {
     // display incorrect guess message
-    document.getElementById('guessMessage').innerText = 'Incorrect!'; //TODO: need to define guessMesssage html element
+    document.getElementById('guessMessage').innerText = 'Correct!';
   }
 
   else
   {
-    // display correct guess message
-    document.getElementById('guessMessage').innerText = 'Correct!';
+    // display correct guess 
+    document.getElementById('guessMessage').innerText = 'Incorrect!';
   }
 
   if (correctGuesses.every(val => val)) 

@@ -95,7 +95,6 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/settings', (req, res) => {
-  console.log('hi im here yayyyyyyyy');
   res.render('pages/settings');
 });
 
@@ -115,8 +114,7 @@ app.post('/login', async (req, res) => {
     );
     //console.info(user)
     if(user.username === ''){
-      // res.redirect('/register')
-      res.render('pages/register'); //my code
+      res.render('pages/register');
       return;
     }
     console.log('matching')
