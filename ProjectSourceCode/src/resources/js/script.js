@@ -1,10 +1,21 @@
 let currentWord = 'WORD'; // temp for testing, will change to initialize to '' later
 let correctGuesses = new Array(currentWord.length).fill(false);
 let errorCount = 0;
+let guessedLetters = [];
+// TODO: should we add a reset function each new game to reset global variables?
 
-// should we add a reset function each new game to reset global variables?
+document.addEventListener('keydown', function(event) {
+  const letter = event.key.toUpperCase(); // Get the pressed key and convert it to uppercase
+  if (letter >= 'A' && letter <= 'Z') { // Check if the key is a letter
+    const button = document.querySelector(`button[onclick="checkGuess('${letter}', this)"]`);
+    if (button)
+    {
+      checkGuess(letter, button); // Call the checkGuess function with the letter
+    }
+  }
+});
 
-function setTheme(theme) 
+function setTheme(theme) // TODO: fix so that styling applies to all pages
 {
     const body = document.body;
     if (theme === 'Light') {
@@ -46,10 +57,18 @@ function displayLetters() {
 }
 
 
-function checkGuess(guess)
+function checkGuess(guess, button)
 {
-  console.log('checkGuess called');
+  console.log('checkGuess called', guess);
   let correctGuess = false;
+
+  if (guessedLetters.includes(guess)) 
+  {
+    return;
+  }
+
+  guessedLetters.push(guess);
+  button.style.backgroundColor = '#d3d3d3';
 
   if (currentWord.includes(guess))
   {

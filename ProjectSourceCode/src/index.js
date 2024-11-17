@@ -23,6 +23,11 @@ const hbs = handlebars.create({
   layoutsDir: __dirname + '/views/layouts',
   partialsDir: __dirname + '/views/partials',
 });
+/*
+hbs.handlebars.keyboardTyping('range', (start, end) => {
+
+});
+*/
 
 // database configuration
 const dbConfig = {
