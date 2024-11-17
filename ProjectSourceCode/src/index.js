@@ -99,14 +99,6 @@ app.get('/login', (req, res) => {
     res.render('pages/login');
 });
 
-app.get('/settings', (req, res) => {
-  res.render('pages/settings');
-});
-
-app.get('/discover', (req, res) => {
-  res.render('pages/discover'); 
-});
-
 app.post('/login', async (req, res) => {
   db.tx(async t => {
     const user = await t.one(
@@ -140,16 +132,8 @@ app.post('/login', async (req, res) => {
 
 });
 
-app.get('/register', (req, res) => {
-    res.render('pages/register');
-  });
-
-app.get('/playHangman', (req, res) => {
-    res.render('pages/playHangman');
-  });
-
   // Register
-  app.post('/register', async (req, res) => {
+app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     
     var uname = req.body.username;
@@ -178,13 +162,21 @@ app.get('/playHangman', (req, res) => {
 });
 
 // access after this point requires login 
-  const auth = (req, res, next) => {
+const auth = (req, res, next) => {
     if (!req.session.user) {
       return res.redirect('/login');
     }
     next();
 };
 app.use(auth);
+
+app.get('/settings', (req, res) => {
+  res.render('pages/settings');
+});
+
+app.get('/playHangman', (req, res) => {
+  res.render('pages/playHangman');
+});
 
 app.get('/dictionary', (req, res) => {
     res.render('pages/dictionary');
