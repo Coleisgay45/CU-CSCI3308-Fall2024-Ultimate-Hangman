@@ -24,7 +24,6 @@ function setTheme(theme) // TODO: fix so that styling applies to all pages
       body.setAttribute('data-bs-theme', 'dark');
     }
 }
-
 function setDifficulty(level) // TODO: need to decide which word lengths correlate with which difficulty?
 {
     if (level == 'Easy'){
