@@ -1,3 +1,4 @@
+const { response } = require("express");
 
 function setTheme(theme) {
     const body = document.body;
@@ -9,22 +10,33 @@ function setTheme(theme) {
 }
 
 function setDifficulty(level){
-    if (level == 'Easy'){
-      // 3 and 4 
-      //WordsFromFile('Easy');
+  // this is the where we connect them, it will connect front end to back end by calling it
+  fetch('/set-difficulty',{
+    // Sends an HTTP POST request to the server at the /set-difficulty endpoint.
+    method :'POST',
+    headers: {
+      'Content-Type':'application/json',
+      //The Content-Type: 'application/json' header specifies that the request body contains JSON data.
+    },
+    body : JSON.stringify({difficulty: level}), // bodys shows the seelected diffuculty level 
 
+  })
+  .then(response=>{
+    if(!response.ok){
+      throw new Error("Failed to set diffuculty");
     }
-
-    else if (level == 'Medium'){
-   // 5 6 
-      //WordsFromFile('Medium');
-    }
-
-    else if (level == 'Hard'){
-      //WordsFromFile('Hard');
-           // 6+
-    }
+    throw response.json();
+  })
+  .then(data=>{
+    console.log('Difficulty set to:', data.difficulty);
+    window.location.href='/playHangman';
+    // if diffuculty went well thwb it is gonna redirect to 
+    //Playhangman page abd it will start platinh the gane 
+    //based on the se diffucultu 
+  })
+  .catch(err => console.error(err));
 }
+
 function WordsFromFile(level) {
   // Arrays to store words for each difficulty level
   const Easy = [];

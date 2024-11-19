@@ -13,6 +13,7 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
 const fs = require('fs')
+const WordsFromFile = require('./script'); // Adjust the path to where script.js is located
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
 // *****************************************************
@@ -116,6 +117,37 @@ app.get('/discover', (req, res) => {
   res.render('pages/discover'); 
 });
 
+
+app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-diffuculty 
+  // request from the client, it contains info about what client sent 
+  //res this is the respomse the server sen back 
+  const { diffuculty }= req.body;// we get the diffuculty from request body 
+  //request body contains diffuculty 
+  if(['Easy','Medium','Hard'].includes(diffuculty)){
+    // we check if diffucultt is easy, meduim or hard
+    //It uses the .includes() method to see if difficulty (which the user provided) is in that list.
+    req.session.diffuculty = diffuculty;
+    // we store the diffuculty in session 
+    // session is the place we store information 
+    // The session is a way to store data that the server can remember 
+    //between requests (like remembering the user's chosen difficulty).
+    req.session.save(err =>{ // we save the session and then handle the session 
+
+      if(err){ 
+        //// we check to see if there is soething wrong 
+      // in saving our session
+        console.log('Eror saving session',err);
+        return res.status(500).json({error:'Failed to save diffuculty'});      
+      }
+      res.status(200).json({diffuculty});
+    });
+  }
+  else{ // this is for the case that our diffuculty is not inclusing 
+    // easy hard and meduim
+    res.status(400).json({error: 'invalid diffuculty'});
+  }
+});
+
 app.post('/login', async (req, res) => {
   db.tx(async t => {
     const user = await t.one(
@@ -155,7 +187,20 @@ app.get('/register', (req, res) => {
   });
 
 app.get('/playHangman', (req, res) => {
-    res.render('pages/playHangman');
+    const difficulty = req.session.difficulty || 'Easy';
+    // we gonna check, if we do have a diffucultg 
+    // then we will use the saved session diffuculty 
+    // after that we will make it easy as default 
+    WordsFromFile(difficulty)// we gonna call the function either with  defaul t
+    // or either with selected one 
+    .then(wordEntry =>{
+      res.render('pages/playHangman',{word:wordEntry.word, definition: wordEntry.definition});
+    })
+    .catch(err =>{
+      console.error('Error fetching word:',err);
+      res.status(500).render('pages/playHangman',{error:'failed ti fetch word!'});
+
+    });
   });
 
   // Register
@@ -251,3 +296,6 @@ app.get('/home', (req, res) => {
 
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
+
+
+// here is the place when we will do back end of settijng diffucuty 
