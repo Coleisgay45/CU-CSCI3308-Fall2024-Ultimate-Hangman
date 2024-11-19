@@ -1,0 +1,27 @@
+{{>message}}
+<table>
+            <thead>
+              <tr>
+                  <th>Username</th>
+                  <th>Easy High Score</th>
+                  <th>Medium High Score</th>
+                  <th>Hard High Score</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+                {{#each users}}
+                <tr>
+                    <td>{{username}} </td>
+                    <td>{{placeholder}}</td>
+                    <td>{{placeholder}}</td>
+                    <td>{{placeholder}}</td>
+                </tr>
+
+                
+                {{/each}}
+           
+            </tbody>
+
+</table>
