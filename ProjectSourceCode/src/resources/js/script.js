@@ -83,6 +83,7 @@ function checkGuess(guess, button)
   else
   {
     errorCount++;
+    updateHangmanImage(errorCount); //calls the function to update the image based on the number of incorrec guess
   }
 
   displayLetters();
@@ -108,4 +109,10 @@ function checkGuess(guess, button)
   {  
     document.getElementById('guessMessage').innerText = 'Game over!';   
   }
+}
+
+function updateHangmanImage(errorCount) 
+{
+    const image = document.getElementByID('Hangman-pic');
+    image.src = 'img/hangman-{errorCount}.png';
 }
