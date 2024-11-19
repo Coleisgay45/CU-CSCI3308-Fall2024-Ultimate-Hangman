@@ -164,6 +164,20 @@ app.post('/register', async (req, res) => {
   }
     // To-DO: Insert username and hashed password into the 'users' table
 });
+// TODO: write test case
+app.get('/settings', (req, res) => {
+    res.render('pages/settings');
+  });
+
+// TODO: write test case
+app.get('/playHangman', (req, res) => {
+    res.render('pages/playHangman');
+  });
+
+// TODO: write test case
+app.get('/dictionary', (req, res) => {
+    res.render('pages/dictionary');
+});
 
 // access after this point requires login 
 // TODO: do we write test case for this ?
@@ -175,20 +189,6 @@ const auth = (req, res, next) => {
 };
 app.use(auth);
 
-// TODO: write test case
-app.get('/settings', (req, res) => {
-  res.render('pages/settings');
-});
-
-// TODO: write test case
-app.get('/playHangman', (req, res) => {
-  res.render('pages/playHangman');
-});
-
-// TODO: write test case
-app.get('/dictionary', (req, res) => {
-    res.render('pages/dictionary');
-});
 
 // TODO: write test case
 app.post('/dictionaryword', (req, res) =>{
