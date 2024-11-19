@@ -136,9 +136,7 @@ app.post('/login', async (req, res) => {
     });
 
 });
-app.get('/register', (req, res) => {
-    res.render('pages/register');
-  });
+
 app.get('/playHangman', (req, res) => {
     res.render('pages/playHangman');
   });
@@ -186,16 +184,6 @@ app.get('/settings', (req, res) => {
     res.render('pages/settings')
 });
 
-// access after this point requires login 
-  const auth = (req, res, next) => {
-    if (!req.session.user) {
-      return res.redirect('/login');
-    }
-    next();
-  }
-  
-app.use(auth);
-
 app.get('/dictionary', (req, res) => {
     res.render('pages/dictionary');
 });
@@ -233,6 +221,15 @@ app.post('/dictionaryword', (req, res) =>{
 
 });
  
+// access after this point requires login 
+const auth = (req, res, next) => {
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+    next();
+  }
+  
+app.use(auth);
 
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
