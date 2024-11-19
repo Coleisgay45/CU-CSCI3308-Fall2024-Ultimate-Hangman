@@ -23,6 +23,11 @@ const hbs = handlebars.create({
   layoutsDir: __dirname + '/views/layouts',
   partialsDir: __dirname + '/views/partials',
 });
+/*
+hbs.handlebars.keyboardTyping('range', (start, end) => {
+
+});
+*/
 
 // database configuration
 const dbConfig = {
@@ -53,6 +58,7 @@ db.connect()
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
+console.log(__dirname);
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
 //app.set('resources',path.join(__dirname,'resources'));
 app.use(express.static(__dirname+'/resources'));
@@ -73,51 +79,69 @@ app.use(
   })
 );
 
+// TODO: write test case
 app.get('/', (req, res) => {
   res.render('pages/register');
 });
 
+//test case written
+app.get('/welcome', function(req, res) { 
+  res.status(200).json({
+    status: 'success',
+    message: 'Welcome!'
+  })
+})
 
+// TODO: write test case
+app.get('/register', (req, res) => {
+  res.render('pages/register');
+});
 
+// TODO: write test case
 app.get('/login', (req, res) => {
     res.render('pages/login');
 });
-app.get('/', (req, res) => {
-  res.render('pages/home', { 
-  });
+
+// test case written
+app.post('/login', async (req, res) => {
+  db.tx(async t => {
+    const user = await t.one(
+      `SELECT username, password
+         FROM
+          users
+         WHERE
+          username = $1`,
+      [req.body.username]
+    );
+    //console.info(user)
+    if(user.username === ''){
+      res.render('pages/register');
+      return;
+    }
+    console.log('matching')
+    const match = await bcrypt.compare(req.body.password, user.password);
+    console.log(match)
+    if(match !== true){
+      //res.redirect('/login', {message: "Wrong Password or Username"})
+      res.status(400).render('pages/login');
+      return;
+    }
+    req.session.user = req.body.username;
+    req.session.save();
+    res.redirect('/home');
+  })
+    .catch(err => {
+      res.status(500).render('pages/register')
+    });
+
 });
 
-app.post('/login', async (req, res) => {
-    let user = `select * from users WHERE users.username = '${req.body.username}'`;
-    db.any(user)
-    .then(async (rows) => {
-      if(rows.length == 0) {
-        res.render('pages/register');
-        return;
-      }
-      const match = await bcrypt.compare(req.body.password, rows[0].password);   
-      if(!match) {
-        res.redirect('/login', {message: "Username or Password"})
-      } else {
-        req.session.user = user;
-        req.session.save();
-        res.redirect('/discover');
-      }
-    })
-    .catch((error) => {
-      res.redirect('/register');
-    })
-  });
-
-  app.get('/register', (req, res) => {
-    res.render('pages/register');
-  });
-
-  // Register
+  // test case written
 app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     
     var uname = req.body.username;
+    console.log("USERNAME: ", uname);
     const regquery = `insert into users (username, password) values ($1, $2);`;
     if ((uname !== '') && (req.body.password !== '')){
     const hash = await bcrypt.hash(req.body.password, 10);
@@ -126,45 +150,100 @@ app.post('/register', async (req, res) => {
     // query results can be obtained
     // as shown below
     .then(data => {
-      res.redirect('/login')
+        res.status(200).render('pages/login');
     })
     // if query execution fails
     // send error message
     .catch(err => {
-      console.log('Uh Oh spaghettio');
-      console.log(err);
-      
-      res.render('pages/register', {
-      
-        error: true,
-        message: "User already exists or invalid parameters!",
-      });
+      res.status(400).render('pages/register');
     });
   }
   else{
-    res.redirect('/register', {
-      error: true,
-      message: "User already exists or invalid parameters!",
-    })
-
+    console.log('uh oh spaghettio');
+    res.status(400).render('pages/register');
   }
     // To-DO: Insert username and hashed password into the 'users' table
-  });
+});
 
   //logout
   app.get('/logout', (req,res) => {
     req.render('pages/logout')
   });
 
-  // access after this point requires login 
-  const auth = (req, res, next) => {
+// access after this point requires login 
+// TODO: do we write test case for this ?
+const auth = (req, res, next) => {
     if (!req.session.user) {
       return res.redirect('/login');
     }
     next();
-  };
-  
-  app.use(auth);
+};
+app.use(auth);
 
-app.listen(3000);
+// TODO: write test case
+app.get('/settings', (req, res) => {
+  res.render('pages/settings');
+});
+
+// TODO: write test case
+app.get('/playHangman', (req, res) => {
+  res.render('pages/playHangman');
+});
+
+// TODO: write test case
+app.get('/dictionary', (req, res) => {
+    res.render('pages/dictionary');
+});
+
+// TODO: write test case
+app.post('/dictionaryword', (req, res) =>{
+  var userword = req.body.word;
+  var url2 = "https://api.dictionaryapi.dev/api/v2/entries/en/"
+  + userword;
+  console.log(userword);
+  axios({
+    url: url2,
+    method: 'GET',
+    dataType: 'json',
+    headers: {
+      'Accept-Encoding': 'application/json',
+      
+    },
+    params: { 
+    },
+  })
+  .then(results => {
+    const wordData = results.data;
+    const wordData2 = wordData[0].meanings
+    const wordData3 = wordData2[0].definitions
+    const wordData4 = wordData3[0].definition
+    console.log("word data is ", wordData);
+    console.log("word data 2 is ", wordData2)
+    console.log("word data 3 is ", wordData3)
+    console.log("word data 4 is ", wordData4)
+    // console.log("word data item ", wordData[0].meanings);
+    res.render('pages/dictionary', {message: wordData4}
+     //res.redirect('/login', {message: "Wrong Password or Username"})
+    );
+    
+   // the results will be displayed on the terminal if the docker containers are running // Send some parameters
+  })
+  .catch(error => {
+    // Handle errors
+    // const empty = "error"
+    console.error(error.message);
+    res.render('pages/dictionary', {message: "Error invalid word / word not found"});
+    
+  });
+
+});
+
+// TODO: write test case
+app.get('/home', (req, res) => {
+  res.render('pages/home', {
+    username: req.session.user,
+  });
+});
+
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
