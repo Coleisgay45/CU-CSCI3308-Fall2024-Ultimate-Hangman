@@ -179,6 +179,10 @@ app.get('/dictionary', (req, res) => {
     res.render('pages/dictionary');
 });
 
+app.get('/gameover', (req, res) => {
+    res.render('pages/gameOver'); // Render the gameOver.hbs page
+  });
+
 // access after this point requires login 
 // TODO: do we write test case for this ?
 const auth = (req, res, next) => {
