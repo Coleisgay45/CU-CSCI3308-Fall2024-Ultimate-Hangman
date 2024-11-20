@@ -146,7 +146,7 @@ app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-dif
     // easy hard and meduim
     res.status(400).json({error: 'invalid diffuculty'});
   }
-});
+});z
 
 app.post('/login', async (req, res) => {
   db.tx(async t => {
