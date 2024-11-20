@@ -55,7 +55,6 @@ function displayLetters() {
   document.getElementById('lettersDisplay').textContent = display.join(' ');
 }
 
-
 function checkGuess(guess, button)
 {
   console.log('checkGuess called', guess);
@@ -68,6 +67,8 @@ function checkGuess(guess, button)
 
   guessedLetters.push(guess);
   button.style.backgroundColor = '#d3d3d3';
+
+  correctGuess = false;
 
   if (currentWord.includes(guess))
   {
@@ -97,6 +98,8 @@ function checkGuess(guess, button)
   {
     // display correct guess 
     document.getElementById('guessMessage').innerText = 'Incorrect!';
+    console.log("script.js is loaded");
+    updateHangmanImage(errorCount);
   }
 
   if (correctGuesses.every(val => val)) 
@@ -109,3 +112,10 @@ function checkGuess(guess, button)
     document.getElementById('guessMessage').innerText = 'Game over!';   
   }
 }
+
+function updateHangmanImage(errorCount) {
+    const image = document.getElementById('hangman-image');
+    // Update the image source based on the error count
+    image.src = `img/hangman-${errorCount}.svg`;
+    console.log('Updated hangman image to:', image.src);
+  }
