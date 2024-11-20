@@ -53,3 +53,62 @@ With wrap (flex-wrap: wrap;): Flex items will go to a new row if they can’t fi
 .Keyboard button:hover{
   background: #8286c9;
 }
+/* cnter the entire container */
+.game-over-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.game-over-text {
+  font-size: 3rem;
+  color: black;
+  margin-bottom: 1rem;
+}
+
+.correct-word {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: #6c757d; 
+}
+
+.game-over-image {
+  width: 50%; 
+  max-width: 300px;
+  margin-bottom: 2rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem; /* space between buttons to make it look better*/
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  text-decoration: none;
+  color: #fff;
+  border-radius: 5px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.play-again-btn {
+  background-color: #007bff !important; /* i wanted the buttons to look nicer */
+}
+
+.play-again-btn:hover {
+  background-color: #0056b3 !important; 
+}
+
+.leaderboard-btn {
+  background-color: #28a745 !important; 
+}
+
+.leaderboard-btn:hover {
+  background-color: #1e7e34 !important; 
+}
