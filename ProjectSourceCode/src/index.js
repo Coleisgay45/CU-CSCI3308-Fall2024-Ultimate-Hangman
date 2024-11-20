@@ -12,8 +12,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
-const fs = require('fs')
-const WordsFromFile = require('./script'); // Adjust the path to where script.js is located
+const WordsFromFile  = require('./resources/js/script');// Adjust the path to where script.js is located
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
 // *****************************************************
@@ -121,12 +120,12 @@ app.get('/discover', (req, res) => {
 app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-diffuculty 
   // request from the client, it contains info about what client sent 
   //res this is the respomse the server sen back 
-  const { diffuculty }= req.body;// we get the diffuculty from request body 
+  const { difficulty }= req.body;// we get the diffuculty from request body 
   //request body contains diffuculty 
-  if(['Easy','Medium','Hard'].includes(diffuculty)){
+  if(['Easy','Medium','Hard'].includes(difficulty)){
     // we check if diffucultt is easy, meduim or hard
     //It uses the .includes() method to see if difficulty (which the user provided) is in that list.
-    req.session.diffuculty = diffuculty;
+    req.session.difficulty = difficulty;
     // we store the diffuculty in session 
     // session is the place we store information 
     // The session is a way to store data that the server can remember 
@@ -146,7 +145,7 @@ app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-dif
     // easy hard and meduim
     res.status(400).json({error: 'invalid diffuculty'});
   }
-});z
+});
 
 app.post('/login', async (req, res) => {
   db.tx(async t => {

@@ -1,15 +1,15 @@
 {{>message}}
- <h1>Play Hangman</h1>
-  
-  <!-- Word and definition section -->
-  {{#if word}}
-    <p><strong>Guess The Word:</strong> {{word}}</p>
-  {{else}}
-    <p>No word available. Please try again.</p>
-  {{/if}}
+
 <form method="post" action="/dictionaryword">
   <div class="mb-3"> <!--instead of styling them individually -->
-    <div class="Hangman-Pic">
+    <h1>Play Hangman</h1>
+  <!-- Word and definition section -->
+    {{#if word}}
+      <p><strong>Guess The Word:</strong> {{word}}</p>
+    {{else}}
+      <p>No word available. Please try again.</p>
+    {{/if}}
+      <div class="Hangman-Pic">
         <img src="img/hangman-0.svg">
     </div>
     
