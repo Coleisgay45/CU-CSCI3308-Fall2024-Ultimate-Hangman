@@ -98,6 +98,7 @@ function checkGuess(guess, button)
   {
     // display correct guess 
     document.getElementById('guessMessage').innerText = 'Incorrect!';
+    updateHangmanImage(errorCount); //calls the function to update the image based on the number of incorrec guess
   }
 
   if (correctGuesses.every(val => val)) 
@@ -111,8 +112,9 @@ function checkGuess(guess, button)
   }
 }
 
-function updateHangmanImage(errorCount) 
-{
-    const image = document.getElementByID('Hangman-pic');
-    image.src = 'img/hangman-{errorCount}.png';
-}
+function updateHangmanImage(errorCount) {
+    const image = document.getElementById('hangman-image');
+    // Update the image source based on the error count
+    image.src = `img/hangman-${errorCount}.svg`;
+    console.log('Updated hangman image to:', image.src);
+  }
