@@ -107,5 +107,6 @@ function checkGuess(guess, button)
   else if (errorCount >= 6) 
   {  
     document.getElementById('guessMessage').innerText = 'Game over!';   
+    window.location.href = '/gameover';
   }
 }

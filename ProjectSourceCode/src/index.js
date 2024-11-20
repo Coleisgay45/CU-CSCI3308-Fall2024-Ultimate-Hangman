@@ -190,6 +190,9 @@ app.get('/dictionary', (req, res) => {
     res.render('pages/dictionary');
 });
 
+app.get('/gameover', (req, res) => {
+    res.render('pages/gameOver'); // Render the gameOver.hbs page
+  });
 // TODO: write test case
 app.post('/dictionaryword', (req, res) =>{
   var userword = req.body.word;
