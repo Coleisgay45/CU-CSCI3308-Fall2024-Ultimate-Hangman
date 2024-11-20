@@ -183,6 +183,13 @@ app.get('/gameover', (req, res) => {
     res.render('pages/gameOver'); // Render the gameOver.hbs page
   });
 
+  // TODO: write test case
+app.get('/home', (req, res) => {
+    res.render('pages/home', {
+      username: req.session.user,
+    });
+  });
+
 // access after this point requires login 
 // TODO: do we write test case for this ?
 const auth = (req, res, next) => {
@@ -235,13 +242,6 @@ app.post('/dictionaryword', (req, res) =>{
     
   });
 
-});
-
-// TODO: write test case
-app.get('/home', (req, res) => {
-  res.render('pages/home', {
-    username: req.session.user,
-  });
 });
 
 module.exports = app.listen(3000);

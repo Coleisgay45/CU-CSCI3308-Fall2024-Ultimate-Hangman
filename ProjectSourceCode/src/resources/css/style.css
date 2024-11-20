@@ -74,7 +74,6 @@ With wrap (flex-wrap: wrap;): Flex items will go to a new row if they can’t fi
   justify-content: center;
   text-align: center;
   height: 100vh;
-  background-color: #f8f9fa; /* Optional: Light background */
 }
 
 /* Style the "Game Over" text */

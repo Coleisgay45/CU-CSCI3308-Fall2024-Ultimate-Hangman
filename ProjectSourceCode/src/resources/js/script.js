@@ -23,7 +23,21 @@ function setTheme(theme) // TODO: fix so that styling applies to all pages
     } else if (theme === 'Dark') {
       body.setAttribute('data-bs-theme', 'dark');
     }
+
+    // local storage allows you to save stuff so im saving the theme into localstorage
+    localStorage.setItem('theme', theme);
 }
+// this function loads and applys the theme that was selected to a page when its loaded
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        setTheme(savedTheme);
+    }
+}
+
+// you have to call the loadTheme function whenever scrtip.js is loaded so the theme will apply to each page
+loadTheme();
+
 function setDifficulty(level) // TODO: need to decide which word lengths correlate with which difficulty?
 {
     if (level == 'Easy'){
