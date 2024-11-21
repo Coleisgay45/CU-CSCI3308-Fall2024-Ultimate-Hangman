@@ -111,14 +111,3 @@ function checkGuess(guess, button)
     window.location.href = '/gameover?result=lose';
   }
 }
-
-const params = new URLSearchParams(window.location.search);
-        const result = params.get('result');
-
-        // Set the result message
-        const resultMessage = document.getElementById('resultMessage');
-        if (result === 'win') {
-            resultMessage.textContent = 'You Win!';
-        } else if (result === 'lose') {
-            resultMessage.textContent = 'You Lose!';
-        }
