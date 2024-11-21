@@ -9,6 +9,7 @@
 <body>
   <div class="game-over-container">
     <h1 class="game-over-text">Game Over!</h1>
+    <h2 id="resultMessage"></h2>
     <p class="correct-word">The correct word was: <span id="currentWord"></span></p>
     <img src="/img/hangman-6.svg" alt="Final Hangman Image" class="game-over-image">
     <div class="button-group">
@@ -16,5 +17,21 @@
       <a href="/leaderboard" class="btn leaderboard-btn">Leaderboard</a>
     </div>
   </div>
+  <script>
+        // get query parameters
+        const params = new URLSearchParams(window.location.search);
+        const result = params.get('result'); // in script js when it is redirected to game over page
+        const correctWord = params.get('correctWord');
+
+        // having th emessage update
+        const resultMessage = document.getElementById('resultMessage');
+        if (result === 'win') {
+            resultMessage.textContent = 'You Win!';
+        } else if (result === 'lose') {
+            resultMessage.textContent = 'You Lose!';
+        }
+
+        //need to try to fetch what the correct word was
+    </script>
 </body>
 </html>

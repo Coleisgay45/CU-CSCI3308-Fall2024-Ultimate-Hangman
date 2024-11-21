@@ -119,13 +119,13 @@ function checkGuess(guess, button)
   if (correctGuesses.every(val => val)) 
   {
     document.getElementById('guessMessage').innerText = 'You win!';
-    window.location.href = '/gameover';
+    window.location.href = '/gameover?result=win';
   } 
   
   else if (errorCount >= 6) 
   {  
     document.getElementById('guessMessage').innerText = 'Game over!';   
-    window.location.href = '/gameover';
+    window.location.href = '/gameover?result=lose';
   }
 }
 
