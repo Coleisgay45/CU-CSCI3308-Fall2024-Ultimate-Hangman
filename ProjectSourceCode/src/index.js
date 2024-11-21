@@ -240,5 +240,38 @@ app.get('/home', (req, res) => {
   });
 });
 
+
+
+app.get('/leaderboard', function (req, res) {
+  //   // var username = req.query.username;
+  //   // var city = req.query.city;
+  
+    // // Multiple queries using templated strings
+    // var current_user = `select * from userinfo where username = '${username}';`;
+    // var city_users = `select * from userinfo where city = '${city}';`;
+  
+    var usersRanked = `select * from users order by hard_high_score desc;`
+  
+    // use task to execute multiple queries
+    db.any(usersRanked)
+      // if query execution succeeds
+      // query results can be obtained
+      // as shown below
+      .then(data => {
+        users = data;
+        console.log("user data fetched");
+        console.log(data);
+        res.render('pages/leaderboard', {users})
+      })
+      // if query execution fails
+      // send error message
+      .catch(err => {
+        console.log("Error users were not fetched")
+        console.error(err.message);
+        res.render('pages/leaderboard', {message: "Error fetching user data"});
+      });
+  }
+  
+  );
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
