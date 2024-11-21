@@ -235,8 +235,20 @@ app.post('/dictionaryword', (req, res) =>{
 
 // TODO: write test case
 app.get('/home', (req, res) => {
-  res.render('pages/home', {
-    username: req.session.user,
+  var userRanked = `select * from users where users.username = '${req.session.user}'`;
+  db.any(userRanked)
+  .then( (rows) => {
+    res.render('pages/home', {
+      username: req.session.user,
+      easy_high_score: rows[0].easy_high_score,
+      medium_high_score: rows[0].medium_high_score,
+      hard_high_score: rows[0].hard_high_score,
+    });
+  })
+  .catch(err => {
+    console.log("Error data was not fetched")
+    console.error(err.message);
+    res.render('pages/leaderboard', {message: "Error fetching data"});
   });
 });
 
