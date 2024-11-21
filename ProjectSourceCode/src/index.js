@@ -79,7 +79,6 @@ app.use(
   })
 );
 
-<<<<<<< HEAD
 
 app.get('/read-file', (req, res) => {
   const filePath = path.join(__dirname, 'resources','js', 'wordsanddefinitions.txt'); // Adjust path
@@ -93,9 +92,7 @@ app.get('/read-file', (req, res) => {
 });
 
 
-=======
 // TODO: write test case
->>>>>>> main
 app.get('/', (req, res) => {
   res.render('pages/register');
 });
@@ -118,7 +115,6 @@ app.get('/login', (req, res) => {
     res.render('pages/login');
 });
 
-<<<<<<< HEAD
 app.get('/settings', (req, res) => {
   console.log('hi im here yayyyyyyyy');
   res.render('pages/settings');
@@ -159,9 +155,7 @@ app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-dif
   }
 });
 
-=======
 // test case written
->>>>>>> main
 app.post('/login', async (req, res) => {
   db.tx(async t => {
     const user = await t.one(
@@ -195,7 +189,6 @@ app.post('/login', async (req, res) => {
 
 });
 
-<<<<<<< HEAD
 app.get('/register', (req, res) => {
     res.render('pages/register');
   });
@@ -217,12 +210,8 @@ app.get('/playHangman', (req, res) => {
     });
   });
 
-  // Register
-  app.post('/register', async (req, res) => {
-=======
-  // test case written
+  
 app.post('/register', async (req, res) => {
->>>>>>> main
     //hash the password using bcrypt library
     
     var uname = req.body.username;
@@ -329,4 +318,4 @@ module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
 
 
-// here is the place when we will do back end of settijng diffucuty 
+// here is the place when we will do back end of settijng diffucuty
