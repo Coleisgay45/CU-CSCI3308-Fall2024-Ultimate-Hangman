@@ -1,6 +1,8 @@
 const { response } = require("express");
 const fs = require('fs');
 
+
+
 let currentWord = 'WORD'; // temp for testing, will change to initialize to '' later
 let correctGuesses = new Array(currentWord.length).fill(false);
 let errorCount = 0;
@@ -115,6 +117,7 @@ function WordsFromFile(level) {
     }  
   });
 
+
   // sunce fetch is a asyrchones thing 
   // we do need promise so it will wait till whole file loads and then it will start doing stuuff 
   // if we do not put promise then it will fetch data before file is loaded
@@ -193,19 +196,12 @@ function WordsFromFile(level) {
   // });
 };
 
-
+module.exports = { WordsFromFile };
 
 WordsFromFile();
 
 
-function generateRandomWord()
-{
-  let currentWord_ = '';
-  // random word generated, then we set it to currentWord_
-  // word generated depends on level: maybe easy = 3-4, medium = 5-6, hard = 7+? idk what we want to decide
-  // set all to uppercase to correlate with buttons
-  currentWord = currentWord_;
-}
+
 
 function displayLetters() {
   let display = currentWord.split('').map((letter, index) => {
@@ -269,4 +265,5 @@ function checkGuess(guess, button)
     document.getElementById('guessMessage').innerText = 'Game over!';   
   }
 }
+
 
