@@ -119,6 +119,7 @@ function checkGuess(guess, button)
   if (correctGuesses.every(val => val)) 
   {
     document.getElementById('guessMessage').innerText = 'You win!';
+    window.location.href = '/gameover';
   } 
   
   else if (errorCount >= 6) 
