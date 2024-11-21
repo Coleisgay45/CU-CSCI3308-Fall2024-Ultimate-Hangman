@@ -23,6 +23,11 @@ const hbs = handlebars.create({
   layoutsDir: __dirname + '/views/layouts',
   partialsDir: __dirname + '/views/partials',
 });
+/*
+hbs.handlebars.keyboardTyping('range', (start, end) => {
+
+});
+*/
 
 // database configuration
 const dbConfig = {
@@ -74,6 +79,7 @@ app.use(
   })
 );
 
+<<<<<<< HEAD
 
 app.get('/read-file', (req, res) => {
   const filePath = path.join(__dirname, 'resources','js', 'wordsanddefinitions.txt'); // Adjust path
@@ -87,11 +93,14 @@ app.get('/read-file', (req, res) => {
 });
 
 
+=======
+// TODO: write test case
+>>>>>>> main
 app.get('/', (req, res) => {
   res.render('pages/register');
 });
 
-//test cases
+//test case written
 app.get('/welcome', function(req, res) { 
   res.status(200).json({
     status: 'success',
@@ -99,14 +108,17 @@ app.get('/welcome', function(req, res) {
   })
 })
 
+// TODO: write test case
 app.get('/register', (req, res) => {
   res.render('pages/register');
 });
 
+// TODO: write test case
 app.get('/login', (req, res) => {
     res.render('pages/login');
 });
 
+<<<<<<< HEAD
 app.get('/settings', (req, res) => {
   console.log('hi im here yayyyyyyyy');
   res.render('pages/settings');
@@ -147,6 +159,9 @@ app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-dif
   }
 });
 
+=======
+// test case written
+>>>>>>> main
 app.post('/login', async (req, res) => {
   db.tx(async t => {
     const user = await t.one(
@@ -159,8 +174,7 @@ app.post('/login', async (req, res) => {
     );
     //console.info(user)
     if(user.username === ''){
-      // res.redirect('/register')
-      res.render('pages/register'); //my code
+      res.render('pages/register');
       return;
     }
     console.log('matching')
@@ -181,6 +195,7 @@ app.post('/login', async (req, res) => {
 
 });
 
+<<<<<<< HEAD
 app.get('/register', (req, res) => {
     res.render('pages/register');
   });
@@ -204,6 +219,10 @@ app.get('/playHangman', (req, res) => {
 
   // Register
   app.post('/register', async (req, res) => {
+=======
+  // test case written
+app.post('/register', async (req, res) => {
+>>>>>>> main
     //hash the password using bcrypt library
     
     var uname = req.body.username;
@@ -232,7 +251,8 @@ app.get('/playHangman', (req, res) => {
 });
 
 // access after this point requires login 
-  const auth = (req, res, next) => {
+// TODO: do we write test case for this ?
+const auth = (req, res, next) => {
     if (!req.session.user) {
       return res.redirect('/login');
     }
@@ -240,11 +260,22 @@ app.get('/playHangman', (req, res) => {
 };
 app.use(auth);
 
+// TODO: write test case
+app.get('/settings', (req, res) => {
+  res.render('pages/settings');
+});
+
+// TODO: write test case
+app.get('/playHangman', (req, res) => {
+  res.render('pages/playHangman');
+});
+
+// TODO: write test case
 app.get('/dictionary', (req, res) => {
     res.render('pages/dictionary');
 });
 
-  
+// TODO: write test case
 app.post('/dictionaryword', (req, res) =>{
   var userword = req.body.word;
   var url2 = "https://api.dictionaryapi.dev/api/v2/entries/en/"
@@ -286,7 +317,8 @@ app.post('/dictionaryword', (req, res) =>{
   });
 
 });
- 
+
+// TODO: write test case
 app.get('/home', (req, res) => {
   res.render('pages/home', {
     username: req.session.user,
