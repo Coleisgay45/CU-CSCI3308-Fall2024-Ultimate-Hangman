@@ -142,7 +142,7 @@ app.post('/register', async (req, res) => {
     
     var uname = req.body.username;
     console.log("USERNAME: ", uname);
-    const regquery = `insert into users (username, password, easy_score, medium_score, hard_score) values ($1, $2, 0, 0, 0);`;
+    const regquery = `insert into users (username, password, easy_high_score, medium_high_score, hard_high_score) values ($1, $2, 0, 0, 0);`;
     if ((uname !== '') && (req.body.password !== '')){
     const hash = await bcrypt.hash(req.body.password, 10);
     db.any(regquery,[uname, hash])
@@ -235,46 +235,43 @@ app.post('/dictionaryword', (req, res) =>{
 
 // TODO: write test case
 app.get('/home', (req, res) => {
-  let easy = `select easy_score from users where users.username = '${req.session.user}'`;
-  let medium = `select medium_score from users where users.username = '${req.session.user}'`;
-  db.task('get-everything', task => {
-    return task.batch([
-      task.any(easy),
-      // task.any(medium),
-    ]);
-  })
-  .then((rows) => {
-    console.log(easy[0].easy_score);
-    res.render('pages/home', {
-      username: req.session.user,
-      easy_score: easy[0].easy_score,
-      // medium_score: medium[0].medium_score,
-    });
-  })
-  .catch(err => {
-
+  res.render('pages/home', {
+    username: req.session.user,
   });
 });
 
-app.get('/leaderboards', (req, res) => {
-  const users = 'select * from users'
-  // Query to get all the users
 
-  db.any(users)
-    .then(users => {
-      console.log(users)
-      res.render('pages/leaderboard', {
-        users
-      });
-    })
-    .catch(err => {
-      res.render('pages/leaderboard', {
-        users: [],
-        error: true,
-        message: err.message,
-      });
-    });
-});
 
+app.get('/leaderboard', function (req, res) {
+  //   // var username = req.query.username;
+  //   // var city = req.query.city;
+  
+    // // Multiple queries using templated strings
+    // var current_user = `select * from userinfo where username = '${username}';`;
+    // var city_users = `select * from userinfo where city = '${city}';`;
+  
+    var usersRanked = `select * from users order by hard_high_score desc;`
+  
+    // use task to execute multiple queries
+    db.any(usersRanked)
+      // if query execution succeeds
+      // query results can be obtained
+      // as shown below
+      .then(data => {
+        users = data;
+        console.log("user data fetched");
+        console.log(data);
+        res.render('pages/leaderboard', {users})
+      })
+      // if query execution fails
+      // send error message
+      .catch(err => {
+        console.log("Error users were not fetched")
+        console.error(err.message);
+        res.render('pages/leaderboard', {message: "Error fetching user data"});
+      });
+  }
+  
+  );
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
