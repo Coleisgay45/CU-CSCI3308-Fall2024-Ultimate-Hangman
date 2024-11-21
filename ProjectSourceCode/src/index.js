@@ -165,6 +165,11 @@ app.post('/register', async (req, res) => {
     // To-DO: Insert username and hashed password into the 'users' table
 });
 
+  //logout
+  app.get('/logout', (req,res) => {
+    req.render('pages/logout')
+  });
+
 // access after this point requires login 
 // TODO: do we write test case for this ?
 const auth = (req, res, next) => {
