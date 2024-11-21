@@ -102,11 +102,23 @@ function checkGuess(guess, button)
   if (correctGuesses.every(val => val)) 
   {
     document.getElementById('guessMessage').innerText = 'You win!';
+    window.location.href = '/gameover?result=win';
   } 
   
   else if (errorCount >= 6) 
   {  
     document.getElementById('guessMessage').innerText = 'Game over!';   
-    window.location.href = '/gameover';
+    window.location.href = '/gameover?result=lose';
   }
 }
+
+const params = new URLSearchParams(window.location.search);
+        const result = params.get('result');
+
+        // Set the result message
+        const resultMessage = document.getElementById('resultMessage');
+        if (result === 'win') {
+            resultMessage.textContent = 'You Win!';
+        } else if (result === 'lose') {
+            resultMessage.textContent = 'You Lose!';
+        }
