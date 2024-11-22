@@ -4,8 +4,6 @@
 
 const express = require('express'); // To build an application server or API
 const app = express();
-const WordsFromFile  = require('./src/resources/js/script.js');// Adjust the path to where script.js is located
-
 const handlebars = require('express-handlebars');
 const Handlebars = require('handlebars');
 const path = require('path');
@@ -14,6 +12,8 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
+const WordsFromFile = require('./resources/js/client.js');
+
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -130,12 +130,13 @@ app.get('/discover', (req, res) => {
 app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-diffuculty 
   // request from the client, it contains info about what client sent 
   //res this is the respomse the server sen back 
-  const { difficulty }= req.body;// we get the diffuculty from request body 
+  const { difficulty } = req.body;// we get the diffuculty from request body 
   //request body contains diffuculty 
+  console.log(difficulty);
   if(['Easy','Medium','Hard'].includes(difficulty)){
     // we check if diffucultt is easy, meduim or hard
     //It uses the .includes() method to see if difficulty (which the user provided) is in that list.
-    req.session.difficulty = difficulty;
+    req.session.difficulty = difficulty || 'Easy';
     // we store the diffuculty in session 
     // session is the place we store information 
     // The session is a way to store data that the server can remember 
@@ -196,20 +197,28 @@ app.get('/register', (req, res) => {
   });
 
 app.get('/playHangman', (req, res) => {
-    const difficulty = req.session.difficulty || 'Easy';
-    // we gonna check, if we do have a diffucultg 
+    const difficulty = req.session.difficulty || 'Easy'; // Default to Easy
+    WordsFromFile(difficulty)
+  
+    
+      .then((wordEntry) => {
+        console.log(wordEntry.word)
+        res.render('pages/playHangman', {
+          word: wordEntry.word, 
+          definition: wordEntry.definition,
+        });
+      console.log(difficulty);
+        
+     // we gonna check, if we do have a diffucultg 
     // then we will use the saved session diffuculty 
     // after that we will make it easy as default 
-    WordsFromFile(difficulty)// we gonna call the function either with  defaul t
+    // we gonna call the function either with  defaul t
     // or either with selected one 
-    .then(wordEntry =>{
-      res.render('pages/playHangman',{word:wordEntry.word, definition: wordEntry.definition});
-    })
-    .catch(err =>{
-      console.error('Error fetching word:',err);
-      res.status(500).render('pages/playHangman',{error:'failed ti fetch word!'});
-
-    });
+      })
+      .catch((err) => {
+        console.error('Error fetching word:', err);
+        res.status(500).render('pages/playHangman', { error: 'Failed to fetch word!' });
+      });
   });
 
   
@@ -257,9 +266,7 @@ app.get('/settings', (req, res) => {
 });
 
 // TODO: write test case
-app.get('/playHangman', (req, res) => {
-  res.render('pages/playHangman');
-});
+
 
 // TODO: write test case
 app.get('/dictionary', (req, res) => {

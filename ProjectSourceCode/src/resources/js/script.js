@@ -1,269 +1,116 @@
-const { response } = require("express");
-const fs = require('fs');
+console.log('client.js loaded');
 
+// Global variables for game state
+let currentWord = ''; // The current word to be guessed
+let correctGuesses = []; // Array to track correctly guessed letters
+let guessedLetters = []; // Array to track all guessed letters
+let errorCount = 0; // Number of incorrect guesses
 
+// Function to initialize the game
+function initializeGame() {
+  // Get the hidden word from the DOM
+  let word = document.getElementById('wordToMatch').innerText;
 
-let currentWord = 'WORD'; // temp for testing, will change to initialize to '' later
-let correctGuesses = new Array(currentWord.length).fill(false);
-let errorCount = 0;
-let guessedLetters = [];
-// TODO: should we add a reset function each new game to reset global variables?
+  // Initialize game variables
+  currentWord = word; // Set the current word to the hidden word
+  correctGuesses = new Array(currentWord.length).fill(false); // Create an array to track guessed letters
+  guessedLetters = []; // Reset the array of guessed letters
+  errorCount = 0; // Reset the error count
 
-document.addEventListener('keydown', function(event) {
+  // Reset the display to show underscores for unguessed letters
+  displayLetters();
+
+  // Clear any messages from the previous game
+  document.getElementById('guessMessage').textContent = '';
+
+  // Re-enable all buttons on the keyboard
+  document.querySelectorAll('.Keyboard button').forEach((btn) => {
+    btn.disabled = false; // Enable the button
+    btn.style.backgroundColor = ''; // Reset the button's background color
+  });
+
+  // Hide the reveal word section from the previous game
+  document.getElementById('revealWord').style.display = 'none';
+  document.getElementById('correctWord').textContent = ''; // Clear the revealed word
+}
+
+// Event listener to handle keyboard input
+document.addEventListener('keydown', function (event) {
   const letter = event.key.toUpperCase(); // Get the pressed key and convert it to uppercase
-  if (letter >= 'A' && letter <= 'Z') { // Check if the key is a letter
+
+  // Check if the key is a valid letter (A-Z)
+  if (letter >= 'A' && letter <= 'Z') {
+    // Find the corresponding button for the letter
     const button = document.querySelector(`button[onclick="checkGuess('${letter}', this)"]`);
-    if (button)
-    {
-      checkGuess(letter, button); // Call the checkGuess function with the letter
+    if (button) {
+      checkGuess(letter, button); // Call the checkGuess function with the guessed letter
     }
   }
 });
 
-function setTheme(theme) // TODO: fix so that styling applies to all pages
-{
-    const body = document.body;
-    if (theme === 'Light') {
-      body.setAttribute('data-bs-theme', 'light');
-    } else if (theme === 'Dark') {
-      body.setAttribute('data-bs-theme', 'dark');
-    }
-}
-
-function setDifficulty(level){
-  // this is the where we connect them, it will connect front end to back end by calling it
-  fetch('/set-difficulty',{
-    // Sends an HTTP POST request to the server at the /set-difficulty endpoint.
-    method :'POST',
-    headers: {
-      'Content-Type':'application/json',
-      //The Content-Type: 'application/json' header specifies that the request body contains JSON data.
-    },
-    body : JSON.stringify({difficulty: level}), // bodys shows the seelected diffuculty level 
-
-  })
-  .then(response=>{
-    if(!response.ok){
-      throw new Error("Failed to set difficulty");
-    }
-    throw response.json();
-  })
-  .then(data=>{
-    console.log('Difficulty set to:', data.difficulty);
-    window.location.href='/playHangman';
-    // if diffuculty went well thwb it is gonna redirect to 
-    //Playhangman page abd it will start platinh the gane 
-    //based on the se diffucultu 
-  })
-  .catch(err => console.error(err));
-}
-
-function WordsFromFile(level) {
-  // Arrays to store words for each difficulty level
-  const Easy = [];
-  const Medium = [];
-  const Hard = [];
-  
-  console.log('ok'); // For debugging purposes, print a message to the console
-  console.log(__dirname);
-  fs.readFile('./src/resources/js/word_def.txt', (err, data) => {
-    if (err) throw err;
-    let text = data.toString()
-    const lines = text.split('\n');
-    lines.forEach(line => {
-      const [word, definition] = line.split(',').map(part => part.trim());
-      
-      // Ensure both word and definition exist
-      if (word && definition) {
-        const TrimmedWord = word.replace(/[()]/g, '');
-        const TrimmedDefinitions = definition.replace(/[()]/g, '');  // Same cleaning for definition
-        const entry = { word: TrimmedWord, definition: TrimmedDefinitions };
-
-        // Filter out words containing invalid characters like hyphens, apostrophes, or spaces
-        if (!/[-' ]/.test(TrimmedWord)) {
-          // Categorize words based on their length into difficulty levels
-          if (TrimmedWord.length == 3 || TrimmedWord.length == 4) {
-            Easy.push(entry); // Add to Easy level
-          }
-          if (TrimmedWord.length == 5 || TrimmedWord.length == 6) {
-            Medium.push(entry); // Add to Medium level
-          }
-          if (TrimmedWord.length > 6) {
-            Hard.push(entry); // Add to Hard level
-          }
-        }
-      }
-    });
-
-    // Debugging: log the first entry from each difficulty level to the console
-    console.log(Easy[100]); 
-    console.log(Medium[100]); 
-    console.log(Hard[100]); 
-
-    // Resolve the promise based on the selected level
-    if (level === 'Easy') {
-      const index = Math.floor(Math.random() * Easy.length); 
-      resolve(Easy[index]); // Return the selected word for Easy
-    }
-
-    if (level === 'Medium') {
-      const index = Math.floor(Math.random() * Medium.length);
-      resolve(Medium[index]); // Return the selected word for Medium
-    }
-
-    if (level === 'Hard') {
-      const index = Math.floor(Math.random() * Hard.length);
-      resolve(Hard[index]); // Return the selected word for Hard
-    }  
-  });
-
-
-  // sunce fetch is a asyrchones thing 
-  // we do need promise so it will wait till whole file loads and then it will start doing stuuff 
-  // if we do not put promise then it will fetch data before file is loaded
-  // Start fetching the data from the file using the endpoint
-  // return new Promise((resolve, reject) => {
-  //   fetch('./src/resources/js/word_def.txt')
-  //     // If the response is not successful, throw an error
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         throw new Error('Failed to fetch file');
-  //       }
-  //       return response.json(); // Parse the JSON response to get the content
-  //     })
-      
-  //     // The above fetch uses the fetch API to request the file. 
-  //     // Since the 'fs' module is for Node.js and cannot run in the browser, we wrote the '/read-file' endpoint to handle this.
-      
-  //     .then(data => {
-  //       // Split the file content by lines
-  //       const lines = data.content.split('\n');
-        
-  //       // Loop over each line in the file
-  //       lines.forEach(line => {
-  //         const [word, definition] = line.split(',').map(part => part.trim());
-          
-  //         // Ensure both word and definition exist
-  //         if (word && definition) {
-  //           const TrimmedWord = word.replace(/[()]/g, '');
-  //           const TrimmedDefinitions = definition.replace(/[()]/g, '');  // Same cleaning for definition
-  //           const entry = { word: TrimmedWord, definition: TrimmedDefinitions };
-
-  //           // Filter out words containing invalid characters like hyphens, apostrophes, or spaces
-  //           if (!/[-' ]/.test(TrimmedWord)) {
-  //             // Categorize words based on their length into difficulty levels
-  //             if (TrimmedWord.length == 3 || TrimmedWord.length == 4) {
-  //               Easy.push(entry); // Add to Easy level
-  //             }
-  //             if (TrimmedWord.length == 5 || TrimmedWord.length == 6) {
-  //               Medium.push(entry); // Add to Medium level
-  //             }
-  //             if (TrimmedWord.length > 6) {
-  //               Hard.push(entry); // Add to Hard level
-  //             }
-  //           }
-  //         }
-  //       });
-
-  //       // Debugging: log the first entry from each difficulty level to the console
-  //       console.log(Easy[100]); 
-  //       console.log(Medium[100]); 
-  //       console.log(Hard[100]); 
-
-  //       // Resolve the promise based on the selected level
-  //       if (level === 'Easy') {
-  //         const index = Math.floor(Math.random() * Easy.length); 
-  //         resolve(Easy[index]); // Return the selected word for Easy
-  //       }
-
-  //       if (level === 'Medium') {
-  //         const index = Math.floor(Math.random() * Medium.length);
-  //         resolve(Medium[index]); // Return the selected word for Medium
-  //       }
-
-  //       if (level === 'Hard') {
-  //         const index = Math.floor(Math.random() * Hard.length);
-  //         resolve(Hard[index]); // Return the selected word for Hard
-  //       }
-  //     })
-      
-  //     // Catch any errors that might occur during fetch or processing
-  //     // this is like second part of the promise thingy 
-  //     .catch(err => {
-  //       console.error('Error occurred:', err); // Log the error for debugging
-  //       reject(err); // Reject the promise with the error
-  //     });
-  // });
-};
-
-module.exports = { WordsFromFile };
-
-WordsFromFile();
-
-
-
-
+// Function to display the current state of the word (underscores and correct guesses)
 function displayLetters() {
-  let display = currentWord.split('').map((letter, index) => {
-    // Check if the letter has been correctly guessed
-    return correctGuesses[index] ? letter : '_';
-  });
-  document.getElementById('lettersDisplay').textContent = display.join(' ');
+  const display = currentWord
+    .split('') 
+    .map((letter, index) => (correctGuesses[index] ? letter : '_')) 
+    .join(' ');
+
+  // Update the display on the webpage
+  document.getElementById('lettersDisplay').textContent = display;
 }
 
+// Function to handle letter guesses
+function checkGuess(guess, button) {
+  console.log('checkGuess called', guess); // Debug: Log the guessed letter
 
-function checkGuess(guess, button)
-{
-  console.log('checkGuess called', guess);
-  let correctGuess = false;
-
-  if (guessedLetters.includes(guess)) 
-  {
-    return;
+  // Check if the letter has already been guessed
+  if (guessedLetters.includes(guess)) {
+    return; // Ignore repeated guesses
   }
 
+  // Add the guessed letter to the list of guessed letters
   guessedLetters.push(guess);
-  button.style.backgroundColor = '#d3d3d3';
 
-  if (currentWord.includes(guess))
-  {
-    console.log(guess);
-    correctGuess = true;
-    for (let i = 0; i < currentWord.length; i++) {
-      if (currentWord[i] === guess) {
-        correctGuesses[i] = true;
-      }
+  // Disable the button to prevent re-clicking
+  button.disabled = true; 
+  button.style.backgroundColor = '#d3d3d3'; // Change button color to indicate it was clicked
+
+  let correctGuess = false; // Track whether the guess was correct
+
+  // Check if the guessed letter is in the word
+  for (let i = 0; i < currentWord.length; i++) {
+    if (currentWord[i].toUpperCase() === guess.toUpperCase()) {
+      correctGuesses[i] = true; // Mark the position as correctly guessed
+      correctGuess = true; // Indicate the guess was correct
     }
   }
 
-  else
-  {
-    errorCount++;
-  }
-
-  displayLetters();
-
-  if (correctGuess)
-  {
-    // display incorrect guess message
+  // Display appropriate message based on correctness
+  if (correctGuess) {
+    console.log('Correct guess:', guess); // Debug: Log the correct guess
     document.getElementById('guessMessage').innerText = 'Correct!';
-  }
-
-  else
-  {
-    // display correct guess 
+  } else {
+    errorCount++; // Increment the error count for incorrect guesses
     document.getElementById('guessMessage').innerText = 'Incorrect!';
   }
 
-  if (correctGuesses.every(val => val)) 
-  {
-    document.getElementById('guessMessage').innerText = 'You win!';
-  } 
-  
-  else if (errorCount >= 6) 
-  {  
-    document.getElementById('guessMessage').innerText = 'Game over!';   
+  // Update the word display with correct letters and underscores
+  displayLetters();
+
+  // Check for game win or loss conditions
+  if (correctGuesses.every(Boolean)) { // If all letters are guessed
+    document.getElementById('guessMessage').innerText = 'You win!'; // Display win message
+  } else if (errorCount >= 6) { // If error count reaches 6
+    document.getElementById('guessMessage').textContent = 'Game over!'; // Display loss message
+    document.getElementById('revealWord').style.display = 'block'; // Reveal the correct word
+    document.getElementById('correctWord').textContent = currentWord; // Show the correct word
   }
 }
 
-
+// Initialize the game when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  initializeGame(); // Call initializeGame to set up the initial game state
+  
+});
+//By using DOMContentLoaded, the code ensures that all elements needed for the game (like buttons, displays, or hidden elements) are available before trying to manipulate them.
+//Without this, the initializeGame() function might run too early, causing errors if the DOM isn't fully loaded yet.
