@@ -118,7 +118,6 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/settings', (req, res) => {
-  console.log('hi im here yayyyyyyyy');
   res.render('pages/settings');
 });
 
@@ -126,37 +125,6 @@ app.get('/discover', (req, res) => {
   res.render('pages/discover'); 
 });
 
-
-app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-diffuculty 
-  // request from the client, it contains info about what client sent 
-  //res this is the respomse the server sen back 
-  const { difficulty } = req.body;// we get the diffuculty from request body 
-  //request body contains diffuculty 
-  console.log(difficulty);
-  if(['Easy','Medium','Hard'].includes(difficulty)){
-    // we check if diffucultt is easy, meduim or hard
-    //It uses the .includes() method to see if difficulty (which the user provided) is in that list.
-    req.session.difficulty = difficulty || 'Easy';
-    // we store the diffuculty in session 
-    // session is the place we store information 
-    // The session is a way to store data that the server can remember 
-    //between requests (like remembering the user's chosen difficulty).
-    req.session.save(err =>{ // we save the session and then handle the session 
-
-      if(err){ 
-        //// we check to see if there is soething wrong 
-      // in saving our session
-        console.log('Eror saving session',err);
-        return res.status(500).json({error:'Failed to save diffuculty'});      
-      }
-      res.status(200).json({diffuculty});
-    });
-  }
-  else{ // this is for the case that our diffuculty is not inclusing 
-    // easy hard and meduim
-    res.status(400).json({error: 'invalid diffuculty'});
-  }
-});
 
 // test case written
 app.post('/login', async (req, res) => {
@@ -196,32 +164,6 @@ app.get('/register', (req, res) => {
     res.render('pages/register');
   });
 
-app.get('/playHangman', (req, res) => {
-    const difficulty = req.session.difficulty || 'Easy'; // Default to Easy
-    WordsFromFile(difficulty)
-  
-    
-      .then((wordEntry) => {
-        console.log(wordEntry.word)
-        res.render('pages/playHangman', {
-          word: wordEntry.word, 
-          definition: wordEntry.definition,
-        });
-      console.log(difficulty);
-        
-     // we gonna check, if we do have a diffucultg 
-    // then we will use the saved session diffuculty 
-    // after that we will make it easy as default 
-    // we gonna call the function either with  defaul t
-    // or either with selected one 
-      })
-      .catch((err) => {
-        console.error('Error fetching word:', err);
-        res.status(500).render('pages/playHangman', { error: 'Failed to fetch word!' });
-      });
-  });
-
-  
 app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     
@@ -251,21 +193,21 @@ app.post('/register', async (req, res) => {
 });
 
   //logout
-  app.get('/logout', (req,res) => {
-    req.session.destroy((err) => {
-      if (err) {
-        console.error('Failed to destroy session:', err);
-        return res.render('pages/logout', { 
-          message: 'Could not log out. Please try again later.',
-          error: true
-        });
-      }
-      res.render('pages/logout', { 
-        message: 'You have successfully logged out.',
-        error: false
+app.get('/logout', (req,res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Failed to destroy session:', err);
+      return res.render('pages/logout', { 
+        message: 'Could not log out. Please try again later.',
+        error: true
       });
+    }
+    res.render('pages/logout', { 
+      message: 'You have successfully logged out.',
+      error: false
     });
   });
+});
 
 // access after this point requires login 
 // TODO: do we write test case for this ?
@@ -277,13 +219,35 @@ const auth = (req, res, next) => {
 };
 app.use(auth);
 
+app.get('/playHangman', (req, res) => {
+  const difficulty = req.session.difficulty || 'Easy'; // Default to Easy
+  WordsFromFile(difficulty)
+
+  
+    .then((wordEntry) => {
+      console.log(wordEntry.word)
+      res.render('pages/playHangman', {
+        word: wordEntry.word, 
+        definition: wordEntry.definition,
+      });
+    console.log(difficulty);
+      
+   // we gonna check, if we do have a diffucultg 
+  // then we will use the saved session diffuculty 
+  // after that we will make it easy as default 
+  // we gonna call the function either with  defaul t
+  // or either with selected one 
+    })
+    .catch((err) => {
+      console.error('Error fetching word:', err);
+      res.status(500).render('pages/playHangman', { error: 'Failed to fetch word!' });
+    });
+});
+
 // TODO: write test case
 app.get('/settings', (req, res) => {
   res.render('pages/settings');
 });
-
-// TODO: write test case
-
 
 // TODO: write test case
 app.get('/dictionary', (req, res) => {
@@ -352,7 +316,36 @@ app.get('/home', (req, res) => {
   });
 });
 
+app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-diffuculty 
+  // request from the client, it contains info about what client sent 
+  //res this is the respomse the server sen back 
+  const { difficulty } = req.body;// we get the diffuculty from request body 
+  //request body contains diffuculty 
+  console.log(difficulty);
+  if(['Easy','Medium','Hard'].includes(difficulty)){
+    // we check if diffucultt is easy, meduim or hard
+    //It uses the .includes() method to see if difficulty (which the user provided) is in that list.
+    req.session.difficulty = difficulty || 'Easy';
+    // we store the diffuculty in session 
+    // session is the place we store information 
+    // The session is a way to store data that the server can remember 
+    //between requests (like remembering the user's chosen difficulty).
+    req.session.save(err =>{ // we save the session and then handle the session 
 
+      if(err){ 
+        //// we check to see if there is soething wrong 
+      // in saving our session
+        console.log('Eror saving session',err);
+        return res.status(500).json({error:'Failed to save diffuculty'});      
+      }
+      res.status(200).json({diffuculty});
+    });
+  }
+  else{ // this is for the case that our diffuculty is not inclusing 
+    // easy hard and meduim
+    res.status(400).json({error: 'invalid diffuculty'});
+  }
+});
 
 app.get('/leaderboard', function (req, res) {
   //   // var username = req.query.username;
