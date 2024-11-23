@@ -332,13 +332,15 @@ app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-dif
     //between requests (like remembering the user's chosen difficulty).
     req.session.save(err =>{ // we save the session and then handle the session 
 
+      console.log(difficulty);
+
       if(err){ 
         //// we check to see if there is soething wrong 
       // in saving our session
         console.log('Eror saving session',err);
         return res.status(500).json({error:'Failed to save diffuculty'});      
       }
-      res.status(200).json({diffuculty});
+      res.status(200).json({difficulty});
     });
   }
   else{ // this is for the case that our diffuculty is not inclusing 

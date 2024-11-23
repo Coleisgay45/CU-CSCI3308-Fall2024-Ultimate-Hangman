@@ -6,9 +6,12 @@ let errorCount = 0;
 let guessedLetters = [];
 // TODO: should we add a reset function each new game to reset global variables?
 
+console.log("client.js loaded successfully");
+
 
 function setTheme(theme) // TODO: fix so that styling applies to all pages
 {
+  console.log("we are in set theme");
     const body = document.body;
     if (theme === 'Light') {
       body.setAttribute('data-bs-theme', 'light');
@@ -18,6 +21,7 @@ function setTheme(theme) // TODO: fix so that styling applies to all pages
 }
 
 function setDifficulty(level){
+  console.log("we are in setDifficulty");
   // this is the where we connect them, it will connect front end to back end by calling it
   fetch('/set-difficulty',{
     // Sends an HTTP POST request to the server at the /set-difficulty endpoint.
