@@ -12,6 +12,8 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
+const WordsFromFile = require('./resources/js/client.js');
+
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -79,6 +81,19 @@ app.use(
   })
 );
 
+
+app.get('/read-file', (req, res) => {
+  const filePath = path.join(__dirname, 'resources','js', 'wordsanddefinitions.txt'); // Adjust path
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading file:', err);
+      return res.status(500).send('Error reading file');
+    }
+    res.json({ content: data });
+  });
+});
+
+
 // TODO: write test case
 app.get('/', (req, res) => {
   res.render('pages/register');
@@ -100,6 +115,47 @@ app.get('/register', (req, res) => {
 // TODO: write test case
 app.get('/login', (req, res) => {
     res.render('pages/login');
+});
+
+app.get('/settings', (req, res) => {
+  console.log('hi im here yayyyyyyyy');
+  res.render('pages/settings');
+});
+
+app.get('/discover', (req, res) => {
+  res.render('pages/discover'); 
+});
+
+
+app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-diffuculty 
+  // request from the client, it contains info about what client sent 
+  //res this is the respomse the server sen back 
+  const { difficulty } = req.body;// we get the diffuculty from request body 
+  //request body contains diffuculty 
+  console.log(difficulty);
+  if(['Easy','Medium','Hard'].includes(difficulty)){
+    // we check if diffucultt is easy, meduim or hard
+    //It uses the .includes() method to see if difficulty (which the user provided) is in that list.
+    req.session.difficulty = difficulty || 'Easy';
+    // we store the diffuculty in session 
+    // session is the place we store information 
+    // The session is a way to store data that the server can remember 
+    //between requests (like remembering the user's chosen difficulty).
+    req.session.save(err =>{ // we save the session and then handle the session 
+
+      if(err){ 
+        //// we check to see if there is soething wrong 
+      // in saving our session
+        console.log('Eror saving session',err);
+        return res.status(500).json({error:'Failed to save diffuculty'});      
+      }
+      res.status(200).json({diffuculty});
+    });
+  }
+  else{ // this is for the case that our diffuculty is not inclusing 
+    // easy hard and meduim
+    res.status(400).json({error: 'invalid diffuculty'});
+  }
 });
 
 // test case written
@@ -136,7 +192,36 @@ app.post('/login', async (req, res) => {
 
 });
 
-  // test case written
+app.get('/register', (req, res) => {
+    res.render('pages/register');
+  });
+
+app.get('/playHangman', (req, res) => {
+    const difficulty = req.session.difficulty || 'Easy'; // Default to Easy
+    WordsFromFile(difficulty)
+  
+    
+      .then((wordEntry) => {
+        console.log(wordEntry.word)
+        res.render('pages/playHangman', {
+          word: wordEntry.word, 
+          definition: wordEntry.definition,
+        });
+      console.log(difficulty);
+        
+     // we gonna check, if we do have a diffucultg 
+    // then we will use the saved session diffuculty 
+    // after that we will make it easy as default 
+    // we gonna call the function either with  defaul t
+    // or either with selected one 
+      })
+      .catch((err) => {
+        console.error('Error fetching word:', err);
+        res.status(500).render('pages/playHangman', { error: 'Failed to fetch word!' });
+      });
+  });
+
+  
 app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     
@@ -198,9 +283,7 @@ app.get('/settings', (req, res) => {
 });
 
 // TODO: write test case
-app.get('/playHangman', (req, res) => {
-  res.render('pages/playHangman');
-});
+
 
 // TODO: write test case
 app.get('/dictionary', (req, res) => {
@@ -304,3 +387,6 @@ app.get('/leaderboard', function (req, res) {
   );
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
+
+
+// here is the place when we will do back end of settijng diffucuty

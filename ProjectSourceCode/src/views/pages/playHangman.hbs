@@ -1,11 +1,27 @@
 {{>message}}
+
 <form method="post" action="/dictionaryword">
   <div class="mb-3"> <!--instead of styling them individually -->
-    <div class="Hangman-Pic">
-        <img src="img/hangman-0.svg">
-    </div>
+    <h1>Play Hangman</h1>
+  <!-- Word and definition section -->
+
     <div id="lettersDisplay" ></div>
     <div id="guessMessage"></div>
+        {{#if word}}
+      <p><strong>Guess The Word: </strong></p>
+      <span style="display: none" id="wordToMatch">{{word}}</span>
+    {{else}}
+      <p>No word available. Please try again.</p>
+    {{/if}}
+      <div class="Hangman-Pic">
+        <img src="img/hangman-0.svg">
+    </div>
+    <div id="revealWord" style="display: none; color: red; font-weight: bold;">
+    The correct word was: <span id="correctWord"></span>
+    </div>
+     <div style="margin-top: 20px;">
+    <button onclick="initializeGame()">Restart Game</button>
+    </div>
     <div class="Game-box" style="font-size: 20px; margin-top: 10px; color: blue;">
         <div class = "Keyboard">
             <button type="button" onclick="checkGuess('A', this)">A</button>
@@ -35,6 +51,8 @@
             <button type="button" onclick="checkGuess('Y', this)">Y</button>
             <button type="button" onclick="checkGuess('Z', this)">Z</button>
         </div>
+
     </div>
   </div>
+
 
