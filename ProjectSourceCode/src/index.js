@@ -64,6 +64,17 @@ app.use(bodyParser.json()); // specify the usage of JSON for parsing request bod
 app.use(express.static(__dirname+'/resources'));
 // path join is taking you to rpository 
 
+let gameProgress = {
+//   let currentWord = 'WORD'; // temp for testing, will change to initialize to '' later
+// let correctGuesses = new Array(currentWord.length).fill(false);
+// let errorCount = 0;
+// let guessedLetters = [];
+  currentWord: '',
+  guessedLetters: [],
+  correctGuesses: [],
+  errorCount: 0
+}
+
 // initialize session variables
 app.use(
   session({
@@ -126,6 +137,41 @@ app.post('/login', async (req, res) => {
       res.status(400).render('pages/login');
       return;
     }
+
+    const query = `SELECT * FROM saved WHERE username = $1`;
+    db.any(query, [req.body.username])
+    .then(data => {
+      if (data.length > 0) {
+        const gameProgress = {
+          currentWord: data[0].currentWord, // Assuming `currentWord` is a column
+          correctGuesses: data[0].correctGuesses,
+          errorCount: data[0].errorCount,  // Assuming `errorCount` is a column
+          guessedLetters: data[0].guessedLetters
+          // Add other fields as needed
+        };
+
+        // Save to session if game progress exists
+        req.session.gameProgress = gameProgress;
+      } else {
+        console.log("No game progress found for the user.");
+      }
+    })
+    .catch(err => {
+      console.error("Error fetching game progress:", err);
+    });
+
+    // const query = `SELECT * FROM saved WHERE username = $1`
+    // db.any(query,[req.body.username])
+    //.then(data)
+    // const gameProgress = {
+    //currentWord: data.currentWord,
+    //errorcount: data.errorcount...
+  //}
+  //.catch()
+
+    // if (gameProgress) {
+    //   req.session.gameProgress = gameProgress
+    // }
     req.session.user = req.body.username;
     req.session.save();
     res.redirect('/home');
@@ -199,6 +245,14 @@ app.get('/settings', (req, res) => {
 
 // TODO: write test case
 app.get('/playHangman', (req, res) => {
+  if (req.session.gameProgress){
+    const gameProgress = req.session.gameProgress;
+    res.render('pages/playHangman', {gameProgress});
+  }
+  // if req.session.gameProgress {
+  //   const gameProgress = req.session.gameProgress
+  //  res.render('pages/playHangman', {gameProgress})
+  // }
   res.render('pages/playHangman');
 });
 
@@ -269,6 +323,59 @@ app.get('/home', (req, res) => {
   });
 });
 
+app.post('/savegame', (req, res) => {
+  req.session.gameProgress = req.body.gameProgress
+})
+
+
+/*
+app.get('logout){
+if req.sesion.gameprogress{
+const query = `insert into saved (currentword, guessedletters, correctguesses, errorcount) values ($1,$2,$3,$4)`
+
+db.none(query, [req.session.gameprogress.currentword, req.session...])
+then() {
+success}
+.catch() error
+
+
+}
+
+destroy req.session user req.sessiongameprogress
+
+redirect to whatever page
+
+}
+
+*/
+
+app.get('/logout', (req, res) => {
+  /*
+  if req.sesion.gameprogress{
+  const query = `insert into saved (currentword, guessedletters, correctguesses, errorcount) values ($1,$2,$3,$4)`
+
+  db.none(query, [req.session.gameprogress.currentword, req.session...])
+  then() {
+  success}
+  .catch() error
+
+
+  }
+  */
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Failed to destroy session:', err);
+      return res.render('pages/logout', { 
+        message: 'Could not log out. Please try again later.',
+        error: true
+      });
+    }
+    res.render('pages/logout', { 
+      message: 'You have successfully logged out.',
+      error: false
+    });
+  });
+});
 
 
 app.get('/leaderboard', function (req, res) {
