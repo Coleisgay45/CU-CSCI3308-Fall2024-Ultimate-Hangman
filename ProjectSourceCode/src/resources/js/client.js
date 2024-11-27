@@ -9,16 +9,16 @@ let guessedLetters = [];
 console.log("client.js loaded successfully");
 
 
-function setTheme(theme) // TODO: fix so that styling applies to all pages
-{
-  console.log("we are in set theme");
-    const body = document.body;
-    if (theme === 'Light') {
-      body.setAttribute('data-bs-theme', 'light');
-    } else if (theme === 'Dark') {
-      body.setAttribute('data-bs-theme', 'dark');
-    }
-}
+// function setTheme(theme) // TODO: fix so that styling applies to all pages
+// {
+//   console.log("we are in set theme");
+//     const body = document.body;
+//     if (theme === 'Light') {
+//       body.setAttribute('data-bs-theme', 'light');
+//     } else if (theme === 'Dark') {
+//       body.setAttribute('data-bs-theme', 'dark');
+//     }
+// }
 
 function setDifficulty(level){
   console.log("we are in setDifficulty");

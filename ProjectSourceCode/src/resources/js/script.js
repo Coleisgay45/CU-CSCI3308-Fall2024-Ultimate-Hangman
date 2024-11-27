@@ -6,6 +6,36 @@ let correctGuesses = []; // Array to track correctly guessed letters
 let guessedLetters = []; // Array to track all guessed letters
 let errorCount = 0; // Number of incorrect guesses
 
+function setTheme(theme) // TODO: fix so that styling applies to all pages
+{
+    const body = document.body;
+    if (theme === 'Light') 
+    {
+      body.setAttribute('data-bs-theme', 'light');
+    } 
+    else if (theme === 'Dark') 
+    {
+      body.setAttribute('data-bs-theme', 'dark');
+    }
+
+    // local storage allows you to save stuff so im saving the theme into localstorage
+    localStorage.setItem('theme', theme);
+}
+
+// this function loads and applys the theme that was selected to a page when its loaded
+function loadTheme() 
+{
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) 
+    {
+      setTheme(savedTheme);
+    }
+}
+
+// you have to call the loadTheme function whenever scrtip.js is loaded so the theme will apply to each page
+loadTheme();
+console.log('load theme called');
+
 // Function to initialize the game
 function initializeGame() 
 {
@@ -50,35 +80,6 @@ document.addEventListener('keydown', function (event) {
     }
   }
 });
-
-
-function setTheme(theme) // TODO: fix so that styling applies to all pages
-{
-    const body = document.body;
-    if (theme === 'Light') 
-    {
-      body.setAttribute('data-bs-theme', 'light');
-    } 
-    else if (theme === 'Dark') 
-    {
-      body.setAttribute('data-bs-theme', 'dark');
-    }
-
-    // local storage allows you to save stuff so im saving the theme into localstorage
-    localStorage.setItem('theme', theme);
-}
-// this function loads and applys the theme that was selected to a page when its loaded
-function loadTheme() 
-{
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) 
-    {
-      setTheme(savedTheme);
-    }
-}
-
-// you have to call the loadTheme function whenever scrtip.js is loaded so the theme will apply to each page
-loadTheme();
 
 // function setDifficulty(level) // TODO: need to decide which word lengths correlate with which difficulty?
 // {
@@ -162,7 +163,7 @@ function checkGuess(guess, button)
     document.getElementById('guessMessage').textContent = 'Game over!'; // Display loss message
     document.getElementById('revealWord').style.display = 'block'; // Reveal the correct word
     document.getElementById('correctWord').textContent = currentWord; // Show the correct word
-    window.location.href = '/gameover';
+    //window.location.href = '/gameover';
   }
 }
 
