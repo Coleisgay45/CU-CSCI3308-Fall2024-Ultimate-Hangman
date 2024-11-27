@@ -92,6 +92,71 @@ describe('i am testing logout get endpoint', () => {
   });
 });
 
+describe('i am testing playHangman get endpoint', () => {
+  // Sample test case given to test / endpoint.
+  it('should render playHangman page', done => {
+    chai
+      .request(app)
+      .get('/playHangman')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe('i am testing settings get endpoint', () => {
+  // Sample test case given to test / endpoint.
+  it('should render settings page', done => {
+    chai
+      .request(app)
+      .get('/settings')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe('i am testing dictionary get endpoint', () => {
+  // Sample test case given to test / endpoint.
+  it('should render dictionary page', done => {
+    chai
+      .request(app)
+      .get('/dictionary')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe('i am testing home get endpoint', () => {
+  // Sample test case given to test / endpoint.
+  it('should render home page', done => {
+    chai
+      .request(app)
+      .get('/home')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe('i am testing leaderboard get endpoint', () => {
+  // Sample test case given to test / endpoint.
+  it('should render leaderboard page', done => {
+    chai
+      .request(app)
+      .get('/leaderboard')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
 // describe('read file test', () => {
 //   // Sample test case given to test / endpoint.
 //   it('file is successfully read', done => {

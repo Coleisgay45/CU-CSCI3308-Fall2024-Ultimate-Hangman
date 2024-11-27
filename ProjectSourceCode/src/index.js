@@ -242,7 +242,7 @@ const auth = (req, res, next) => {
 };
 app.use(auth);
 
-// TODO: write test case
+// test case written
 app.get('/playHangman', (req, res) => {
   const difficulty = req.session.difficulty || 'Easy'; // Default to Easy
   WordsFromFile(difficulty)
@@ -250,7 +250,7 @@ app.get('/playHangman', (req, res) => {
   
     .then((wordEntry) => {
       console.log(wordEntry.word)
-      res.render('pages/playHangman', {
+      res.status(200).render('pages/playHangman', {
         word: wordEntry.word, 
         definition: wordEntry.definition,
       });
@@ -268,14 +268,14 @@ app.get('/playHangman', (req, res) => {
     });
 });
 
-// TODO: write test case
+// test case written
 app.get('/settings', (req, res) => {
-  res.render('pages/settings');
+  res.status(200).render('pages/settings');
 });
 
-// TODO: write test case
+// test case written
 app.get('/dictionary', (req, res) => {
-    res.render('pages/dictionary');
+    res.status(200).render('pages/dictionary');
 });
 
 
@@ -328,7 +328,7 @@ app.get('/home', (req, res) => {
   var userRanked = `select * from users where users.username = '${req.session.user}'`;
   db.any(userRanked)
   .then( (rows) => {
-    res.render('pages/home', {
+    res.status(200).render('pages/home', {
       username: req.session.user,
       easy_high_score: rows[0].easy_high_score,
       medium_high_score: rows[0].medium_high_score,
@@ -338,7 +338,7 @@ app.get('/home', (req, res) => {
   .catch(err => {
     console.log("Error data was not fetched")
     console.error(err.message);
-    res.render('pages/leaderboard', {message: "Error fetching data"});
+    res.status(500).render('pages/leaderboard', {message: "Error fetching data"});
   });
 });
 
@@ -396,14 +396,14 @@ app.get('/leaderboard', function (req, res) {
         users = data;
         console.log("user data fetched");
         console.log(data);
-        res.render('pages/leaderboard', {users})
+        res.status(200).render('pages/leaderboard', {users})
       })
       // if query execution fails
       // send error message
       .catch(err => {
         console.log("Error users were not fetched")
         console.error(err.message);
-        res.render('pages/leaderboard', {message: "Error fetching user data"});
+        res.status(500).render('pages/leaderboard', {message: "Error fetching user data"});
       });
   }
   
