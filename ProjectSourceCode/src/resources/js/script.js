@@ -79,6 +79,8 @@ document.addEventListener('keydown', function (event) {
       checkGuess(letter, button); // Call the checkGuess function with the guessed letter
     }
   }
+  loadTheme(); //might change **
+  console.log('load theme called into event listener');
 });
 
 // function setDifficulty(level) // TODO: need to decide which word lengths correlate with which difficulty?
