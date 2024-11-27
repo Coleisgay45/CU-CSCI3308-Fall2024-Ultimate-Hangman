@@ -2,11 +2,11 @@
 
 <form method="post" action="/dictionaryword">
   <div class="mb-3"> <!--instead of styling them individually -->
-<!--
-    <div class="Hangman-Pic">
+
+    {{!-- <div class="Hangman-Pic">
         <img id="hangman-image" src = "img/hangman-0.svg" alt="Hangman Step">
-    </div>
--->
+    </div> --}}
+
     <h1>Play Hangman</h1>  <!-- is this needed idk-->
   <!-- Word and definition section -->
 
@@ -19,8 +19,8 @@
       <p>No word available. Please try again.</p>
     {{/if}}
       <div class="Hangman-Pic">
-        <img src="img/hangman-0.svg">
-    </div>
+        <img id="hangman-image" src = "img/hangman-0.svg" alt="Hangman Step">
+      </div>
     <div id="revealWord" style="display: none; color: red; font-weight: bold;">
     The correct word was: <span id="correctWord"></span>
     </div>

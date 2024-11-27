@@ -172,6 +172,7 @@ function updateHangmanImage(errorCount)
   image.src = `img/hangman-${errorCount}.svg`;
   console.log('Updated hangman image to:', image.src);
 }
+
 // Initialize the game when the page loads
 document.addEventListener('DOMContentLoaded', () => {
   initializeGame(); // Call initializeGame to set up the initial game state
