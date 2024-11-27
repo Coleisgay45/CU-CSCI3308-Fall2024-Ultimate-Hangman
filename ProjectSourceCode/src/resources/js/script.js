@@ -2,7 +2,7 @@ console.log('client.js loaded');
 
 // Global variables for game state
 let currentWord = ''; // The current word to be guessed
-let correctGuesses = []; // Array to track correctly guessed letters
+let correctGuesses = new Array(currentWord.length).fill(false); // Array to track correctly guessed letters
 let guessedLetters = []; // Array to track all guessed letters
 let errorCount = 0; // Number of incorrect guesses
 
@@ -46,7 +46,7 @@ function initializeGame()
 
   // Initialize game variables
   currentWord = word; // Set the current word to the hidden word
-  correctGuesses = []; // Create an array to track guessed letters
+  correctGuesses = new Array(currentWord.length).fill(false); // Create an array to track guessed letters
   guessedLetters = []; // Reset the array of guessed letters
   errorCount = 0; // Reset the error count
 
@@ -111,6 +111,7 @@ function displayLetters()
 // Function to handle letter guesses
 function checkGuess(guess, button) 
 {
+  guess = guess.toUpperCase();
   console.log('checkGuess called', guess); // Debug: Log the guessed letter
 
   // Check if the letter has already been guessed
@@ -127,12 +128,12 @@ function checkGuess(guess, button)
 
   let correctGuess = false; // Track whether the guess was correct
 
-  if (currentWord.includes(guess))
+  if ((currentWord.toUpperCase()).includes(guess))
   {
   // Check if the guessed letter is in the word
     for (let i = 0; i < currentWord.length; i++) 
     {
-      if (currentWord[i].toUpperCase() === guess.toUpperCase()) 
+      if (currentWord[i].toUpperCase() === guess) 
       {
         correctGuesses[i] = true; // Mark the position as correctly guessed
         correctGuess = true; // Indicate the guess was correct
@@ -160,6 +161,13 @@ function checkGuess(guess, button)
   // Check for game win or loss conditions
   if (correctGuesses.every(Boolean)) 
   { // If all letters are guessed
+    console.log(correctGuesses);
+    console.log(currentWord);
+    for (let i = 0; i < correctGuesses.length; i++) {
+      console.log(correctGuesses[i]); // Access each value by index
+      console.log('inside for loop');
+    }
+    console.log('end of for loop');
     document.getElementById('guessMessage').innerText = 'You win!'; // Display win message
   } 
   else if (errorCount >= 6) 
