@@ -1,9 +1,9 @@
 const { response } = require("express");
 const fs = require('fs');
-let currentWord = ' ';
-let correctGuesses = new Array(currentWord.length).fill(false);
-let errorCount = 0;
-let guessedLetters = [];
+let currentWord = '';
+// let correctGuesses = new Array(currentWord.length).fill(false);
+// let errorCount = 0;
+// let guessedLetters = [];
 // TODO: should we add a reset function each new game to reset global variables?
 
 console.log("client.js loaded successfully");

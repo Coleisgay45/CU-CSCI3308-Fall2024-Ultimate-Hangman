@@ -1,8 +1,8 @@
 console.log('client.js loaded');
 
 // Global variables for game state
-let currentWord = ''; // The current word to be guessed
-let correctGuesses = new Array(currentWord.length).fill(false); // Array to track correctly guessed letters
+let currentFetchedWord = ''; // The current word to be guessed
+let correctGuesses = new Array(currentFetchedWord.length).fill(false); // Array to track correctly guessed letters
 let guessedLetters = []; // Array to track all guessed letters
 let errorCount = 0; // Number of incorrect guesses
 
@@ -47,8 +47,8 @@ function initializeGame()
     // TODO: update userscore in leaderboard
 
     // Initialize game variables
-    currentWord = word; // Set the current word to the hidden word
-    correctGuesses = new Array(currentWord.length).fill(false); // Create an array to track guessed letters
+    currentFetchedWord = word; // Set the current word to the hidden word
+    correctGuesses = new Array(currentFetchedWord.length).fill(false); // Create an array to track guessed letters
     guessedLetters = []; // Reset the array of guessed letters
     errorCount = 0; // Reset the error count
 
@@ -102,7 +102,7 @@ function initializeGame()
 // Function to display the current state of the word (underscores and correct guesses)
 function displayLetters() 
 {
-  const display = currentWord
+  const display = currentFetchedWord
     .split('') 
     .map((letter, index) => (correctGuesses[index] ? letter : '_')) 
     .join(' ');
@@ -131,12 +131,12 @@ function checkGuess(guess, button)
 
   let correctGuess = false; // Track whether the guess was correct
 
-  if ((currentWord.toUpperCase()).includes(guess))
+  if ((currentFetchedWord.toUpperCase()).includes(guess))
   {
   // Check if the guessed letter is in the word
-    for (let i = 0; i < currentWord.length; i++) 
+    for (let i = 0; i < currentFetchedWord.length; i++) 
     {
-      if (currentWord[i].toUpperCase() === guess) 
+      if (currentFetchedWord[i].toUpperCase() === guess) 
       {
         correctGuesses[i] = true; // Mark the position as correctly guessed
         correctGuess = true; // Indicate the guess was correct
@@ -165,7 +165,7 @@ function checkGuess(guess, button)
   if (correctGuesses.every(Boolean)) 
   { // If all letters are guessed
     console.log(correctGuesses);
-    console.log(currentWord);
+    console.log(currentFetchedWord);
     for (let i = 0; i < correctGuesses.length; i++) {
       console.log(correctGuesses[i]); // Access each value by index
       console.log('inside for loop');
@@ -177,7 +177,7 @@ function checkGuess(guess, button)
   { // If error count reaches 6
     document.getElementById('guessMessage').textContent = 'Game over!'; // Display loss message
     document.getElementById('revealWord').style.display = 'block'; // Reveal the correct word
-    document.getElementById('correctWord').textContent = currentWord; // Show the correct word
+    document.getElementById('correctWord').textContent = currentFetchedWord; // Show the correct word
     //window.location.href = '/gameover';
   }
 }
