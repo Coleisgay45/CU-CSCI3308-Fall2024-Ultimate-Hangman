@@ -117,13 +117,13 @@ app.get('/login', (req, res) => {
     res.render('pages/login');
 });
 
-app.get('/settings', (req, res) => {
-  res.render('pages/settings');
-});
+// app.get('/settings', (req, res) => {
+//   res.render('pages/settings');
+// });
 
-app.get('/discover', (req, res) => {
-  res.render('pages/discover'); 
-});
+// app.get('/discover', (req, res) => {
+//   res.render('pages/discover'); 
+// });
 
 
 // test case written
@@ -160,9 +160,9 @@ app.post('/login', async (req, res) => {
 
 });
 
-app.get('/register', (req, res) => {
-    res.render('pages/register');
-  });
+// app.get('/register', (req, res) => {
+//     res.render('pages/register');
+//   });
 
 app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
@@ -192,25 +192,25 @@ app.post('/register', async (req, res) => {
     // To-DO: Insert username and hashed password into the 'users' table
 });
 // TODO: write test case
-app.get('/settings', (req, res) => {
-    res.render('pages/settings');
-  });
+// app.get('/settings', (req, res) => {
+//     res.render('pages/settings');
+//   });
 
 // TODO: write test case
-app.get('/dictionary', (req, res) => {
-    res.render('pages/dictionary');
-});
+// app.get('/dictionary', (req, res) => {
+//     res.render('pages/dictionary');
+// });
 
 app.get('/gameover', (req, res) => {
     res.render('pages/gameOver'); // Render the gameOver.hbs page
   });
 
   // TODO: write test case
-app.get('/home', (req, res) => {
-    res.render('pages/home', {
-      username: req.session.user,
-    });
-  });
+// app.get('/home', (req, res) => {
+//     res.render('pages/home', {
+//       username: req.session.user,
+//     });
+//   });
 
   //logout
 app.get('/logout', (req,res) => {
