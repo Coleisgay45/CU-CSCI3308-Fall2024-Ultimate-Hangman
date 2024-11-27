@@ -48,6 +48,39 @@ document.addEventListener('keydown', function (event) {
   }
 });
 
+
+function setTheme(theme) // TODO: fix so that styling applies to all pages
+{
+    const body = document.body;
+    if (theme === 'Light') {
+      body.setAttribute('data-bs-theme', 'light');
+    } else if (theme === 'Dark') {
+      body.setAttribute('data-bs-theme', 'dark');
+    }
+
+    // local storage allows you to save stuff so im saving the theme into localstorage
+    localStorage.setItem('theme', theme);
+}
+// this function loads and applys the theme that was selected to a page when its loaded
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        setTheme(savedTheme);
+    }
+}
+
+// you have to call the loadTheme function whenever scrtip.js is loaded so the theme will apply to each page
+loadTheme();
+
+function setDifficulty(level) // TODO: need to decide which word lengths correlate with which difficulty?
+{
+    if (level == 'Easy'){
+    }
+
+    else if (level == 'Medium'){
+
+    }
+  
 // Function to display the current state of the word (underscores and correct guesses)
 function displayLetters() {
   const display = currentWord
@@ -67,7 +100,6 @@ function checkGuess(guess, button) {
   if (guessedLetters.includes(guess)) {
     return; // Ignore repeated guesses
   }
-
   // Add the guessed letter to the list of guessed letters
   guessedLetters.push(guess);
 
@@ -77,6 +109,8 @@ function checkGuess(guess, button) {
 
   let correctGuess = false; // Track whether the guess was correct
 
+  if (currentWord.includes(guess))
+  {
   // Check if the guessed letter is in the word
   for (let i = 0; i < currentWord.length; i++) {
     if (currentWord[i].toUpperCase() === guess.toUpperCase()) {
@@ -97,6 +131,20 @@ function checkGuess(guess, button) {
   // Update the word display with correct letters and underscores
   displayLetters();
 
+
+  if (correctGuess)
+  {
+    // display incorrect guess message
+    document.getElementById('guessMessage').innerText = 'Correct!';
+  }
+
+  else
+  {
+    // display correct guess 
+    document.getElementById('guessMessage').innerText = 'Incorrect!';
+    console.log("script.js is loaded");
+    updateHangmanImage(errorCount);
+
   // Check for game win or loss conditions
   if (correctGuesses.every(Boolean)) { // If all letters are guessed
     document.getElementById('guessMessage').innerText = 'You win!'; // Display win message
@@ -104,13 +152,21 @@ function checkGuess(guess, button) {
     document.getElementById('guessMessage').textContent = 'Game over!'; // Display loss message
     document.getElementById('revealWord').style.display = 'block'; // Reveal the correct word
     document.getElementById('correctWord').textContent = currentWord; // Show the correct word
+    window.location.href = '/gameover';
+
   }
 }
 
+ function updateHangmanImage(errorCount) {
+    const image = document.getElementById('hangman-image');
+    // Update the image source based on the error count
+    image.src = `img/hangman-${errorCount}.svg`;
+    console.log('Updated hangman image to:', image.src);
+  }
 // Initialize the game when the page loads
 document.addEventListener('DOMContentLoaded', () => {
   initializeGame(); // Call initializeGame to set up the initial game state
-  
+
 });
 //By using DOMContentLoaded, the code ensures that all elements needed for the game (like buttons, displays, or hidden elements) are available before trying to manipulate them.
 //Without this, the initializeGame() function might run too early, causing errors if the DOM isn't fully loaded yet.
