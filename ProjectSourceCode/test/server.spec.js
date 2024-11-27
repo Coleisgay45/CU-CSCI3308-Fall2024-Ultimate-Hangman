@@ -27,6 +27,32 @@ describe('I am testing the server', () => {
   });
 });
 
+describe('i am testing / endpoint', () => {
+  // Sample test case given to test / endpoint.
+  it('should render register page', done => {
+    chai
+      .request(app)
+      .get('/')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+// describe('read file test', () => {
+//   // Sample test case given to test / endpoint.
+//   it('file is successfully read', done => {
+//     chai
+//       .request(app)
+//       .get('/read-file')
+//       .end((err, res) => {
+//         expect(res).to.have.status(200);
+//         done();
+//       });
+//   });
+// });
+
 // *********************** TODO: WRITE 2 UNIT TESTCASES FOR REGISTER POST**************************
 // POS: A SUCESSFUL REGISTRATION
 // NEG: UNSUCESSFUL, LIKE DUPLICATE USERNAME OR SOMETHING ELSE
@@ -92,3 +118,4 @@ describe('I am testing login with valid credentials', () => {
       });
   });
 });
+

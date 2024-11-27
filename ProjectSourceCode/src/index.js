@@ -81,22 +81,23 @@ app.use(
   })
 );
 
-
+// TODO: write test case - where is this used?
 app.get('/read-file', (req, res) => {
-  const filePath = path.join(__dirname, 'resources','js', 'wordsanddefinitions.txt'); // Adjust path
+  const filePath = path.join(__dirname, 'resources','js', 'word_def.txt'); // Adjust path
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
+      //console.log('here');
       console.error('Error reading file:', err);
       return res.status(500).send('Error reading file');
     }
-    res.json({ content: data });
+    res.status(200).json({ content: data });
   });
 });
 
 
-// TODO: write test case
+// test case written
 app.get('/', (req, res) => {
-  res.render('pages/register');
+  res.status(200).render('pages/register');
 });
 
 //test case written
@@ -164,6 +165,7 @@ app.post('/login', async (req, res) => {
 //     res.render('pages/register');
 //   });
 
+// test case written
 app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     
@@ -201,18 +203,19 @@ app.post('/register', async (req, res) => {
 //     res.render('pages/dictionary');
 // });
 
+// TODO: write test case
 app.get('/gameover', (req, res) => {
     res.render('pages/gameOver'); // Render the gameOver.hbs page
   });
 
-  // TODO: write test case
+// TODO: write test case
 // app.get('/home', (req, res) => {
 //     res.render('pages/home', {
 //       username: req.session.user,
 //     });
 //   });
 
-  //logout
+// TODO: write test case
 app.get('/logout', (req,res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -239,7 +242,7 @@ const auth = (req, res, next) => {
 };
 app.use(auth);
 
-
+// TODO: write test case
 app.get('/playHangman', (req, res) => {
   const difficulty = req.session.difficulty || 'Easy'; // Default to Easy
   WordsFromFile(difficulty)
@@ -339,6 +342,7 @@ app.get('/home', (req, res) => {
   });
 });
 
+// TODO: write test case
 app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-diffuculty 
   // request from the client, it contains info about what client sent 
   //res this is the respomse the server sen back 
@@ -372,6 +376,7 @@ app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-dif
   }
 });
 
+// TODO: write test case
 app.get('/leaderboard', function (req, res) {
   //   // var username = req.query.username;
   //   // var city = req.query.city;
