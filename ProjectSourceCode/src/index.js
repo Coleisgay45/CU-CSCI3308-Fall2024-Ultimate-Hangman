@@ -193,29 +193,27 @@ app.post('/register', async (req, res) => {
   }
     // To-DO: Insert username and hashed password into the 'users' table
 });
-// TODO: write test case
+
 // app.get('/settings', (req, res) => {
 //     res.render('pages/settings');
 //   });
 
-// TODO: write test case
 // app.get('/dictionary', (req, res) => {
 //     res.render('pages/dictionary');
 // });
 
-// TODO: write test case
+// test case written
 app.get('/gameover', (req, res) => {
     res.status(200).render('pages/gameOver'); // Render the gameOver.hbs page
   });
 
-// TODO: write test case
 // app.get('/home', (req, res) => {
 //     res.render('pages/home', {
 //       username: req.session.user,
 //     });
 //   });
 
-// TODO: write test case
+// test case written
 app.get('/logout', (req,res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -279,12 +277,17 @@ app.get('/dictionary', (req, res) => {
 });
 
 
-// TODO: write test case
+// TODO: write test case, find out why console logs arent showing up, wtf is up with the status codes 
 app.post('/dictionaryword', (req, res) =>{
+  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
   var userword = req.body.word;
   var url2 = "https://api.dictionaryapi.dev/api/v2/entries/en/"
   + userword;
+  console.log('/////////////////////////////////////////////////');
+  console.log('/////////////////////////////////////////////////');
   console.log(userword);
+  console.log('\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\');
+  console.log('\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\');
   axios({
     url: url2,
     method: 'GET',
@@ -301,12 +304,15 @@ app.post('/dictionaryword', (req, res) =>{
     const wordData2 = wordData[0].meanings
     const wordData3 = wordData2[0].definitions
     const wordData4 = wordData3[0].definition
+    // if  (!wordData || !wordData[0] || !wordData[0].meanings || !wordData[0].meanings[0].definitions)  {
+    //   return res.status(404).render('pages/dictionary', { message: "Error: Invalid word or word not found" });
+    // }
     console.log("word data is ", wordData);
     console.log("word data 2 is ", wordData2)
     console.log("word data 3 is ", wordData3)
     console.log("word data 4 is ", wordData4)
     // console.log("word data item ", wordData[0].meanings);
-    res.render('pages/dictionary', {message: wordData4}
+    res.status(200).render('pages/dictionary', {message: wordData4}
      //res.redirect('/login', {message: "Wrong Password or Username"})
     );
     
@@ -316,14 +322,13 @@ app.post('/dictionaryword', (req, res) =>{
     // Handle errors
     // const empty = "error"
     console.error(error.message);
-    res.render('pages/dictionary', {message: "Error invalid word / word not found"});
-    
+    res.status(500).render('pages/dictionary', {message: "Error Something went wrong"});
   });
 
 });
 
 
-// TODO: write test case
+// test case written
 app.get('/home', (req, res) => {
   var userRanked = `select * from users where users.username = '${req.session.user}'`;
   db.any(userRanked)
@@ -376,7 +381,7 @@ app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-dif
   }
 });
 
-// TODO: write test case
+// testcase written
 app.get('/leaderboard', function (req, res) {
   //   // var username = req.query.username;
   //   // var city = req.query.city;
