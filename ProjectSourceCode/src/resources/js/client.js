@@ -1,4 +1,4 @@
-const { response } = require("express");
+const { response } = require("express"); // TODO: is this line necessary? at the current moment giving browser console error
 const fs = require('fs');
 let currentWord = '';
 // let correctGuesses = new Array(currentWord.length).fill(false);
