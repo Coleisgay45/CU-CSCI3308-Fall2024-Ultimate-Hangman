@@ -42,9 +42,11 @@ function initializeGame()
   // Get the hidden word from the DOM
   let word = document.getElementById('wordToMatch').innerText;
 
+  // TODO: update userscore in leaderboard
+
   // Initialize game variables
   currentWord = word; // Set the current word to the hidden word
-  correctGuesses = new Array(currentWord.length).fill(false); // Create an array to track guessed letters
+  correctGuesses = []; // Create an array to track guessed letters
   guessedLetters = []; // Reset the array of guessed letters
   errorCount = 0; // Reset the error count
 
