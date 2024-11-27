@@ -1,8 +1,50 @@
+
 {{> message}}
 <head>
   <link rel="stylesheet" href="/css/style.css"> 
+
+  <script>
+      // JavaScript Code directly in the HTML
+      console.log("client.js loaded successfully");
+
+      function setTheme(theme) {
+        console.log("We are in setTheme");
+
+        const body = document.body;
+        if (theme === 'Light') {
+          body.setAttribute('data-bs-theme', 'light');
+        } else if (theme === 'Dark') {
+          body.setAttribute('data-bs-theme', 'dark');
+        }
+      }
+
+      function setDifficulty(level) {
+        console.log("We are in setDifficulty");
+        
+        fetch('/set-difficulty', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({difficulty: level}),
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Failed to set difficulty");
+          }
+          return response.json();  // Fetching the JSON data
+        })
+        .then(data => {
+          console.log('Difficulty set to:', data.difficulty);
+          window.location.href = '/playHangman'; // Redirect after setting difficulty
+        })
+        .catch(err => console.error('Error:', err));
+      }
+    </script>
 </head>
+
 <body>
+  <!-- this is the front end, from here will get what they want as diffuculty leevb-->
   <h1>Select Difficulty Level</h1>
   <div class="button-group" id="difficulty-buttons">
     <button type="button" class="btn btn-primary" onclick="setDifficulty('Easy')">Easy</button>
@@ -15,6 +57,7 @@
     <button type="button" class="btn btn-secondary" onclick="setTheme('Light')">Light Theme</button>
     <button type="button" class="btn btn-dark" onclick="setTheme('Dark')">Dark Theme</button>
   </div>
+
 
   <!-- Mute Button -->
     <div class="text-left mt-4" id="mute-button">
@@ -29,5 +72,11 @@
   </div>
 
   <script src="/js/script.js"></script>
+
+  <!--
+  <div class="button-group" id="theme-buttons-logout">
+    <a href="/logout" class="btn btn-light">Sign out</a>
+  </div>
+-->
 </body>
 

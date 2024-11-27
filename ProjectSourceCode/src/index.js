@@ -12,6 +12,8 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
+const WordsFromFile = require('./resources/js/client.js');
+
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -79,6 +81,19 @@ app.use(
   })
 );
 
+
+app.get('/read-file', (req, res) => {
+  const filePath = path.join(__dirname, 'resources','js', 'wordsanddefinitions.txt'); // Adjust path
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading file:', err);
+      return res.status(500).send('Error reading file');
+    }
+    res.json({ content: data });
+  });
+});
+
+
 // TODO: write test case
 app.get('/', (req, res) => {
   res.render('pages/register');
@@ -101,6 +116,15 @@ app.get('/register', (req, res) => {
 app.get('/login', (req, res) => {
     res.render('pages/login');
 });
+
+app.get('/settings', (req, res) => {
+  res.render('pages/settings');
+});
+
+app.get('/discover', (req, res) => {
+  res.render('pages/discover'); 
+});
+
 
 // test case written
 app.post('/login', async (req, res) => {
@@ -136,13 +160,16 @@ app.post('/login', async (req, res) => {
 
 });
 
-  // test case written
+app.get('/register', (req, res) => {
+    res.render('pages/register');
+  });
+
 app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     
     var uname = req.body.username;
     console.log("USERNAME: ", uname);
-    const regquery = `insert into users (username, password) values ($1, $2);`;
+    const regquery = `insert into users (username, password, easy_high_score, medium_high_score, hard_high_score) values ($1, $2, 0, 0, 0);`;
     if ((uname !== '') && (req.body.password !== '')){
     const hash = await bcrypt.hash(req.body.password, 10);
     db.any(regquery,[uname, hash])
@@ -190,6 +217,23 @@ app.get('/home', (req, res) => {
     });
   });
 
+  //logout
+app.get('/logout', (req,res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Failed to destroy session:', err);
+      return res.render('pages/logout', { 
+        message: 'Could not log out. Please try again later.',
+        error: true
+      });
+    }
+    res.render('pages/logout', { 
+      message: 'You have successfully logged out.',
+      error: false
+    });
+  });
+});
+
 // access after this point requires login 
 // TODO: do we write test case for this ?
 const auth = (req, res, next) => {
@@ -199,6 +243,42 @@ const auth = (req, res, next) => {
     next();
 };
 app.use(auth);
+
+
+app.get('/playHangman', (req, res) => {
+  const difficulty = req.session.difficulty || 'Easy'; // Default to Easy
+  WordsFromFile(difficulty)
+
+  
+    .then((wordEntry) => {
+      console.log(wordEntry.word)
+      res.render('pages/playHangman', {
+        word: wordEntry.word, 
+        definition: wordEntry.definition,
+      });
+    console.log(difficulty);
+      
+   // we gonna check, if we do have a diffucultg 
+  // then we will use the saved session diffuculty 
+  // after that we will make it easy as default 
+  // we gonna call the function either with  defaul t
+  // or either with selected one 
+    })
+    .catch((err) => {
+      console.error('Error fetching word:', err);
+      res.status(500).render('pages/playHangman', { error: 'Failed to fetch word!' });
+    });
+});
+
+// TODO: write test case
+app.get('/settings', (req, res) => {
+  res.render('pages/settings');
+});
+
+// TODO: write test case
+app.get('/dictionary', (req, res) => {
+    res.render('pages/dictionary');
+});
 
 
 // TODO: write test case
@@ -244,5 +324,92 @@ app.post('/dictionaryword', (req, res) =>{
 
 });
 
+
+// TODO: write test case
+app.get('/home', (req, res) => {
+  var userRanked = `select * from users where users.username = '${req.session.user}'`;
+  db.any(userRanked)
+  .then( (rows) => {
+    res.render('pages/home', {
+      username: req.session.user,
+      easy_high_score: rows[0].easy_high_score,
+      medium_high_score: rows[0].medium_high_score,
+      hard_high_score: rows[0].hard_high_score,
+    });
+  })
+  .catch(err => {
+    console.log("Error data was not fetched")
+    console.error(err.message);
+    res.render('pages/leaderboard', {message: "Error fetching data"});
+  });
+});
+
+app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-diffuculty 
+  // request from the client, it contains info about what client sent 
+  //res this is the respomse the server sen back 
+  const { difficulty } = req.body;// we get the diffuculty from request body 
+  //request body contains diffuculty 
+  console.log(difficulty);
+  if(['Easy','Medium','Hard'].includes(difficulty)){
+    // we check if diffucultt is easy, meduim or hard
+    //It uses the .includes() method to see if difficulty (which the user provided) is in that list.
+    req.session.difficulty = difficulty || 'Easy';
+    // we store the diffuculty in session 
+    // session is the place we store information 
+    // The session is a way to store data that the server can remember 
+    //between requests (like remembering the user's chosen difficulty).
+    req.session.save(err =>{ // we save the session and then handle the session 
+
+      console.log(difficulty);
+
+      if(err){ 
+        //// we check to see if there is soething wrong 
+      // in saving our session
+        console.log('Eror saving session',err);
+        return res.status(500).json({error:'Failed to save diffuculty'});      
+      }
+      res.status(200).json({difficulty});
+    });
+  }
+  else{ // this is for the case that our diffuculty is not inclusing 
+    // easy hard and meduim
+    res.status(400).json({error: 'invalid diffuculty'});
+  }
+});
+
+app.get('/leaderboard', function (req, res) {
+  //   // var username = req.query.username;
+  //   // var city = req.query.city;
+  
+    // // Multiple queries using templated strings
+    // var current_user = `select * from userinfo where username = '${username}';`;
+    // var city_users = `select * from userinfo where city = '${city}';`;
+  
+    var usersRanked = `select * from users order by hard_high_score desc;`
+  
+    // use task to execute multiple queries
+    db.any(usersRanked)
+      // if query execution succeeds
+      // query results can be obtained
+      // as shown below
+      .then(data => {
+        users = data;
+        console.log("user data fetched");
+        console.log(data);
+        res.render('pages/leaderboard', {users})
+      })
+      // if query execution fails
+      // send error message
+      .catch(err => {
+        console.log("Error users were not fetched")
+        console.error(err.message);
+        res.render('pages/leaderboard', {message: "Error fetching user data"});
+      });
+  }
+  
+  );
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
+
+
+// here is the place when we will do back end of settijng diffucuty

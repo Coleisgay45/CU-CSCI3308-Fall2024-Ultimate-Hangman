@@ -1,19 +1,53 @@
-let currentWord = 'WORD'; // temp for testing, will change to initialize to '' later
-let correctGuesses = new Array(currentWord.length).fill(false);
-let errorCount = 0;
-let guessedLetters = [];
-// TODO: should we add a reset function each new game to reset global variables?
+console.log('client.js loaded');
 
-document.addEventListener('keydown', function(event) {
+// Global variables for game state
+let currentWord = ''; // The current word to be guessed
+let correctGuesses = []; // Array to track correctly guessed letters
+let guessedLetters = []; // Array to track all guessed letters
+let errorCount = 0; // Number of incorrect guesses
+
+// Function to initialize the game
+function initializeGame() {
+  // Get the hidden word from the DOM
+  let word = document.getElementById('wordToMatch').innerText;
+
+  // Initialize game variables
+  currentWord = word; // Set the current word to the hidden word
+  correctGuesses = new Array(currentWord.length).fill(false); // Create an array to track guessed letters
+  guessedLetters = []; // Reset the array of guessed letters
+  errorCount = 0; // Reset the error count
+
+  // Reset the display to show underscores for unguessed letters
+  displayLetters();
+
+  // Clear any messages from the previous game
+  document.getElementById('guessMessage').textContent = '';
+
+  // Re-enable all buttons on the keyboard
+  document.querySelectorAll('.Keyboard button').forEach((btn) => {
+    btn.disabled = false; // Enable the button
+    btn.style.backgroundColor = ''; // Reset the button's background color
+  });
+
+  // Hide the reveal word section from the previous game
+  document.getElementById('revealWord').style.display = 'none';
+  document.getElementById('correctWord').textContent = ''; // Clear the revealed word
+}
+
+// Event listener to handle keyboard input
+document.addEventListener('keydown', function (event) {
   const letter = event.key.toUpperCase(); // Get the pressed key and convert it to uppercase
-  if (letter >= 'A' && letter <= 'Z') { // Check if the key is a letter
+
+  // Check if the key is a valid letter (A-Z)
+  if (letter >= 'A' && letter <= 'Z') {
+    // Find the corresponding button for the letter
     const button = document.querySelector(`button[onclick="checkGuess('${letter}', this)"]`);
-    if (button)
-    {
-      checkGuess(letter, button); // Call the checkGuess function with the letter
+    if (button) {
+      checkGuess(letter, button); // Call the checkGuess function with the guessed letter
     }
   }
 });
+
 
 function setTheme(theme) // TODO: fix so that styling applies to all pages
 {
@@ -46,61 +80,57 @@ function setDifficulty(level) // TODO: need to decide which word lengths correla
     else if (level == 'Medium'){
 
     }
-
-    else if (level == 'Hard'){
-        
-    }
-}
-
-function generateRandomWord()
-{
-  let currentWord_ = '';
-  // random word generated, then we set it to currentWord_
-  // word generated depends on level: maybe easy = 3-4, medium = 5-6, hard = 7+? idk what we want to decide
-  // set all to uppercase to correlate with buttons
-  currentWord = currentWord_;
-}
-
+  
+// Function to display the current state of the word (underscores and correct guesses)
 function displayLetters() {
-  let display = currentWord.split('').map((letter, index) => {
-    // Check if the letter has been correctly guessed
-    return correctGuesses[index] ? letter : '_';
-  });
-  document.getElementById('lettersDisplay').textContent = display.join(' ');
+  const display = currentWord
+    .split('') 
+    .map((letter, index) => (correctGuesses[index] ? letter : '_')) 
+    .join(' ');
+
+  // Update the display on the webpage
+  document.getElementById('lettersDisplay').textContent = display;
 }
 
-function checkGuess(guess, button)
-{
-  console.log('checkGuess called', guess);
-  let correctGuess = false;
+// Function to handle letter guesses
+function checkGuess(guess, button) {
+  console.log('checkGuess called', guess); // Debug: Log the guessed letter
 
-  if (guessedLetters.includes(guess)) 
-  {
-    return;
+  // Check if the letter has already been guessed
+  if (guessedLetters.includes(guess)) {
+    return; // Ignore repeated guesses
   }
-
+  // Add the guessed letter to the list of guessed letters
   guessedLetters.push(guess);
-  button.style.backgroundColor = '#d3d3d3';
 
-  correctGuess = false;
+  // Disable the button to prevent re-clicking
+  button.disabled = true; 
+  button.style.backgroundColor = '#d3d3d3'; // Change button color to indicate it was clicked
+
+  let correctGuess = false; // Track whether the guess was correct
 
   if (currentWord.includes(guess))
   {
-    console.log(guess);
-    correctGuess = true;
-    for (let i = 0; i < currentWord.length; i++) {
-      if (currentWord[i] === guess) {
-        correctGuesses[i] = true;
-      }
+  // Check if the guessed letter is in the word
+  for (let i = 0; i < currentWord.length; i++) {
+    if (currentWord[i].toUpperCase() === guess.toUpperCase()) {
+      correctGuesses[i] = true; // Mark the position as correctly guessed
+      correctGuess = true; // Indicate the guess was correct
     }
   }
 
-  else
-  {
-    errorCount++;
+  // Display appropriate message based on correctness
+  if (correctGuess) {
+    console.log('Correct guess:', guess); // Debug: Log the correct guess
+    document.getElementById('guessMessage').innerText = 'Correct!';
+  } else {
+    errorCount++; // Increment the error count for incorrect guesses
+    document.getElementById('guessMessage').innerText = 'Incorrect!';
   }
 
+  // Update the word display with correct letters and underscores
   displayLetters();
+
 
   if (correctGuess)
   {
@@ -114,23 +144,29 @@ function checkGuess(guess, button)
     document.getElementById('guessMessage').innerText = 'Incorrect!';
     console.log("script.js is loaded");
     updateHangmanImage(errorCount);
-  }
 
-  if (correctGuesses.every(val => val)) 
-  {
-    document.getElementById('guessMessage').innerText = 'You win!';
-  } 
-  
-  else if (errorCount >= 6) 
-  {  
-    document.getElementById('guessMessage').innerText = 'Game over!';   
+  // Check for game win or loss conditions
+  if (correctGuesses.every(Boolean)) { // If all letters are guessed
+    document.getElementById('guessMessage').innerText = 'You win!'; // Display win message
+  } else if (errorCount >= 6) { // If error count reaches 6
+    document.getElementById('guessMessage').textContent = 'Game over!'; // Display loss message
+    document.getElementById('revealWord').style.display = 'block'; // Reveal the correct word
+    document.getElementById('correctWord').textContent = currentWord; // Show the correct word
     window.location.href = '/gameover';
+
   }
 }
 
-function updateHangmanImage(errorCount) {
+ function updateHangmanImage(errorCount) {
     const image = document.getElementById('hangman-image');
     // Update the image source based on the error count
     image.src = `img/hangman-${errorCount}.svg`;
     console.log('Updated hangman image to:', image.src);
   }
+// Initialize the game when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  initializeGame(); // Call initializeGame to set up the initial game state
+
+});
+//By using DOMContentLoaded, the code ensures that all elements needed for the game (like buttons, displays, or hidden elements) are available before trying to manipulate them.
+//Without this, the initializeGame() function might run too early, causing errors if the DOM isn't fully loaded yet.
