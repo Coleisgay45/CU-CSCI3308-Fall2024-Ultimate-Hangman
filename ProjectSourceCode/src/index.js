@@ -197,11 +197,6 @@ app.get('/settings', (req, res) => {
   });
 
 // TODO: write test case
-app.get('/playHangman', (req, res) => {
-    res.render('pages/playHangman');
-  });
-
-// TODO: write test case
 app.get('/dictionary', (req, res) => {
     res.render('pages/dictionary');
 });
