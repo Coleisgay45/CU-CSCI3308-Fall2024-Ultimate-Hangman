@@ -40,31 +40,34 @@ console.log('load theme called');
 function initializeGame() 
 {
   // Get the hidden word from the DOM
-  let word = document.getElementById('wordToMatch').innerText;
+  let element = document.getElementById('wordToMatch');
+  if (element !== null) {
+    let word = element.innerText;   //let word = document.getElementById('wordToMatch').innerText;
+  
+    // TODO: update userscore in leaderboard
 
-  // TODO: update userscore in leaderboard
+    // Initialize game variables
+    currentWord = word; // Set the current word to the hidden word
+    correctGuesses = new Array(currentWord.length).fill(false); // Create an array to track guessed letters
+    guessedLetters = []; // Reset the array of guessed letters
+    errorCount = 0; // Reset the error count
 
-  // Initialize game variables
-  currentWord = word; // Set the current word to the hidden word
-  correctGuesses = new Array(currentWord.length).fill(false); // Create an array to track guessed letters
-  guessedLetters = []; // Reset the array of guessed letters
-  errorCount = 0; // Reset the error count
+    // Reset the display to show underscores for unguessed letters
+    displayLetters();
 
-  // Reset the display to show underscores for unguessed letters
-  displayLetters();
+    // Clear any messages from the previous game
+    document.getElementById('guessMessage').textContent = '';
 
-  // Clear any messages from the previous game
-  document.getElementById('guessMessage').textContent = '';
+    // Re-enable all buttons on the keyboard
+    document.querySelectorAll('.Keyboard button').forEach((btn) => {
+      btn.disabled = false; // Enable the button
+      btn.style.backgroundColor = ''; // Reset the button's background color
+    });
 
-  // Re-enable all buttons on the keyboard
-  document.querySelectorAll('.Keyboard button').forEach((btn) => {
-    btn.disabled = false; // Enable the button
-    btn.style.backgroundColor = ''; // Reset the button's background color
-  });
-
-  // Hide the reveal word section from the previous game
-  document.getElementById('revealWord').style.display = 'none';
-  document.getElementById('correctWord').textContent = ''; // Clear the revealed word
+    // Hide the reveal word section from the previous game
+    document.getElementById('revealWord').style.display = 'none';
+    document.getElementById('correctWord').textContent = ''; // Clear the revealed word
+  }
 }
 
 // Event listener to handle keyboard input
