@@ -40,6 +40,58 @@ describe('i am testing / endpoint', () => {
   });
 });
 
+describe('i am testing register get endpoint', () => {
+  // Sample test case given to test / endpoint.
+  it('should render register page', done => {
+    chai
+      .request(app)
+      .get('/register')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe('i am testing login get endpoint', () => {
+  // Sample test case given to test / endpoint.
+  it('should render login page', done => {
+    chai
+      .request(app)
+      .get('/login')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe('i am testing game over get endpoint', () => {
+  // Sample test case given to test / endpoint.
+  it('should render gameover page', done => {
+    chai
+      .request(app)
+      .get('/gameover')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe('i am testing logout get endpoint', () => {
+  // Sample test case given to test / endpoint.
+  it('should render logout page', done => {
+    chai
+      .request(app)
+      .get('/logout')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
 // describe('read file test', () => {
 //   // Sample test case given to test / endpoint.
 //   it('file is successfully read', done => {

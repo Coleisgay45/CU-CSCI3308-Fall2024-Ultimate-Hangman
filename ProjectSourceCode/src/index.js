@@ -108,14 +108,14 @@ app.get('/welcome', function(req, res) {
   })
 })
 
-// TODO: write test case
+// test case written
 app.get('/register', (req, res) => {
-  res.render('pages/register');
+  res.status(200).render('pages/register');
 });
 
-// TODO: write test case
+// test case written
 app.get('/login', (req, res) => {
-    res.render('pages/login');
+    res.status(200).render('pages/login');
 });
 
 // app.get('/settings', (req, res) => {
@@ -205,7 +205,7 @@ app.post('/register', async (req, res) => {
 
 // TODO: write test case
 app.get('/gameover', (req, res) => {
-    res.render('pages/gameOver'); // Render the gameOver.hbs page
+    res.status(200).render('pages/gameOver'); // Render the gameOver.hbs page
   });
 
 // TODO: write test case
@@ -220,12 +220,12 @@ app.get('/logout', (req,res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error('Failed to destroy session:', err);
-      return res.render('pages/logout', { 
+      return res.status(500).render('pages/logout', { 
         message: 'Could not log out. Please try again later.',
         error: true
       });
     }
-    res.render('pages/logout', { 
+    res.status(200).render('pages/logout', { 
       message: 'You have successfully logged out.',
       error: false
     });
