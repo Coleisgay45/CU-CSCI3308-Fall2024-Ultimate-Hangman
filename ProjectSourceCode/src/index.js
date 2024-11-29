@@ -128,6 +128,12 @@ app.get('/login', (req, res) => {
 
 
 // test case written
+
+// login creates a user session if the user passes in the correct
+// / valid credentials. If invalid or wrong credentials were passed in
+// the login page is rendered again. Otherwise on sucessful login
+// the home page is rendered
+
 app.post('/login', async (req, res) => {
   db.tx(async t => {
     const user = await t.one(
@@ -169,6 +175,10 @@ app.post('/login', async (req, res) => {
 app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     
+    // register creates a new user in the user database. It takes
+    // the information that the user passes in (username, password)
+    // and creates and inserts a new user into the user database
+
     var uname = req.body.username;
     console.log("USERNAME: ", uname);
     const regquery = `insert into users (username, password, easy_high_score, medium_high_score, hard_high_score) values ($1, $2, 0, 0, 0);`;
@@ -214,6 +224,8 @@ app.get('/gameover', (req, res) => {
 //   });
 
 // test case written
+
+//logout destroys the user session and logs the user out
 app.get('/logout', (req,res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -279,15 +291,12 @@ app.get('/dictionary', (req, res) => {
 
 // TODO: write test case, find out why console logs arent showing up, wtf is up with the status codes 
 app.post('/dictionaryword', (req, res) =>{
-  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+  // Makes a api call using the word that the user enters by
+  // parsing the word to the api call url
   var userword = req.body.word;
   var url2 = "https://api.dictionaryapi.dev/api/v2/entries/en/"
   + userword;
-  console.log('/////////////////////////////////////////////////');
-  console.log('/////////////////////////////////////////////////');
   console.log(userword);
-  console.log('\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\');
-  console.log('\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\');
   axios({
     url: url2,
     method: 'GET',
@@ -304,9 +313,9 @@ app.post('/dictionaryword', (req, res) =>{
     const wordData2 = wordData[0].meanings
     const wordData3 = wordData2[0].definitions
     const wordData4 = wordData3[0].definition
-    // if  (!wordData || !wordData[0] || !wordData[0].meanings || !wordData[0].meanings[0].definitions)  {
-    //   return res.status(404).render('pages/dictionary', { message: "Error: Invalid word or word not found" });
-    // }
+    
+    // parse the api call results and then display the word as a message
+
     console.log("word data is ", wordData);
     console.log("word data 2 is ", wordData2)
     console.log("word data 3 is ", wordData3)
@@ -330,6 +339,8 @@ app.post('/dictionaryword', (req, res) =>{
 
 // test case written
 app.get('/home', (req, res) => {
+  // displays information for the home screen, displays the user's data
+  // their username, scores, etc
   var userRanked = `select * from users where users.username = '${req.session.user}'`;
   db.any(userRanked)
   .then( (rows) => {
@@ -383,12 +394,8 @@ app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-dif
 
 // testcase written
 app.get('/leaderboard', function (req, res) {
-  //   // var username = req.query.username;
-  //   // var city = req.query.city;
-  
-    // // Multiple queries using templated strings
-    // var current_user = `select * from userinfo where username = '${username}';`;
-    // var city_users = `select * from userinfo where city = '${city}';`;
+  // loads the leaderboard by fetching all the users from the database
+  // users are ranked by their highest hard mode score
   
     var usersRanked = `select * from users order by hard_high_score desc;`
   
