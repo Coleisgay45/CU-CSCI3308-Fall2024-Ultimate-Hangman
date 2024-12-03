@@ -8,7 +8,7 @@ CREATE TABLE users (
 );
 
 drop table if exists words;
-create table Words(
+create table words(
     word varchar(5000),
     word_def varchar(5000)
 );
