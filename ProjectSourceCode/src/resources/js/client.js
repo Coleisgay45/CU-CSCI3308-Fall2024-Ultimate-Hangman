@@ -1,6 +1,7 @@
 const { response } = require("express");
 const fs = require('fs');
 let currentWord = ' ';
+let TrimmedDefinitions = ' ';
 let correctGuesses = new Array(currentWord.length).fill(false);
 let errorCount = 0;
 let guessedLetters = [];
@@ -68,7 +69,8 @@ function WordsFromFile(level) {
       // Ensure both word and definition exist
       if (word && definition) {
         currentWord = word.replace(/[()]/g, '');
-        const TrimmedDefinitions = definition.replace(/[()]/g, '');  // Same cleaning for definition
+        //const TrimmedDefinitions = definition.replace(/[()]/g, '');  // Same cleaning for definition
+        TrimmedDefinitions = definition;
         const entry = { word: currentWord, definition: TrimmedDefinitions };
 
         // Filter out words containing invalid characters like hyphens, apostrophes, or spaces
@@ -111,6 +113,36 @@ function WordsFromFile(level) {
   });
 
 
+function hint()
+{
+  const modal = document.getElementById('hintModal'); // Get the modal
+  const hintText = document.getElementById('hintText'); // Get the hint text area
+ 
+  // Check if a word is loaded
+  if (!currentWord) {
+    hintText.textContent = "No word is currently loaded!";
+  } else {
+    // Search for the definition of the current word
+    const wordToFind = currentWord.toUpperCase();
+    const match = [...Easy, ...Medium, ...Hard].find(
+      entry => entry.word.toUpperCase() === wordToFind
+    );
+ 
+    // Display the definition if found, otherwise show an error
+    if (match) {
+      hintText.textContent = match.TrimmedDefinitions;
+    } else {
+      hintText.textContent = "No definition available for this word!";
+    }
+  }
+ 
+  modal.style.display = "flex"; // Show the modal
+}
+
+function closeHintModal() {
+  const modal = document.getElementById('hintModal'); // Get the modal
+  modal.style.display = "none"; // Hide the modal
+ }
   // sunce fetch is a asyrchones thing 
   // we do need promise so it will wait till whole file loads and then it will start doing stuuff 
   // if we do not put promise then it will fetch data before file is loaded
