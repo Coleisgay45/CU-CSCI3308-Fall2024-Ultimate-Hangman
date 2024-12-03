@@ -165,6 +165,23 @@ app.post('/register', async (req, res) => {
     // To-DO: Insert username and hashed password into the 'users' table
 });
 
+  //logout
+  app.get('/logout', (req,res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Failed to destroy session:', err);
+        return res.render('pages/logout', { 
+          message: 'Could not log out. Please try again later.',
+          error: true
+        });
+      }
+      res.render('pages/logout', { 
+        message: 'You have successfully logged out.',
+        error: false
+      });
+    });
+  });
+
 // access after this point requires login 
 // TODO: do we write test case for this ?
 const auth = (req, res, next) => {

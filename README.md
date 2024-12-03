@@ -19,12 +19,14 @@ Team Eccentric Developers
 
 Version Control: github repository
 
-Stack Used: 
+Stack Used: PostgreSQL, Handlebars, Javascript, HTML, Bootstrap, NodeJS, Python (For extracting our data), Virtual Studio Code, Postman
 
 Prerequisites to run: Internet Access
 
-Instructions:
+Instructions: To run the application locally, change the current path to CU-CSCI3308-Fall2024-Ultimate-Hangman\ProjectSourceCode. Then with Docker open, in your Operating System's Shell Terminal, type the following: docker compose up. In the internet browser of your choice, type localhost:3000 and then you can successfully run
+and use Ultimate Hangman! Make an account by typing in a username and password and then login. To use the dictionary, type in a word of your choice and press enter. The word's definition should pop up as a message. To change the display settings or display, click on Settings and click on the buttons of your choice. e.g. to play
+on hard, click on the hard button. To play hangman, simply click on the buttons and play!
 
-Testing:
+Testing: The Javascript should automatically run the tests. 
 
 Links: https://cu-csci3308-fall2024-ultimate-hangman.onrender.com/
