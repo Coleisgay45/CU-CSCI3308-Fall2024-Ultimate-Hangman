@@ -146,6 +146,7 @@ app.post('/login', async (req, res) => {
     );
     //console.info(user)
     if(user.username === ''){
+
       res.render('pages/register');
       return;
     }
@@ -154,7 +155,7 @@ app.post('/login', async (req, res) => {
     console.log(match)
     if(match !== true){
       //res.redirect('/login', {message: "Wrong Password or Username"})
-      res.status(400).render('pages/login');
+      res.status(400).render('pages/login' , {message: "Wrong Password or Username"});
       return;
     }
     req.session.user = req.body.username;
@@ -162,7 +163,8 @@ app.post('/login', async (req, res) => {
     res.redirect('/home');
   })
     .catch(err => {
-      res.status(500).render('pages/register')
+      res.status(500).render('pages/register',{message: "Something Went Wrong"});
+      // ireegular errros like overflows
     });
 
 });
@@ -189,17 +191,17 @@ app.post('/register', async (req, res) => {
     // query results can be obtained
     // as shown below
     .then(data => {
-        res.status(200).render('pages/login');
+        res.status(200).render('pages/login',{message: "Sucess, Get in:)!"});
     })
     // if query execution fails
     // send error message
     .catch(err => {
-      res.status(400).render('pages/register');
+      res.status(400).render('pages/register',{message: "Something Went Wrong"});
     });
   }
   else{
     console.log('uh oh spaghettio');
-    res.status(400).render('pages/register');
+    res.status(400).render('pages/register',{message: "Something Went Wrong"});
   }
     // To-DO: Insert username and hashed password into the 'users' table
 });
