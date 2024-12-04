@@ -200,15 +200,6 @@ function updateHangmanImage(errorCount) {
   }
 // initialize the game when the page loads
 
-function updateHangmanImage(errorCount) 
-{
-  const image = document.getElementById('hangman-image');// Update the image source based on the error count
-  image.src = `img/hangman-${errorCount}.svg`;
-  console.log('Updated hangman image to:', image.src);
-}
-
-// Initialize the game when the page loads
-
 document.addEventListener('DOMContentLoaded', function () {
   // Check if the current page is the "playgame" page (by URL or a unique element)
   if (window.location.pathname.includes("playHangman")) {
