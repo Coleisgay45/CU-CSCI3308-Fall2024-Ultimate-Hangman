@@ -12,7 +12,7 @@
     <div id="guessMessage"></div>
         {{#if word}}
       <p><strong>Guess The Word: </strong></p>
-      <span style="display: none" id="wordToMatch">{{word}}</span>
+      <span style="display: none" id="wordToMatch">{{word}}</span> <!-- word passed into handlebars-->
     {{else}}
       <p>No word available. Please try again.</p>
     {{/if}}
@@ -28,7 +28,8 @@
 
     <!--Hint button-->
     <div style = "margin-top: 20px;">
-      <button type = "button" onclick = "hint()">hint</button>
+      <!--<button type = "button" onclick = "hint({{Easy}}, {{Medium}}, {{Hard}})">hint</button>-->
+      <button type = "button" {{hint_onClick definition}}>hint</button>
     </div>
     <!-- Modal for Hint -->
     <div id="hintModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center;">
