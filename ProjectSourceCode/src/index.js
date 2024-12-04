@@ -247,10 +247,6 @@ app.get('/leaderboard', (req, res) => {
     res.render('pages/leaderboard');
 });
 
-app.get('/home', (req,res) => {
-    res.render('pages/home')
-});
-
 // access after this point requires login 
 // TODO: do we write test case for this ?
 const auth = (req, res, next) => {
