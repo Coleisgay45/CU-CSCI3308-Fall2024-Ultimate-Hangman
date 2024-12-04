@@ -228,23 +228,6 @@ app.get('/gameover', (req, res) => {
 
 // test case written
 
-//logout destroys the user session and logs the user out
-app.get('/logout', (req,res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Failed to destroy session:', err);
-      return res.status(500).render('pages/logout', { 
-        message: 'Could not log out. Please try again later.',
-        error: true
-      });
-    }
-    res.status(200).render('pages/logout', { 
-      message: 'You have successfully logged out.',
-      error: false
-    });
-  });
-});
-
 // access after this point requires login 
 // TODO: do we write test case for this ?
 const auth = (req, res, next) => {
@@ -284,6 +267,23 @@ app.get('/playHangman', (req, res) => {
 // test case written
 app.get('/settings', (req, res) => {
   res.status(200).render('pages/settings');
+});
+
+//logout destroys the user session and logs the user out
+app.get('/logout', (req,res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Failed to destroy session:', err);
+      return res.status(500).render('pages/logout', { 
+        message: 'Could not log out. Please try again later.',
+        error: true
+      });
+    }
+    res.status(200).render('pages/logout', { 
+      message: 'You have successfully logged out.',
+      error: false
+    });
+  });
 });
 
 // test case written
