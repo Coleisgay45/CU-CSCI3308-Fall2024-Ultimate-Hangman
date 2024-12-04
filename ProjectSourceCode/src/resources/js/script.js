@@ -1,5 +1,5 @@
-console.log('client.js loaded');
-
+console.log('script.js loaded');
+const { addScore } = require('ProjectSourceCode/src/index.js');
 // Global variables for game state
 let currentWord = ''; // The current word to be guessed
 let correctGuesses = new Array(currentWord.length).fill(false); // Array to track correctly guessed letters
@@ -112,7 +112,7 @@ function displayLetters()
 }
 
 // Function to handle letter guesses
-function checkGuess(guess, button) 
+function checkGuess(guess, button, username) 
 {
   guess = guess.toUpperCase();
   console.log('checkGuess called', guess); // Debug: Log the guessed letter
@@ -181,6 +181,7 @@ function checkGuess(guess, button)
     console.log('end of for loop');
     document.getElementById('guessMessage').innerText = 'You win!'; // Display win message
     window.location.href = `/gameover?result=win&correctWord=${currentWord}`;
+    addScore(username, 1);
 
   } 
   else if (errorCount >= 6) 

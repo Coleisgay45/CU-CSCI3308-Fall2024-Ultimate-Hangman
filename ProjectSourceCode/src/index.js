@@ -81,6 +81,18 @@ app.use(
   })
 );
 
+// const addScore = async (username, additionalScore, difficulty) => {
+//   try {
+//     await db.query(
+//       'UPDATE users SET easy_high_score = easy_high_score + ? WHERE id = ?',
+//       [additionalScore, username]
+//     );
+//     console.log(`Added ${additionalScore} points to user ${username}`);
+//   } catch (error) {
+//     console.error('Error updating score:', error.message);
+//   }
+// };
+
 // TODO: write test case - where is this used?
 app.get('/read-file', (req, res) => {
   const filePath = path.join(__dirname, 'resources','js', 'word_def.txt'); // Adjust path
