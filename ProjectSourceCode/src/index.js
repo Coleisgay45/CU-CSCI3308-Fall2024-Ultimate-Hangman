@@ -395,6 +395,27 @@ app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-dif
   }
 });
 
+const test = function (req, res) {
+  var score = `select * from users where users.username = '${req.session.user}'`;
+  var newScore;
+  db.any(score)
+  .then((rows) => {
+    console.log(newScore);
+    newScore = rows[0].easy_high_score + 1;
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+  var updateScore = `update users set easy_high_score = ${newScore} where users.username = '${req.session.user}'`;
+  db.any(updateScore)
+  .then((rows) => {
+    console.log(rows);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+};
+
 // testcase written
 app.get('/leaderboard', function (req, res) {
   // loads the leaderboard by fetching all the users from the database
@@ -423,6 +444,7 @@ app.get('/leaderboard', function (req, res) {
   }
   
   );
+exports.test = test;
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
 
