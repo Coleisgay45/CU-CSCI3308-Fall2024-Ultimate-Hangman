@@ -12,12 +12,18 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
-const WordsFromFile = require('./resources/js/client.js');
+const fs = require('fs');
 
+var Easy = [];
+let Medium = [];
+let Hard = [];
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
 // *****************************************************
+
+Handlebars.registerHelper('hint_onClick', function(param1) {
+  return new Handlebars.SafeString(`onclick="hint('${param1}')"`);});
 
 // create `ExpressHandlebars` instance and configure the layouts and partials dir.
 const hbs = handlebars.create({
@@ -99,6 +105,67 @@ app.get('/read-file', (req, res) => {
 app.get('/', (req, res) => {
   res.status(200).render('pages/register');
 });
+
+function WordsFromFile(level) {
+  // Arrays to store words for each difficulty level
+  return new Promise((resolve, reject) => {
+    
+    console.log('ok'); // For debugging purposes, print a message to the console
+    console.log(__dirname);
+    fs.readFile('./src/resources/js/word_def.txt', (err, data) => {
+      if (err) throw err;
+      let text = data.toString()
+      const lines = text.split('\n');
+      lines.forEach(line => {
+        const [word, definition] = line.split(',').map(part => part.trim());
+        
+        // Ensure both word and definition exist
+        if (word && definition) {
+          currentFetchedWord = word.replace(/[()]/g, '');
+          //const TrimmedDefinitions = definition.replace(/[()]/g, '');  // Same cleaning for definition
+          TrimmedDefinitions = definition;
+          const entry = { word: currentFetchedWord, definition: TrimmedDefinitions };
+
+          // Filter out words containing invalid characters like hyphens, apostrophes, or spaces
+          if (!/[-' ]/.test(currentFetchedWord)) {
+            // Categorize words based on their length into difficulty levels
+            if (currentFetchedWord.length == 3 || currentFetchedWord.length == 4) {
+              Easy.push(entry); // Add to Easy level
+            }
+            if (currentFetchedWord.length == 5 || currentFetchedWord.length == 6) {
+              Medium.push(entry); // Add to Medium level
+            }
+            if (currentFetchedWord.length > 6) {
+              Hard.push(entry); // Add to Hard level
+            }
+          }
+        }
+      });
+
+      // Debugging: log the first entry from each difficulty level to the console
+      console.log(Easy[199]); 
+      console.log(Medium[1899]); 
+      console.log(Hard[11234]); 
+
+      // Resolve the promise based on the selected level
+      if (level === 'Easy') {
+        const index = Math.floor(Math.random() * Easy.length); 
+        resolve(Easy[index]); // Return the selected word for Easy
+      }
+
+      if (level === 'Medium') {
+        const index = Math.floor(Math.random() * Medium.length);
+        resolve(Medium[index]); // Return the selected word for Medium
+      }
+
+      if (level === 'Hard') {
+        const index = Math.floor(Math.random() * Hard.length);
+        resolve(Hard[index]); // Return the selected word for Hard
+      }  
+    })
+  });
+}
+
 
 //test case written
 app.get('/welcome', function(req, res) { 
@@ -241,14 +308,14 @@ app.use(auth);
 // test case written
 app.get('/playHangman', (req, res) => {
   const difficulty = req.session.difficulty || 'Easy'; // Default to Easy
-  WordsFromFile(difficulty)
-
-  
-    .then((wordEntry) => {
-      console.log(wordEntry.word)
+  WordsFromFile(difficulty).then((wordEntry) => {
+      console.log("teST:",wordEntry.word)
       res.status(200).render('pages/playHangman', {
         word: wordEntry.word, 
         definition: wordEntry.definition,
+        // Easy: Easy,
+        // Medium: Medium,
+        // Hard: Hard,
       });
     console.log(difficulty);
       

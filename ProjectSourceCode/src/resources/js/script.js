@@ -1,4 +1,4 @@
-console.log('client.js loaded');
+console.log('script.js loaded');
 
 // Global variables for game state
 let currentWord = ''; // The current word to be guessed
@@ -70,35 +70,6 @@ function initializeGame()
   }
 }
 
-// Event listener to handle keyboard input
-// document.addEventListener('keydown', function (event) {
-//   const letter = event.key.toUpperCase(); // Get the pressed key and convert it to uppercase
-
-//   // Check if the key is a valid letter (A-Z)
-//   if (letter >= 'A' && letter <= 'Z') 
-//   {
-//     // Find the corresponding button for the letter
-//     const button = document.querySelector(`button[onclick="checkGuess('${letter}', this)"]`);
-//     if (button) 
-//     {
-//       checkGuess(letter, button); // Call the checkGuess function with the guessed letter
-//     }
-//   }
-//   loadTheme(); //might change **
-//   console.log('load theme called into event listener');
-// });
-
-// function setDifficulty(level) // TODO: need to decide which word lengths correlate with which difficulty?
-// {
-//   console.log('this function is called');
-//     if (level == 'Easy'){
-//     }
-
-//     else if (level == 'Medium'){
-
-//     }
-//   }
-  
 // Function to display the current state of the word (underscores and correct guesses)
 function displayLetters() 
 {
@@ -221,8 +192,5 @@ document.addEventListener('DOMContentLoaded', function () {
   initializeGame(); // Call initializeGame to set up the initial game state
 });
 
-// document.addEventListener('DOMContentLoaded', () => {
-//   initializeGame(); // Call initializeGame to set up the initial game state
-// });
 //By using DOMContentLoaded, the code ensures that all elements needed for the game (like buttons, displays, or hidden elements) are available before trying to manipulate them.
 //Without this, the initializeGame() function might run too early, causing errors if the DOM isn't fully loaded yet
