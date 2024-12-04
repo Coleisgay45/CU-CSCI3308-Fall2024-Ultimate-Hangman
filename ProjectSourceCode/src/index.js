@@ -213,6 +213,7 @@ app.post('/login', async (req, res) => {
     );
     //console.info(user)
     if(user.username === ''){
+
       res.render('pages/register');
       return;
     }
@@ -221,7 +222,7 @@ app.post('/login', async (req, res) => {
     console.log(match)
     if(match !== true){
       //res.redirect('/login', {message: "Wrong Password or Username"})
-      res.status(400).render('pages/login');
+      res.status(400).render('pages/login' , {message: "Wrong Password or Username"});
       return;
     }
     req.session.user = req.body.username;
@@ -229,7 +230,8 @@ app.post('/login', async (req, res) => {
     res.redirect('/home');
   })
     .catch(err => {
-      res.status(500).render('pages/register')
+      res.status(500).render('pages/register',{message: "Something Went Wrong"});
+      // ireegular errros like overflows
     });
 
 });
@@ -256,17 +258,17 @@ app.post('/register', async (req, res) => {
     // query results can be obtained
     // as shown below
     .then(data => {
-        res.status(200).render('pages/login');
+        res.status(200).render('pages/login',{message: "Sucess, Get in:)!"});
     })
     // if query execution fails
     // send error message
     .catch(err => {
-      res.status(400).render('pages/register');
+      res.status(400).render('pages/register',{message: "Something Went Wrong"});
     });
   }
   else{
     console.log('uh oh spaghettio');
-    res.status(400).render('pages/register');
+    res.status(400).render('pages/register',{message: "Something Went Wrong"});
   }
     // To-DO: Insert username and hashed password into the 'users' table
 });
@@ -281,7 +283,8 @@ app.post('/register', async (req, res) => {
 
 // test case written
 app.get('/gameover', (req, res) => {
-    res.status(200).render('pages/gameOver'); // Render the gameOver.hbs page
+    const { result, correctWord } = req.query;
+    res.status(200).render('pages/gameOver', { result, correctWord}); // Render the gameOver.hbs page
   });
 
 // app.get('/home', (req, res) => {
@@ -291,23 +294,6 @@ app.get('/gameover', (req, res) => {
 //   });
 
 // test case written
-
-//logout destroys the user session and logs the user out
-app.get('/logout', (req,res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Failed to destroy session:', err);
-      return res.status(500).render('pages/logout', { 
-        message: 'Could not log out. Please try again later.',
-        error: true
-      });
-    }
-    res.status(200).render('pages/logout', { 
-      message: 'You have successfully logged out.',
-      error: false
-    });
-  });
-});
 
 // access after this point requires login 
 // TODO: do we write test case for this ?
@@ -348,6 +334,23 @@ app.get('/playHangman', (req, res) => {
 // test case written
 app.get('/settings', (req, res) => {
   res.status(200).render('pages/settings');
+});
+
+//logout destroys the user session and logs the user out
+app.get('/logout', (req,res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Failed to destroy session:', err);
+      return res.status(500).render('pages/logout', { 
+        message: 'Could not log out. Please try again later.',
+        error: true
+      });
+    }
+    res.status(200).render('pages/logout', { 
+      message: 'You have successfully logged out.',
+      error: false
+    });
+  });
 });
 
 // test case written

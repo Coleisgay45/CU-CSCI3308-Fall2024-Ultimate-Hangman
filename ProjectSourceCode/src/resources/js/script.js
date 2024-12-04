@@ -120,15 +120,23 @@ function checkGuess(guess, button)
   {
     console.log('Correct guess:', guess); // Debug: Log the correct guess
     document.getElementById('guessMessage').innerText = 'Correct!';
+    document.getElementById('guessMessage').style.color = 'green';
   } 
   else 
   {
     errorCount++; // Increment the error count for incorrect guesses
     document.getElementById('guessMessage').innerText = 'Incorrect!';
+    document.getElementById('guessMessage').style.color = 'red';
     console.log("script.js is loaded");
     updateHangmanImage(errorCount);
   }
 
+// <<<<<<< HEAD
+//   if (correctGuesses.every(val => val)) 
+//   {
+//     document.getElementById('guessMessage').innerText = 'You win!';
+//     window.location.href = '/gameover?result=win';
+// =======
   // Update the word display with correct letters and underscores
   displayLetters();
 
@@ -143,24 +151,25 @@ function checkGuess(guess, button)
     }
     console.log('end of for loop');
     document.getElementById('guessMessage').innerText = 'You win!'; // Display win message
+    window.location.href = `/gameover?result=win&correctWord=${currentWord}`;
+
   } 
   else if (errorCount >= 6) 
-  { // If error count reaches 6
+  {  // if error count reaches 6
     document.getElementById('guessMessage').textContent = 'Game over!'; // Display loss message
     document.getElementById('revealWord').style.display = 'block'; // Reveal the correct word
     document.getElementById('correctWord').textContent = currentWord; // Show the correct word
-    //window.location.href = '/gameover';
+    window.location.href = `/gameover?result=lose&correctWord=${currentWord}`;
   }
 }
 
-function updateHangmanImage(errorCount) 
-{
-  const image = document.getElementById('hangman-image');// Update the image source based on the error count
-  image.src = `img/hangman-${errorCount}.svg`;
-  console.log('Updated hangman image to:', image.src);
-}
-
-// Initialize the game when the page loads
+function updateHangmanImage(errorCount) {
+    const image = document.getElementById('hangman-image');
+    // Update the image source based on the error count
+    image.src = `img/hangman-${errorCount}.svg`;
+    console.log('Updated hangman image to:', image.src);
+  }
+// initialize the game when the page loads
 
 document.addEventListener('DOMContentLoaded', function () {
   // Check if the current page is the "playgame" page (by URL or a unique element)
