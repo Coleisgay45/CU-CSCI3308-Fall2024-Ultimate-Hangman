@@ -111,7 +111,7 @@ function WordsFromFile(level) {
   });
 
 
-  // sunce fetch is a asyrchones thing 
+  // sunce fetch is a asyrchones thing  
   // we do need promise so it will wait till whole file loads and then it will start doing stuuff 
   // if we do not put promise then it will fetch data before file is loaded
   // Start fetching the data from the file using the endpoint
