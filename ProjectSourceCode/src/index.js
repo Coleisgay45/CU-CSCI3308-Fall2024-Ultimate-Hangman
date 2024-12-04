@@ -216,7 +216,8 @@ app.post('/register', async (req, res) => {
 
 // test case written
 app.get('/gameover', (req, res) => {
-    res.status(200).render('pages/gameOver'); // Render the gameOver.hbs page
+    const { result, correctWord } = req.query;
+    res.status(200).render('pages/gameOver', { result, correctWord}); // Render the gameOver.hbs page
   });
 
 // app.get('/home', (req, res) => {

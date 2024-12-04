@@ -173,19 +173,20 @@ describe('i am testing leaderboard get endpoint', () => {
 // *********************** TODO: WRITE 2 UNIT TESTCASES FOR REGISTER POST**************************
 // POS: A SUCESSFUL REGISTRATION
 // NEG: UNSUCESSFUL, LIKE DUPLICATE USERNAME OR SOMETHING ELSE
-// describe('I am testing registration with new user', () => {
-//   it('Returns 200 status code, successful registration', (done) => {
-//     chai
-//       .request(app)
-//       .post('/register')      
-//       .send({ username: 'erpoulas123', password: 'Slay936!!' })
-//       .end((err, res) => {
-//         expect(res).to.have.status(200);
-//         //res.should.be.html;
-//         done();
-//       });
-//   });
-// });
+describe('I am testing registration with new user', () => {
+  it('Returns 200 status code, successful registration', (done) => {
+    chai
+      .request(app)
+      .post('/register')      
+      .send({ username: 'erpoulas123', password: 'Slay936!!' })
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res).to.have.status(200);
+        //res.should.be.html;
+        done();
+      });
+  });
+});
 
 describe('I am testing registration with existing user in database', () => {
   it('Returns 400 status code, failed registration', (done) => {
@@ -194,6 +195,7 @@ describe('I am testing registration with existing user in database', () => {
       .post('/register')      
       .send({ username: 'hhawksley0', password: 'MiamiBeach832$' })
       .end((err, res) => {
+        if (err) return done(err);
         expect(res).to.have.status(400);
         //res.should.be.html;
         done();
@@ -213,6 +215,7 @@ describe('I am testing login with existing user, incorrect password', () => {
       .post('/login')
       .send({ username: 'hhawksley0', password: 'Stu1234567?' })
       .end((err, res) => {
+        if (err) return done(err);
         expect(res).to.have.status(400);
         //res.should.be.html;
         done();
@@ -229,6 +232,7 @@ describe('I am testing login with valid credentials', () => {
       .post('/login')
       .send({ username: 'hhawksley0', password: 'Stu123456!' })
       .end((err, res) => {
+        if (err) return done(err);
         expect(res).to.have.status(200);
         //res.should.be.html;
         done();

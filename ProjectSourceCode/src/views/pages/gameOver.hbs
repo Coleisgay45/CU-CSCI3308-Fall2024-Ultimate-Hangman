@@ -9,12 +9,36 @@
 <body>
   <div class="game-over-container">
     <h1 class="game-over-text">Game Over!</h1>
-    <p class="correct-word">The correct word was: <span id="currentWord"></span></p>
+    <h2 id="resultMessage"></h2>
+    <p class="correct-word">The correct word was: <span id="correctWord">{{correctWord}}</span></p>
     <img src="/img/hangman-6.svg" alt="Final Hangman Image" class="game-over-image">
     <div class="button-group">
       <a href="/playHangman" class="btn play-again-btn">Play Again</a>
       <a href="/leaderboard" class="btn leaderboard-btn">Leaderboard</a>
     </div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+        // get query parameters
+        const params = new URLSearchParams(window.location.search);
+        const result = params.get('result'); // in script js when it is redirected to game over page
+
+        // having th emessage update
+        const resultMessage = document.getElementById('resultMessage');
+        if (result === 'win') {
+            resultMessage.textContent = 'You Win!';
+            resultMessage.style.color = 'green';
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        } else if (result === 'lose') {
+            resultMessage.textContent = 'You Lose!';
+            resultMessage.style.color = 'red';
+        }
+
+        //need to try to fetch what the correct word was
+    </script>
 </body>
 </html>
