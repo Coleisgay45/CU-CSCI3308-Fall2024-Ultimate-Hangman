@@ -6,6 +6,20 @@ let correctGuesses = new Array(currentWord.length).fill(false); // Array to trac
 let guessedLetters = []; // Array to track all guessed letters
 let errorCount = 0; // Number of incorrect guesses
 
+
+
+
+// function test(db, username){
+//   db.any(username)
+//   .then((rows) => {
+//     newScore = rows[0].easy_high_score + 1;
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+// }
+
 function setTheme(theme) // TODO: fix so that styling applies to all pages
 {
     const body = document.body;
@@ -149,7 +163,7 @@ function checkGuess(guess, button)
       console.log(correctGuesses[i]); // Access each value by index
       console.log('inside for loop');
     }
-    console.log('end of for loop');
+    console.log('end of for loop');    
     document.getElementById('guessMessage').innerText = 'You win!'; // Display win message
     window.location.href = `/gameover?result=win&correctWord=${currentWord}`;
 

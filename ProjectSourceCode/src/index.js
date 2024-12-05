@@ -310,13 +310,25 @@ app.get('/playHangman', (req, res) => {
   const difficulty = req.session.difficulty || 'Easy'; // Default to Easy
   WordsFromFile(difficulty).then((wordEntry) => {
       console.log("teST:",wordEntry.word)
-      res.status(200).render('pages/playHangman', {
-        word: wordEntry.word, 
-        definition: wordEntry.definition,
-        // Easy: Easy,
-        // Medium: Medium,
-        // Hard: Hard,
-      });
+      console.log(wordEntry);
+      let placeholder;
+      let userScore = `select * from users where users.username = '${req.session.user}'`;
+      db.any(userScore)
+      .then((rows) => {
+        if(difficulty == "Easy") {
+          placeholder = rows[0].easy_high_score;
+        } else if (difficulty == "Medium") {
+          placeholder = rows[0].medium_high_score;
+        } else if (difficulty == "Hard") {
+          placeholder = rows[0].hard_high_score;
+        }
+        res.status(200).render('pages/playHangman', {
+          word: wordEntry.word, 
+          definition: wordEntry.definition,
+          score: placeholder,
+        });
+      })
+      .catch();
     console.log(difficulty);
       
    // we gonna check, if we do have a diffucultg 
@@ -462,6 +474,41 @@ app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-dif
   }
 });
 
+app.post('/score', (req, res) => {
+  let difficulty = req.session.difficulty || 'Easy';
+  console.log('waoo');
+  var score = `select * from users where users.username = '${req.session.user}'`;
+  db.any(score)
+  .then((rows) => {
+    console.log(difficulty);
+    var newScore;
+    var updateScore;
+    if(difficulty == "Easy") {
+      newScore = rows[0].easy_high_score + 1;
+      updateScore = `update users set easy_high_score = ${newScore} where users.username = '${req.session.user}'`;
+    } else if(req.session.difficulty == "Medium") {     
+      newScore = rows[0].medium_high_score + 1;
+      updateScore = `update users set medium_high_score = ${newScore} where users.username = '${req.session.user}'`;
+    } else if(req.session.difficulty == "Hard") {
+      newScore = rows[0].hard_high_score + 1;
+      updateScore = `update users set hard_high_score = ${newScore} where users.username = '${req.session.user}'`;
+    }
+    console.log(newScore);
+    db.any(updateScore)
+    .then((rows) => {
+      console.log(rows);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+  
+});
+
 // testcase written
 app.get('/leaderboard', function (req, res) {
   // loads the leaderboard by fetching all the users from the database
@@ -490,6 +537,7 @@ app.get('/leaderboard', function (req, res) {
   }
   
   );
+
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
 

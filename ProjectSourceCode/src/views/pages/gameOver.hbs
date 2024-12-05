@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+  
+  <div id="scoreBody"></div>
+
   <div class="game-over-container">
     <h1 class="game-over-text">Game Over!</h1>
     <h2 id="resultMessage"></h2>
@@ -23,11 +26,18 @@
         const params = new URLSearchParams(window.location.search);
         const result = params.get('result'); // in script js when it is redirected to game over page
 
-        // having th emessage update
+        // having the message update
         const resultMessage = document.getElementById('resultMessage');
         if (result === 'win') {
             resultMessage.textContent = 'You Win!';
             resultMessage.style.color = 'green';
+            var score = document.createElement("form");
+            score.setAttribute("method", "POST");
+            score.setAttribute("action", "/score");
+            score.setAttribute("id", "score");
+            
+            document.getElementById('scoreBody').appendChild(score);
+            score.submit();
             confetti({
                 particleCount: 150,
                 spread: 70,
