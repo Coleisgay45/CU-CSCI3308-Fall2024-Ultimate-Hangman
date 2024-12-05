@@ -15,8 +15,8 @@ const axios = require('axios'); // To make HTTP requests from our server. We'll 
 const fs = require('fs');
 
 var Easy = [];
-let Medium = [];
-let Hard = [];
+var Medium = [];
+var Hard = [];
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
