@@ -243,13 +243,27 @@ app.get('/playHangman', (req, res) => {
   const difficulty = req.session.difficulty || 'Easy'; // Default to Easy
   WordsFromFile(difficulty)
 
-  
     .then((wordEntry) => {
-      console.log(wordEntry.word)
-      res.status(200).render('pages/playHangman', {
-        word: wordEntry.word, 
-        definition: wordEntry.definition,
-      });
+      console.log(wordEntry.word);
+      console.log(wordEntry);
+      let placeholder;
+      let userScore = `select * from users where users.username = '${req.session.user}'`;
+      db.any(userScore)
+      .then((rows) => {
+        if(difficulty == "Easy") {
+          placeholder = rows[0].easy_high_score;
+        } else if (difficulty == "Medium") {
+          placeholder = rows[0].medium_high_score;
+        } else if (difficulty == "Hard") {
+          placeholder = rows[0].hard_high_score;
+        }
+        res.status(200).render('pages/playHangman', {
+          word: wordEntry.word, 
+          definition: wordEntry.definition,
+          score: placeholder,
+        });
+      })
+      .catch();
     console.log(difficulty);
       
    // we gonna check, if we do have a diffucultg 

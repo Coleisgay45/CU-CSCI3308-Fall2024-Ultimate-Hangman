@@ -192,13 +192,7 @@ function checkGuess(guess, button)
       console.log(correctGuesses[i]); // Access each value by index
       console.log('inside for loop');
     }
-    console.log('end of for loop');
-    var score = document.createElement("form");
-    score.setAttribute("method", "POST");
-    score.setAttribute("action", "/score");
-    score.setAttribute("id", "score");
-    document.getElementById("scoreBody").appendChild(score);
-    // document.getElementById("score").submit();
+    console.log('end of for loop');    
     document.getElementById('guessMessage').innerText = 'You win!'; // Display win message
     window.location.href = `/gameover?result=win&correctWord=${currentWord}`;
 
