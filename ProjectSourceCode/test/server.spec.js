@@ -3,12 +3,60 @@
 const app = require('../src/index'); //TODO: Make sure the path to your index.js is correctly added
 
 // ********************** Import Libraries ***********************************
-
+const jsdom = require('jsdom');
+const {JSDOM} = jsdom;
 const chai = require('chai'); // Chai HTTP provides an interface for live integration testing of the API's.
 const chaiHttp = require('chai-http');
 chai.should();
 chai.use(chaiHttp);
 const {assert, expect} = chai;
+
+global.localStorage = {
+  getItem: (key) => null,  // or mock a default return value
+  setItem: (key, value) => {},
+  removeItem: (key) => {},
+};
+
+let window;
+let document;
+
+beforeEach(function () {
+  const dom = new JSDOM(`
+    <html>
+      <body>
+        <div id="lettersDisplay"></div>
+      </body>
+    </html>
+  `);
+  window = dom.window;
+  document = window.document;
+
+  // Mock global objects for testing
+  global.document = document;
+  global.window = window;
+
+  global.currentWord = "apple";
+  global.correctGuesses = [true, false, false, true, true]; // a: correct, p: wrong, l: wrong, e: correct
+});
+
+const script = require('../src/resources/js/script.js');
+
+// script test cases
+describe('displayLetters', function () { 
+
+  // Set up a fake DOM before each test
+
+  it('should display the correctly guessed letters and underscores for incorrect ones', function () {
+    // Call the displayLetters function
+    script.displayLetters();  // Call the function after requiring script.js
+
+    // Find the element by ID and get its text content
+    const lettersDisplay = document.getElementById('lettersDisplay').textContent;
+
+    // Assert that the text content is updated correctly
+    expect(lettersDisplay).to.equal('a _ _ e');
+  });
+});
 
 // ********************** DEFAULT WELCOME TESTCASE ****************************
 
@@ -239,6 +287,28 @@ describe('I am testing login with valid credentials', () => {
       });
   });
 });
+
+/*
+describe('updateHangmanImage' function(){
+  let window;
+  let document;
+  beforeEach(function(){
+    const dom = new JSDOM(`
+      <html>
+        <body>
+          <img id = id="hangman-image" />
+        </body>
+      </html>
+    `);
+    window = dom.window;
+    document = window.document;
+
+    global.document
+  })
+})
+
+*/
+
 
 // // negative test case dictionary
 // describe('I am testing dictionary with word not in dictionary', () => {

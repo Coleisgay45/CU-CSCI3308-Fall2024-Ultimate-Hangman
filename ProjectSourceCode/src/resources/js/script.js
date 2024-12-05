@@ -206,5 +206,6 @@ document.addEventListener('DOMContentLoaded', function () {
   initializeGame(); // Call initializeGame to set up the initial game state
 });
 
+module.exports = { displayLetters }; 
 //By using DOMContentLoaded, the code ensures that all elements needed for the game (like buttons, displays, or hidden elements) are available before trying to manipulate them.
 //Without this, the initializeGame() function might run too early, causing errors if the DOM isn't fully loaded yet
