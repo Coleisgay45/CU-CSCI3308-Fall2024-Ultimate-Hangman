@@ -7,7 +7,7 @@ let guessedLetters = []; // Array to track all guessed letters
 let errorCount = 0; // Number of incorrect guesses
 
 
-// import { test } from "../../index";
+
 
 // function test(db, username){
 //   db.any(username)
@@ -193,7 +193,12 @@ function checkGuess(guess, button)
       console.log('inside for loop');
     }
     console.log('end of for loop');
-    // test();
+    var score = document.createElement("form");
+    score.setAttribute("method", "POST");
+    score.setAttribute("action", "/score");
+    score.setAttribute("id", "score");
+    document.getElementById("scoreBody").appendChild(score);
+    // document.getElementById("score").submit();
     document.getElementById('guessMessage').innerText = 'You win!'; // Display win message
     window.location.href = `/gameover?result=win&correctWord=${currentWord}`;
 

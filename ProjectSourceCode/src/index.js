@@ -395,26 +395,40 @@ app.post('/set-difficulty',(req,res) => {// we set up a post ewquest for set-dif
   }
 });
 
-const test = function (req, res) {
+app.post('/score', (req, res) => {
+  let difficulty = req.session.difficulty || 'Easy';
+  console.log('waoo');
   var score = `select * from users where users.username = '${req.session.user}'`;
-  var newScore;
   db.any(score)
   .then((rows) => {
+    console.log(difficulty);
+    var newScore;
+    var updateScore;
+    if(difficulty == "Easy") {
+      newScore = rows[0].easy_high_score + 1;
+      updateScore = `update users set easy_high_score = ${newScore} where users.username = '${req.session.user}'`;
+    } else if(req.session.difficulty == "Medium") {     
+      newScore = rows[0].medium_high_score + 1;
+      updateScore = `update users set medium_high_score = ${newScore} where users.username = '${req.session.user}'`;
+    } else if(req.session.difficulty == "Hard") {
+      newScore = rows[0].hard_high_score + 1;
+      updateScore = `update users set hard_high_score = ${newScore} where users.username = '${req.session.user}'`;
+    }
     console.log(newScore);
-    newScore = rows[0].easy_high_score + 1;
+    db.any(updateScore)
+    .then((rows) => {
+      console.log(rows);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   })
   .catch((err) => {
     console.log(err);
   });
-  var updateScore = `update users set easy_high_score = ${newScore} where users.username = '${req.session.user}'`;
-  db.any(updateScore)
-  .then((rows) => {
-    console.log(rows);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-};
+
+  
+});
 
 // testcase written
 app.get('/leaderboard', function (req, res) {
@@ -444,7 +458,7 @@ app.get('/leaderboard', function (req, res) {
   }
   
   );
-exports.test = test;
+
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
 
