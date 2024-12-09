@@ -89,7 +89,7 @@ app.use(
 
 // TODO: write test case - where is this used?
 app.get('/read-file', (req, res) => {
-  const filePath = path.join(__dirname, 'resources','js', 'word_def.txt'); // Adjust path
+  const filePath = path.join('js', 'word_def.txt'); // Adjust path
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
       //console.log('here');
