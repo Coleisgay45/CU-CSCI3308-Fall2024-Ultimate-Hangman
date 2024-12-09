@@ -69,7 +69,7 @@ app.set('views', path.join(__dirname, 'views'));
 console.log(__dirname);
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
 //app.set('resources',path.join(__dirname,'resources'));
-app.use(express.static(__dirname+'/resources'));
+app.use(express.static(path.join(__dirname+'/resources')));
 // path join is taking you to rpository 
 
 // initialize session variables
@@ -112,7 +112,7 @@ function WordsFromFile(level) {
     
     console.log('ok'); // For debugging purposes, print a message to the console
     console.log(__dirname);
-    fs.readFile('./src/resources/js/word_def.txt', (err, data) => {
+    fs.readFile('js/word_def.txt', (err, data) => {
       if (err) throw err;
       let text = data.toString()
       const lines = text.split('\n');
