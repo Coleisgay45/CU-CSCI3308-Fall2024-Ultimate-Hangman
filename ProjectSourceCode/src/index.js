@@ -66,7 +66,7 @@ db.connect()
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
-console.log(__dirname);
+console.log("dirname "+__dirname);
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
 //app.set('resources',path.join(__dirname,'resources'));
 app.use(express.static(path.join(__dirname+'/resources')));
@@ -112,7 +112,7 @@ function WordsFromFile(level) {
     
     console.log('ok'); // For debugging purposes, print a message to the console
     console.log(__dirname);
-    fs.readFile('js/word_def.txt', (err, data) => {
+    fs.readFile('./resources/js/word_def.txt', (err, data) => {
       if (err) throw err;
       let text = data.toString()
       const lines = text.split('\n');
